@@ -1,0 +1,1182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="NEWRISK county risk explorer — health facility climate risk and readiness assessment (ECHRRA-K v3.0) for Kenyan counties.">
+<meta property="og:title" content="NEWRISK County Risk Explorer">
+<meta property="og:description" content="Health facility climate risk and readiness, county by county.">
+<meta property="og:type" content="website">
+<title>NEWRISK County Risk Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Molengo&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ===== NEWRISK tokens — navy #185890 from the project mark, ochre #B45F06 from the site ===== */
+:root{
+  color-scheme: light;
+  --plane:#f4f6f8; --surface:#ffffff; --surface-2:#f2f5f8;
+  --ink:#10161c; --ink-2:#4a555f; --muted:#79848d;
+  --hair:rgba(16,22,28,.11); --grid:#e3e8ed; --axis:#c2cbd3;
+  --navy:#185890; --accent:#185890; --accent-soft:rgba(24,88,144,.10);
+  --ochre:#b45f06; --ochre-soft:rgba(180,95,6,.10);
+  --s1:#dce9f5; --s2:#b8d3ea; --s3:#8fb8dc; --s4:#5f9aca; --s5:#3a7cb4; --s6:#185890; --s7:#0f3c66;
+  --b1:#8fb8dc; --b2:#3a7cb4; --b3:#185890; --b4:#0f3c66;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --ocean:rgba(24,88,144,.07);
+  --shadow:0 1px 2px rgba(16,22,28,.05),0 10px 30px -20px rgba(16,22,28,.35);
+  --lift:0 2px 4px rgba(16,22,28,.04),0 14px 34px -22px rgba(16,22,28,.4);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --plane:#0b0f13; --surface:#161c22; --surface-2:#1d242b;
+    --ink:#ffffff; --ink-2:#c2ccd4; --muted:#8a949c;
+    --hair:rgba(255,255,255,.13); --grid:#2a323a; --axis:#3a444d;
+    --navy:#4a8ac2; --accent:#5f9aca; --accent-soft:rgba(95,154,202,.17);
+    --ochre:#e08a2e; --ochre-soft:rgba(224,138,46,.14);
+    --s1:#0f3c66; --s2:#185890; --s3:#2d6ea8; --s4:#4a8ac2; --s5:#77aad6; --s6:#a8c8e4; --s7:#dce9f5;
+    --b1:#dce9f5; --b2:#a8c8e4; --b3:#5f9aca; --b4:#1d69ab;
+    --ocean:rgba(95,154,202,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px -20px rgba(0,0,0,.9);
+    --lift:0 2px 4px rgba(0,0,0,.4),0 14px 34px -22px rgba(0,0,0,1);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0b0f13; --surface:#161c22; --surface-2:#1d242b;
+  --ink:#ffffff; --ink-2:#c2ccd4; --muted:#8a949c;
+  --hair:rgba(255,255,255,.13); --grid:#2a323a; --axis:#3a444d;
+  --navy:#4a8ac2; --accent:#5f9aca; --accent-soft:rgba(95,154,202,.17);
+  --ochre:#e08a2e; --ochre-soft:rgba(224,138,46,.14);
+  --s1:#0f3c66; --s2:#185890; --s3:#2d6ea8; --s4:#4a8ac2; --s5:#77aad6; --s6:#a8c8e4; --s7:#dce9f5;
+  --b1:#dce9f5; --b2:#a8c8e4; --b3:#5f9aca; --b4:#1d69ab;
+  --ocean:rgba(95,154,202,.12);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px -20px rgba(0,0,0,.9);
+  --lift:0 2px 4px rgba(0,0,0,.4),0 14px 34px -22px rgba(0,0,0,1);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--plane);color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.6}
+h1,h2,h3{font-family:Molengo,"Public Sans",system-ui,sans-serif;font-weight:400;letter-spacing:0;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+.tnum{font-variant-numeric:tabular-nums}
+.shell{max-width:1200px;margin:0 auto;padding-left:20px;padding-right:20px}
+@media (max-width:520px){.shell{padding-left:16px;padding-right:16px}}
+
+/* ===== masthead ===== */
+.mast{background:var(--surface);border-bottom:1px solid var(--hair);position:sticky;
+  top:env(safe-area-inset-top,0px);z-index:40}
+.mast .shell{display:flex;align-items:center;gap:16px;min-height:62px;padding-block:9px;flex-wrap:wrap}
+.mast .logo{height:34px;width:auto;flex:none}
+.mast .sub{font-size:12px;color:var(--muted);border-left:1px solid var(--hair);padding-left:16px;
+  line-height:1.3;max-width:26ch}
+.mast .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.topbtn{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);border-radius:6px;
+  padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer}
+.topbtn:hover{border-color:var(--axis);color:var(--ink)}
+@media (max-width:640px){.mast .sub{display:none}}
+
+/* ===== breadcrumb ===== */
+.crumb{background:var(--surface-2);border-bottom:1px solid var(--hair)}
+.crumb .shell{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding-block:9px;font-size:12.5px}
+.crumb button{background:none;border:none;font:inherit;color:var(--navy);cursor:pointer;padding:2px 4px;
+  border-radius:4px;text-decoration:underline;text-underline-offset:2px}
+.crumb button:hover{background:var(--accent-soft)}
+.crumb .sep{color:var(--muted)}
+.crumb .now{color:var(--ink);font-weight:600}
+
+/* ===== screens ===== */
+.screen{padding-block:38px 56px}
+.pagehead{max-width:72ch;margin-bottom:26px}
+.pagehead .kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ochre);margin:0 0 9px;font-weight:600}
+.pagehead h1{font-size:clamp(25px,3.6vw,36px);line-height:1.13;text-wrap:balance}
+.pagehead h2{font-size:clamp(22px,3.1vw,30px);line-height:1.15;text-wrap:balance}
+.pagehead p{margin:13px 0 0;color:var(--ink-2);font-size:15.5px;max-width:68ch}
+.pagehead p strong{color:var(--ink);font-weight:600}
+
+/* ===== county cards ===== */
+.counties{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.counties{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.counties{grid-template-columns:minmax(0,1fr)}}
+.county{position:relative;text-align:left;background:var(--surface);border:1px solid var(--hair);
+  border-radius:12px;padding:20px;font:inherit;color:inherit;display:flex;flex-direction:column;
+  gap:10px;min-height:186px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.county:hover:not(:disabled){border-color:var(--navy);box-shadow:var(--lift);transform:translateY(-2px)}
+.county:disabled{cursor:not-allowed;opacity:.5;background:var(--surface-2)}
+.county h3{font-size:21px;line-height:1.1;padding-right:0}
+.county .status{font-size:12px;color:var(--ink-2)}
+.county .figs{margin-top:auto;display:flex;gap:16px;font-size:12px;color:var(--muted)}
+.county .figs b{display:block;font-size:19px;color:var(--ink);font-weight:700;
+  font-variant-numeric:tabular-nums;font-family:"Public Sans",sans-serif}
+.county .tag{align-self:flex-start;font-size:10px;font-family:"IBM Plex Mono",monospace;
+  letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.county .tag.live{background:var(--accent-soft);color:var(--navy)}
+.county .tag.soon{background:var(--surface-2);color:var(--muted);border:1px solid var(--hair)}
+.county .go{font-size:13px;color:var(--navy);font-weight:600}
+
+/* ===== lens choice ===== */
+.lenses{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.lenses{grid-template-columns:minmax(0,1fr)}}
+.lens{text-align:left;background:var(--surface);border:1px solid var(--hair);border-radius:12px;
+  padding:20px;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:9px;
+  transition:border-color .15s,box-shadow .15s,transform .15s}
+.lens:hover{border-color:var(--navy);box-shadow:var(--lift);transform:translateY(-2px)}
+.lens .ico{width:38px;height:38px;border-radius:9px;background:var(--accent-soft);display:grid;
+  place-items:center;color:var(--navy)}
+.lens h3{font-size:18px;line-height:1.15}
+.lens p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.lens .go{font-size:12.5px;color:var(--navy);font-weight:600;margin-top:3px}
+
+/* ===== stat tiles ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hair);
+  border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+.stat{background:var(--surface);padding:15px 17px;display:flex;flex-direction:column;gap:3px}
+.stat .k{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-family:"IBM Plex Mono",monospace}
+.stat .v{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat .sub{font-size:12px;color:var(--ink-2)}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.stats{grid-template-columns:1fr}}
+
+/* ===== panels ===== */
+.panel{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:17px 19px 19px;
+  display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel > header{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+.panel h3{font-size:16px}
+.panel .note{margin:0;font-size:12.5px;color:var(--muted);max-width:68ch}
+.stack{display:flex;flex-direction:column;gap:18px}
+.cols{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px}
+.cols-e{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+@media (max-width:900px){.cols,.cols-e{grid-template-columns:minmax(0,1fr)}}
+
+/* the plain-English read of what is on screen */
+.readout{background:var(--accent-soft);border:1px solid var(--hair);border-left:3px solid var(--navy);
+  border-radius:0 10px 10px 0;padding:15px 18px;font-size:15px;color:var(--ink);max-width:78ch}
+.readout b{font-weight:700}
+.readout .small{display:block;margin-top:7px;font-size:13px;color:var(--ink-2)}
+
+/* ===== chooser chips ===== */
+.chooser{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+@media (max-width:860px){.chooser{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.chooser{grid-template-columns:minmax(0,1fr)}}
+.pick{text-align:left;background:var(--surface);border:1px solid var(--hair);border-radius:9px;
+  padding:13px 15px;font:inherit;color:inherit;cursor:pointer;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;transition:border-color .15s}
+.pick:hover{border-color:var(--navy)}
+.pick[aria-pressed="true"]{border-color:var(--navy);background:var(--accent-soft);box-shadow:0 0 0 1px var(--navy)}
+.pick .nm{font-size:14.5px;font-weight:600}
+.pick .mt{font-size:12px;color:var(--muted);grid-column:1}
+.pick .sc{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;grid-row:1/3;
+  grid-column:2;text-align:right}
+.pick .sc small{display:block;font-size:10px;font-weight:400;color:var(--muted);letter-spacing:.06em}
+
+/* ===== bars ===== */
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar-row{display:grid;grid-template-columns:150px minmax(0,1fr) 46px;gap:10px;align-items:center;
+  cursor:pointer;background:none;border:none;font:inherit;color:inherit;padding:0;text-align:left;width:100%}
+.bar-row .nm{font-size:12.5px;color:var(--ink-2);text-align:right;line-height:1.25}
+.bar-track{height:15px;background:var(--surface-2);border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--accent);transition:width .35s ease}
+.bar-row .val{font-size:12.5px;font-weight:600;text-align:right;white-space:nowrap}
+.bar-row:hover .nm{color:var(--ink)}
+.bar-row[aria-current="true"] .bar-track{box-shadow:0 0 0 2px var(--navy)}
+@media (max-width:480px){.bar-row{grid-template-columns:112px minmax(0,1fr) 42px}}
+
+.legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:11.5px;color:var(--ink-2)}
+.legend .item{display:flex;gap:6px;align-items:center}
+.swatch{width:13px;height:13px;border-radius:3px;box-shadow:0 0 0 1px var(--hair) inset}
+.rampbar{display:flex;gap:2px}.rampbar span{width:20px;height:11px;border-radius:2px}
+
+.mapwrap{position:relative}
+svg{display:block;max-width:100%;height:auto}
+.dot{cursor:pointer}
+.dot:hover{stroke-width:2.5}
+
+.prio-key{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px}
+.prio-key .row{display:grid;grid-template-columns:19px 1fr auto;gap:7px;align-items:baseline;
+  font-size:12px;color:var(--ink-2)}
+.prio-key .n{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;color:#fff;
+  background:var(--navy);border-radius:3px;text-align:center;padding:1px 0}
+.prio-key .s{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+@media (max-width:560px){.prio-key{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== matrix ===== */
+.matrix-scroll{overflow-x:auto}
+table.mx{border-collapse:separate;border-spacing:2px;font-size:12px;min-width:560px}
+table.mx th{font-weight:600;color:var(--ink-2);font-size:11px;padding:3px 6px;text-align:left;white-space:nowrap}
+table.mx th.rot{text-align:center;vertical-align:bottom;line-height:1.2;max-width:74px;white-space:normal}
+table.mx td.lbl{text-align:right;color:var(--ink-2);padding-right:8px;white-space:nowrap;font-size:12px;
+  max-width:230px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+table.mx td.lbl:hover{color:var(--ink)}
+.cell{width:62px;height:26px;border-radius:4px;text-align:center;font-size:11px;font-weight:600;
+  cursor:pointer;color:#fff;font-variant-numeric:tabular-nums;line-height:26px}
+.cell.lo{color:var(--ink)} .cell.na{background:var(--surface-2);color:var(--muted);font-weight:400}
+
+.tblwrap{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;min-width:720px}
+table.data th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;padding:7px 9px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{padding:7px 9px;border-bottom:1px solid var(--grid)}
+table.data th.num,table.data td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.data tbody tr{cursor:pointer}
+table.data tbody tr:hover{background:var(--surface-2)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px 2px 6px;
+  border-radius:999px;border:1px solid var(--hair);white-space:nowrap}
+.chip .ic{width:9px;height:9px;border-radius:2px;flex:none}
+.chip.vhigh{color:var(--critical)} .chip.vhigh .ic{background:var(--critical);border-radius:1px}
+.chip.high{color:var(--serious)} .chip.high .ic{background:var(--serious);border-radius:50%}
+.chip.mod{color:#8a6100} .chip.mod .ic{background:var(--warn);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.chip.low{color:var(--good)} .chip.low .ic{background:var(--good);border-radius:50%}
+:root[data-theme="dark"] .chip.mod{color:var(--warn)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .chip.mod{color:var(--warn)}}
+
+/* ===== facility drawer ===== */
+.scrim{position:fixed;inset:0;background:rgba(6,14,22,.55);z-index:70;display:grid;
+  place-items:end center;padding:24px 16px}
+.drawer{background:var(--surface);border:1px solid var(--hair);border-radius:12px;width:min(980px,100%);
+  max-height:88vh;overflow:auto;box-shadow:0 24px 60px -20px rgba(0,0,0,.5)}
+.drawer-head{padding:17px 20px;border-bottom:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:14px;
+  align-items:flex-start;justify-content:space-between;background:var(--surface-2);
+  position:sticky;top:0;z-index:2}
+.drawer-head h3{font-size:21px;margin-bottom:3px}
+.drawer-head .meta{font-size:12px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 12px}
+.drawer-body{padding:17px 20px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+@media (max-width:860px){.drawer-body{grid-template-columns:minmax(0,1fr)}}
+.drawer h4{margin:0 0 9px;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.closebtn{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);border-radius:6px;
+  width:30px;height:30px;font-size:16px;line-height:1;cursor:pointer;flex:none}
+.closebtn:hover{border-color:var(--axis);color:var(--ink)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:12.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums}
+.actions{display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
+.action{border:1px solid var(--hair);border-left:3px solid var(--navy);border-radius:0 7px 7px 0;
+  padding:10px 13px;background:var(--surface-2)}
+.action .top{display:flex;gap:8px;align-items:baseline;justify-content:space-between;margin-bottom:3px}
+.action .dm{font-weight:700;font-size:13.5px}
+.action .sc{font-size:11px;color:var(--muted);font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.action .gp{font-size:13px;color:var(--ink-2);margin:0 0 4px}
+.action .ac{font-size:13px;margin:0;color:var(--ink)}
+.hazpill{display:inline-block;font-size:10.5px;font-family:"IBM Plex Mono",monospace;color:var(--navy);
+  background:var(--accent-soft);border-radius:4px;padding:1px 6px;margin-top:5px}
+
+#tip{position:fixed;z-index:90;pointer-events:none;opacity:0;transition:opacity .1s;
+  background:var(--surface);color:var(--ink);border:1px solid var(--axis);border-radius:6px;
+  padding:8px 11px;font-size:12px;box-shadow:var(--shadow);max-width:270px;line-height:1.4}
+#tip .t{font-weight:700;margin-bottom:3px}
+#tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--ink-2)}
+#tip .r b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+.synth{display:flex;gap:10px;align-items:flex-start;background:var(--ochre-soft);border:1px solid var(--hair);
+  border-left:3px solid var(--ochre);border-radius:0 8px 8px 0;padding:12px 15px;font-size:13px;
+  color:var(--ink-2);margin-top:22px;max-width:92ch}
+.synth b{color:var(--ink);font-weight:600}
+.synth .ic{color:var(--ochre);font-weight:700;flex:none}
+
+button:focus-visible,a:focus-visible,select:focus-visible,tr:focus-visible,.dot:focus-visible{
+  outline:2px solid var(--navy);outline-offset:2px}
+
+.files{display:flex;flex-direction:column;gap:11px;margin:0;padding:0;list-style:none}
+.file{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;
+  background:var(--surface-2);border:1px solid var(--hair);border-radius:9px;padding:14px 16px;
+  text-decoration:none;color:inherit}
+.file:hover{border-color:var(--navy)}
+.file .ext{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.06em;
+  background:var(--accent-soft);color:var(--navy);border-radius:5px;padding:5px 8px}
+.file h4{margin:0 0 2px;font-size:14.5px;font-weight:700;font-family:"Public Sans",sans-serif}
+.file p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.file .go{font-size:12.5px;color:var(--navy);white-space:nowrap;font-weight:600}
+@media (max-width:560px){.file{grid-template-columns:auto minmax(0,1fr)}.file .go{display:none}}
+
+/* ===== funder / partner footer — always on white, as the marks require ===== */
+.credits{background:var(--surface);border-top:1px solid var(--hair);margin-top:10px;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+.credits .shell{padding-block:30px 34px;display:flex;flex-direction:column;gap:22px}
+.logostrip{background:#ffffff;border:1px solid rgba(16,22,28,.11);border-radius:10px;padding:20px 24px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:26px 40px}
+.logostrip img{height:44px;width:auto;display:block}
+.logostrip img.nihr{height:50px}
+.logostrip .divider{width:1px;align-self:stretch;background:rgba(16,22,28,.13);min-height:44px}
+.fundnote{font-size:12.5px;color:var(--ink-2);max-width:82ch}
+.fundnote p{margin:0 0 7px}
+.fundnote a{color:var(--navy)}
+.fundnote .dis{color:var(--muted);font-size:11.5px}
+@media (max-width:640px){.logostrip{gap:18px 26px;padding:16px 18px}.logostrip .divider{display:none}
+  .logostrip img{height:34px}.logostrip img.nihr{height:38px}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="shell">
+    <img class="logo" src="logos/newrisk.png" alt="NEWRISK">
+    <span class="sub">Health facility climate risk<br>and readiness assessment</span>
+    <div class="right">
+      <button class="topbtn" id="restart" type="button" hidden>Change county</button>
+      <button class="topbtn" id="themebtn" type="button">Theme</button>
+    </div>
+  </div>
+</header>
+
+<nav class="crumb" id="crumb" aria-label="Breadcrumb" hidden><div class="shell"></div></nav>
+
+<main>
+  <!-- ============ 1. county gate ============ -->
+  <section class="screen" id="sc-counties">
+    <div class="shell">
+      <div class="pagehead">
+        <p class="kicker">ECHRRA-K v3.0 &middot; Ministry of Health</p>
+        <h1>Which county are you planning for?</h1>
+        <p>Select your county to see how its health facilities are exposed to extreme weather, where
+          they are most likely to fail, and what to fix first. Assessments run on a 6&ndash;12 month
+          cycle, timed to land before annual workplans are drafted.</p>
+      </div>
+      <div class="counties" id="counties"></div>
+      <p class="synth"><span class="ic" aria-hidden="true">&#9888;</span>
+        <span><b>Demonstration data.</b> Facility names, sub-counties, KEPH levels and approximate
+        coordinates are real. Every assessment score, staffing figure and utility reading is
+        <b>synthetic</b> &mdash; generated to exercise the tool ahead of fieldwork, not collected
+        from facilities.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ 2. county overview ============ -->
+  <section class="screen" id="sc-overview" hidden>
+    <div class="shell stack">
+      <div class="pagehead">
+        <p class="kicker">Kilifi County &middot; assessed March&ndash;May 2026</p>
+        <h1>Kilifi at a glance</h1>
+        <p id="ov-lede"></p>
+      </div>
+      <div class="stats" id="ov-stats"></div>
+      <div class="cols">
+        <div class="panel">
+          <header><h3>Where the facilities are</h3>
+            <span class="mono" style="font-size:11px;color:var(--muted)">schematic</span></header>
+          <p class="note">Circle size is the population each facility serves; fill is its overall risk
+            score. Select any facility to open its assessment.</p>
+          <div class="mapwrap"><svg id="ov-map" viewBox="0 0 560 470" role="img"
+            aria-label="Map of assessed facilities in Kilifi County"></svg></div>
+          <div class="legend" id="ov-maplegend"></div>
+        </div>
+        <div class="panel">
+          <header><h3>The ten facilities most at risk</h3>
+            <span class="mono" style="font-size:11px;color:var(--muted)">0&ndash;100</span></header>
+          <p class="note">Overall risk combines how often hazards hit, how bad they are when they do,
+            and how well the facility's systems hold up.</p>
+          <div class="bars" id="ov-top"></div>
+        </div>
+      </div>
+      <div class="pagehead" style="margin-top:14px;margin-bottom:6px">
+        <h2>How would you like to look at this?</h2>
+        <p>Three ways into the same assessment. You can switch between them at any time.</p>
+      </div>
+      <div class="lenses" id="lenses"></div>
+    </div>
+  </section>
+
+  <!-- ============ 3a. by hazard ============ -->
+  <section class="screen" id="sc-hazard" hidden>
+    <div class="shell stack">
+      <div class="pagehead">
+        <p class="kicker">Lens &middot; by climate hazard</p>
+        <h1>Which weather does the most damage?</h1>
+        <p>Pick a hazard to see which facilities it threatens, what it breaks, and where in the county
+          it concentrates. Facilities not exposed to a hazard are left out of its figures.</p>
+      </div>
+      <div class="chooser" id="haz-pick"></div>
+      <div id="haz-detail" class="stack" hidden></div>
+    </div>
+  </section>
+
+  <!-- ============ 3b. by sub-county ============ -->
+  <section class="screen" id="sc-sub" hidden>
+    <div class="shell stack">
+      <div class="pagehead">
+        <p class="kicker">Lens &middot; by sub-county</p>
+        <h1>How does each sub-county stand?</h1>
+        <p>Pick a sub-county to see its facilities, the weather that drives its risk, and the systems
+          its facilities report as weakest.</p>
+      </div>
+      <div class="chooser" id="sub-pick"></div>
+      <div id="sub-detail" class="stack" hidden></div>
+    </div>
+  </section>
+
+  <!-- ============ 3c. by overall score ============ -->
+  <section class="screen" id="sc-scores" hidden>
+    <div class="shell stack">
+      <div class="pagehead">
+        <p class="kicker">Lens &middot; by overall score</p>
+        <h1>The whole county, ranked</h1>
+        <p>Every facility scored, what to fix first across the county, and the full hazard-by-facility
+          picture. Select any row to open a facility.</p>
+      </div>
+      <div class="readout" id="sco-readout"></div>
+      <div class="cols-e">
+        <div class="panel">
+          <header><h3>All 20 facilities by overall risk</h3></header>
+          <div class="bars" id="sco-rank"></div>
+          <div class="legend" id="sco-legend"></div>
+        </div>
+        <div class="panel">
+          <header><h3>What to fix first, county-wide</h3></header>
+          <p class="note">How weak each system is, against how critical it is to keeping services
+            running. Top-right is where money goes first.</p>
+          <div class="mapwrap"><svg id="sco-prio" viewBox="0 0 520 320" role="img"
+            aria-label="Vulnerability against criticality for each facility system"></svg></div>
+          <div class="prio-key" id="sco-priokey"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <header><h3>Every facility against every hazard</h3>
+          <span class="mono" style="font-size:11px;color:var(--muted)">0&ndash;100</span></header>
+        <p class="note">Blank cells mean that hazard does not occur at that site.</p>
+        <div class="matrix-scroll"><table class="mx" id="sco-mx"></table></div>
+        <div class="legend" id="sco-mxlegend"></div>
+      </div>
+      <div class="panel">
+        <header><h3>The numbers behind it</h3></header>
+        <div class="tblwrap"><table class="data" id="sco-tbl"></table></div>
+      </div>
+      <div class="panel">
+        <header><h3>Take the data away</h3></header>
+        <p class="note">The assessments are held in REDCap. The export below uses the live
+          instrument's own 690-column layout, so anything built against it works on real collected
+          data without modification.</p>
+        <ul class="files">
+          <li><a class="file" href="data/ECHRRA-K_Kilifi_20_facilities_REDCap_export.csv" target="_blank" rel="noopener">
+            <span class="ext">CSV</span>
+            <span><h4>REDCap export &mdash; 20 facilities</h4>
+              <p>690 labelled columns across the nine instruments, one row per facility.</p></span>
+            <span class="go">Open &rarr;</span></a></li>
+          <li><a class="file" href="data/ECHRRA-K_Kilifi_derived_scores.json" target="_blank" rel="noopener">
+            <span class="ext">JSON</span>
+            <span><h4>Derived scores</h4>
+              <p>Exposure, severity, per-hazard weakness, criticality weights and composite risk &mdash;
+                what this tool reads.</p></span>
+            <span class="go">Open &rarr;</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="credits">
+  <div class="shell">
+    <div class="logostrip">
+      <img class="nihr" src="logos/nihr.png" alt="Funded by the National Institute for Health and Care Research">
+      <span class="divider" aria-hidden="true"></span>
+      <img src="logos/newrisk.png" alt="NEWRISK">
+      <img src="logos/kemri.png" alt="KEMRI Wellcome Trust">
+      <img src="logos/oxford.png" alt="University of Oxford">
+    </div>
+    <div class="fundnote">
+      <p><strong style="color:var(--ink)">NEWRISK</strong> — A Novel Extreme Weather Risk Insurance
+        System for Kenya. Protecting vulnerable populations in Kenya from the effects of extreme
+        weather by working with them to create meaningful local plans backed by sustainable financial
+        solutions.</p>
+      <p>This project is funded by the National Institute for Health and Care Research (NIHR).
+        Delivered with KEMRI&ndash;Wellcome Trust, the University of Oxford and the Kenya Red Cross
+        Society. Kenyan stakeholders direct and lead all components of the project.</p>
+      <p class="dis">The views expressed are those of the authors and not necessarily those of the
+        NIHR or the Department of Health and Social Care. Assessment tool: ECHRRA-K v3.0, Ministry of
+        Health, January 2026. &middot; <a href="https://www.newrisk.org" rel="noopener">www.newrisk.org</a></p>
+    </div>
+  </div>
+</footer>
+<div id="tip" role="tooltip"></div>
+<div class="scrim" id="scrim" hidden><div class="drawer" id="drawer" role="dialog" aria-modal="true"
+  aria-labelledby="drawer-title"></div></div>
+
+<script>
+const DATA = {"meta":{"tool":"ECHRRA-K V3.0 (Jan 2026)","county":"Kilifi","n_facilities":20,"generated":"2026-09-14","note":"Facility names, sub-counties and approximate coordinates are real. All assessment scores and operational figures are SYNTHETIC demonstration data.","hazards":[{"key":"flood","label":"Heavy rainfall / flooding"},{"key":"landslide","label":"Landslides / mudslides"},{"key":"drought","label":"Drought"},{"key":"heat","label":"Extreme temperatures"},{"key":"wind","label":"Strong winds"},{"key":"slr","label":"Sea-level rise"}],"domains":[{"key":"water","label":"Water services"},{"key":"waste","label":"Waste, sanitation & sewerage"},{"key":"energy","label":"Energy services"},{"key":"infrastructure","label":"Facility infrastructure"},{"key":"workforce","label":"Health workforce"},{"key":"supplies","label":"Medical products & equipment"},{"key":"leadership","label":"Leadership, governance & financing"},{"key":"earlywarning","label":"Early warning & coordination"},{"key":"continuity","label":"Service delivery continuity"},{"key":"alternatives","label":"Alternative service provision"}]},"facilities":[{"name":"Kilifi County Hospital","mfl":"12775","subcounty":"Kilifi North","keph":5,"lat":-3.6305,"lon":39.8499,"zone":"coastal_urban","ownership":"MoH","years":68,"exposure":{"flood":4,"landslide":0,"drought":2,"heat":5,"wind":3,"slr":3},"exposure_comm":{"flood":4,"landslide":1,"drought":3,"heat":5,"wind":3,"slr":4},"severity":{"flood":3,"landslide":0,"drought":1,"heat":4,"wind":2,"slr":2},"trend":{"flood":{"past":1,"present":2,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":4,"present":5,"future":5},"heat":{"past":2,"present":3,"future":4},"wind":{"past":3,"present":4,"future":5},"slr":{"past":4,"present":4,"future":4}},"routine":{"water":4,"waste":3,"energy":4,"infrastructure":4,"workforce":4,"supplies":4,"leadership":4,"earlywarning":3,"continuity":4,"alternatives":3},"stressed":{"water":{"flood":3,"landslide":null,"drought":3,"heat":2,"wind":3,"slr":3},"waste":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":2},"energy":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":3,"slr":4},"infrastructure":{"flood":2,"landslide":null,"drought":4,"heat":2,"wind":2,"slr":3},"workforce":{"flood":4,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"supplies":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"leadership":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"earlywarning":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"continuity":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"alternatives":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3}},"vuln":{"water":2.72,"waste":3.24,"energy":2.36,"infrastructure":2.84,"workforce":2.12,"supplies":2.24,"leadership":2.6,"earlywarning":3.48,"continuity":2.24,"alternatives":3.12},"vuln_h":{"water":{"flood":3,"landslide":null,"drought":3,"heat":4,"wind":3,"slr":3},"waste":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":4},"energy":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":3,"slr":2},"infrastructure":{"flood":4,"landslide":null,"drought":2,"heat":4,"wind":4,"slr":3},"workforce":{"flood":2,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"supplies":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"leadership":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"earlywarning":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"continuity":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"alternatives":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3}},"weight":{"water":5,"waste":3,"energy":5,"infrastructure":5,"workforce":4,"supplies":4,"leadership":2,"earlywarning":2,"continuity":5,"alternatives":3},"risk":25.0,"risk_h":{"flood":44.3,"landslide":0.0,"drought":13.6,"heat":60.8,"wind":29.1,"slr":26.8},"E":2.83,"S":2.0,"V":2.63,"ops":{"catchment_opd":60899,"catchment_vacc":1959,"opd_adults":35571,"opd_under5":16382,"deliveries":602,"adm_adults":1428,"adm_children":496,"pwd":15,"maternal_deaths":1,"water_storage_l":48000,"water_use_l":392457},"staff":{"Public Health Officers":{"n":2,"adequate":"Yes"},"Medical doctors":{"n":2,"adequate":"Yes"},"Clinical officers":{"n":13,"adequate":"Yes"},"Nurses":{"n":40,"adequate":"Yes"},"Laboratory staff":{"n":5,"adequate":"Yes"},"Radiology staff":{"n":1,"adequate":"Yes"},"Nutrition staff":{"n":3,"adequate":"No"},"Health information officers":{"n":2,"adequate":"Yes"},"Pharmacy staff":{"n":5,"adequate":"Yes"},"Counselling staff":{"n":4,"adequate":"Yes"},"CHPs":{"n":126,"adequate":"No"},"Support staff":{"n":23,"adequate":"Yes"},"Morticians":{"n":1,"adequate":"Yes"}},"disruption":{"water":2,"waste":2,"energy":3,"supply":3},"priorities":[{"domain":"infrastructure","label":"Facility infrastructure","vuln":2.84,"weight":5,"score":14.2,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Extreme temperatures"},{"domain":"water","label":"Water services","vuln":2.72,"weight":5,"score":13.6,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Extreme temperatures"},{"domain":"energy","label":"Energy services","vuln":2.36,"weight":5,"score":11.8,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Extreme temperatures"}]},{"name":"Matsangoni Model Health Centre","mfl":"11447","subcounty":"Kilifi North","keph":3,"lat":-3.6279,"lon":39.8578,"zone":"coastal_rural","ownership":"MoH","years":31,"exposure":{"flood":2,"landslide":0,"drought":2,"heat":3,"wind":5,"slr":3},"exposure_comm":{"flood":2,"landslide":1,"drought":3,"heat":4,"wind":5,"slr":3},"severity":{"flood":2,"landslide":0,"drought":2,"heat":3,"wind":5,"slr":4},"trend":{"flood":{"past":3,"present":4,"future":5},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":3,"present":4,"future":5},"heat":{"past":3,"present":4,"future":5},"wind":{"past":4,"present":5,"future":5},"slr":{"past":4,"present":5,"future":5}},"routine":{"water":3,"waste":2,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"waste":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":1},"energy":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":1,"slr":3},"infrastructure":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"workforce":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"supplies":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"leadership":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"earlywarning":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":1},"continuity":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":3},"alternatives":{"flood":2,"landslide":null,"drought":2,"heat":1,"wind":1,"slr":2}},"vuln":{"water":3.6,"waste":4.12,"energy":3.36,"infrastructure":3.72,"workforce":3.6,"supplies":3.6,"leadership":4.0,"earlywarning":4.24,"continuity":3.48,"alternatives":4.24},"vuln_h":{"water":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"waste":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":5},"energy":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":5,"slr":3},"infrastructure":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"workforce":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"supplies":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"leadership":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"earlywarning":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":5},"continuity":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":3},"alternatives":{"flood":4,"landslide":null,"drought":4,"heat":5,"wind":5,"slr":4}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":3,"workforce":5,"supplies":3,"leadership":3,"earlywarning":3,"continuity":5,"alternatives":3},"risk":38.6,"risk_h":{"flood":32.0,"landslide":0.0,"drought":30.7,"heat":46.1,"wind":87.1,"slr":56.3},"E":2.5,"S":2.67,"V":3.74,"ops":{"catchment_opd":14349,"catchment_vacc":418,"opd_adults":6274,"opd_under5":2424,"deliveries":113,"adm_adults":0,"adm_children":0,"pwd":35,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":38989},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"No"},"Nurses":{"n":5,"adequate":"Yes"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":19,"adequate":"No"},"Support staff":{"n":4,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":3.6,"weight":5,"score":18.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Strong winds"},{"domain":"workforce","label":"Health workforce","vuln":3.6,"weight":5,"score":18.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Strong winds"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.48,"weight":5,"score":17.4,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Strong winds"}]},{"name":"Chasimba Health Centre","mfl":"11021","subcounty":"Kilifi North","keph":3,"lat":-3.7004,"lon":39.7712,"zone":"coastal_rural","ownership":"MoH","years":27,"exposure":{"flood":3,"landslide":0,"drought":2,"heat":2,"wind":4,"slr":4},"exposure_comm":{"flood":3,"landslide":1,"drought":2,"heat":2,"wind":4,"slr":4},"severity":{"flood":4,"landslide":0,"drought":2,"heat":3,"wind":4,"slr":4},"trend":{"flood":{"past":2,"present":3,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":3,"present":3,"future":3},"heat":{"past":3,"present":4,"future":5},"wind":{"past":2,"present":3,"future":4},"slr":{"past":2,"present":3,"future":4}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":3,"continuity":4,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"waste":{"flood":2,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"energy":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"infrastructure":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"workforce":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"supplies":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":2,"slr":3},"leadership":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"earlywarning":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"continuity":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":2,"slr":3},"alternatives":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":1}},"vuln":{"water":3.6,"waste":3.48,"energy":3.48,"infrastructure":3.48,"workforce":3.0,"supplies":3.12,"leadership":4.0,"earlywarning":3.48,"continuity":2.72,"alternatives":4.24},"vuln_h":{"water":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"waste":{"flood":4,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"energy":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"infrastructure":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"workforce":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"supplies":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":4,"slr":3},"leadership":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"earlywarning":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"continuity":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":4,"slr":3},"alternatives":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":5}},"weight":{"water":5,"waste":3,"energy":5,"infrastructure":4,"workforce":5,"supplies":3,"leadership":2,"earlywarning":2,"continuity":4,"alternatives":3},"risk":36.4,"risk_h":{"flood":51.6,"landslide":0.0,"drought":26.8,"heat":35.5,"wind":61.2,"slr":59.6},"E":2.5,"S":2.83,"V":3.42,"ops":{"catchment_opd":18450,"catchment_vacc":520,"opd_adults":9424,"opd_under5":2591,"deliveries":193,"adm_adults":0,"adm_children":0,"pwd":36,"maternal_deaths":0,"water_storage_l":24000,"water_use_l":57960},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":2,"adequate":"Yes"},"Nurses":{"n":5,"adequate":"Yes"},"Laboratory staff":{"n":1,"adequate":"Yes"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":16,"adequate":"Yes"},"Support staff":{"n":2,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":2,"energy":2,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":3.6,"weight":5,"score":18.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Strong winds"},{"domain":"energy","label":"Energy services","vuln":3.48,"weight":5,"score":17.4,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Strong winds"},{"domain":"workforce","label":"Health workforce","vuln":3.0,"weight":5,"score":15.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Strong winds"}]},{"name":"Ngerenya Dispensary","mfl":"12042","subcounty":"Kilifi North","keph":2,"lat":-3.5702,"lon":39.8693,"zone":"coastal_rural","ownership":"MoH","years":22,"exposure":{"flood":3,"landslide":0,"drought":4,"heat":4,"wind":4,"slr":2},"exposure_comm":{"flood":4,"landslide":0,"drought":4,"heat":4,"wind":4,"slr":2},"severity":{"flood":3,"landslide":0,"drought":4,"heat":4,"wind":4,"slr":3},"trend":{"flood":{"past":2,"present":3,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":3,"present":4,"future":4},"heat":{"past":3,"present":4,"future":4},"wind":{"past":3,"present":3,"future":4},"slr":{"past":3,"present":4,"future":4}},"routine":{"water":2,"waste":2,"energy":3,"infrastructure":2,"workforce":2,"supplies":2,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":2,"slr":2},"waste":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1},"energy":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":3},"infrastructure":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"workforce":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"supplies":{"flood":1,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":2},"leadership":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":2},"earlywarning":{"flood":1,"landslide":null,"drought":1,"heat":2,"wind":1,"slr":1},"continuity":{"flood":1,"landslide":null,"drought":1,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1}},"vuln":{"water":4.36,"waste":4.6,"energy":3.36,"infrastructure":4.24,"workforce":4.24,"supplies":4.24,"leadership":4.48,"earlywarning":4.48,"continuity":3.84,"alternatives":4.6},"vuln_h":{"water":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":4,"slr":4},"waste":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5},"energy":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":3},"infrastructure":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"workforce":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"supplies":{"flood":5,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":4},"leadership":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":4},"earlywarning":{"flood":5,"landslide":null,"drought":5,"heat":4,"wind":5,"slr":5},"continuity":{"flood":5,"landslide":null,"drought":5,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5}},"weight":{"water":4,"waste":4,"energy":5,"infrastructure":4,"workforce":5,"supplies":4,"leadership":2,"earlywarning":2,"continuity":4,"alternatives":3},"risk":48.9,"risk_h":{"flood":58.0,"landslide":0.0,"drought":67.7,"heat":71.5,"wind":73.1,"slr":39.5},"E":2.83,"S":3.0,"V":4.19,"ops":{"catchment_opd":5400,"catchment_vacc":178,"opd_adults":3141,"opd_under5":1339,"deliveries":0,"adm_adults":0,"adm_children":0,"pwd":37,"maternal_deaths":0,"water_storage_l":5000,"water_use_l":10627},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"Yes"},"Nurses":{"n":1,"adequate":"No"},"Laboratory staff":{"n":0,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":5,"adequate":"No"},"Support staff":{"n":1,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":2,"supply":1},"priorities":[{"domain":"workforce","label":"Health workforce","vuln":4.24,"weight":5,"score":21.2,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Strong winds"},{"domain":"waste","label":"Waste, sanitation & sewerage","vuln":4.6,"weight":4,"score":18.4,"gap":"Placental pit and incinerator flood or become unusable in long rains","action":"Raise and bund waste structures; contract standby waste transport","hazard":"Drought"},{"domain":"water","label":"Water services","vuln":4.36,"weight":4,"score":17.4,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Drought"}]},{"name":"Mtwapa Health Centre","mfl":"11902","subcounty":"Kilifi South","keph":3,"lat":-3.9402,"lon":39.7441,"zone":"coastal_urban","ownership":"MoH","years":34,"exposure":{"flood":4,"landslide":0,"drought":2,"heat":4,"wind":2,"slr":3},"exposure_comm":{"flood":5,"landslide":0,"drought":3,"heat":4,"wind":3,"slr":4},"severity":{"flood":4,"landslide":0,"drought":3,"heat":4,"wind":2,"slr":3},"trend":{"flood":{"past":1,"present":2,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":3,"present":4,"future":5},"heat":{"past":3,"present":4,"future":5},"wind":{"past":3,"present":3,"future":3},"slr":{"past":3,"present":4,"future":4}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":3,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"waste":{"flood":1,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"energy":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"infrastructure":{"flood":1,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":2},"workforce":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"supplies":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":3,"slr":3},"leadership":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":3,"slr":2},"earlywarning":{"flood":1,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":2},"continuity":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2}},"vuln":{"water":3.6,"waste":3.6,"energy":3.48,"infrastructure":3.84,"workforce":3.12,"supplies":3.24,"leadership":3.48,"earlywarning":4.24,"continuity":3.6,"alternatives":4.0},"vuln_h":{"water":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"waste":{"flood":5,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"energy":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"infrastructure":{"flood":5,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":4},"workforce":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"supplies":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":3,"slr":3},"leadership":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":3,"slr":4},"earlywarning":{"flood":5,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":4},"continuity":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4}},"weight":{"water":4,"waste":4,"energy":5,"infrastructure":4,"workforce":5,"supplies":4,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":3},"risk":36.3,"risk_h":{"flood":69.2,"landslide":0.0,"drought":33.5,"heat":64.5,"wind":28.9,"slr":44.5},"E":2.5,"S":2.67,"V":3.52,"ops":{"catchment_opd":8200,"catchment_vacc":230,"opd_adults":4870,"opd_under5":1945,"deliveries":62,"adm_adults":0,"adm_children":0,"pwd":50,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":26891},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":2,"adequate":"No"},"Nurses":{"n":5,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":1,"adequate":"Yes"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":12,"adequate":"Yes"},"Support staff":{"n":4,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":1,"energy":2,"supply":2},"priorities":[{"domain":"energy","label":"Energy services","vuln":3.48,"weight":5,"score":17.4,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Heavy rainfall / flooding"},{"domain":"workforce","label":"Health workforce","vuln":3.12,"weight":5,"score":15.6,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Heavy rainfall / flooding"},{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.84,"weight":4,"score":15.4,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Heavy rainfall / flooding"}]},{"name":"Vipingo Rural Demonstration Health Centre","mfl":"11881","subcounty":"Kilifi South","keph":3,"lat":-3.8191,"lon":39.8097,"zone":"coastal_rural","ownership":"MoH","years":48,"exposure":{"flood":2,"landslide":0,"drought":3,"heat":3,"wind":3,"slr":3},"exposure_comm":{"flood":2,"landslide":1,"drought":3,"heat":3,"wind":3,"slr":4},"severity":{"flood":2,"landslide":0,"drought":3,"heat":3,"wind":3,"slr":3},"trend":{"flood":{"past":2,"present":3,"future":4},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":3,"present":4,"future":5},"heat":{"past":2,"present":3,"future":4},"wind":{"past":3,"present":4,"future":4},"slr":{"past":2,"present":3,"future":3}},"routine":{"water":2,"waste":2,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":2,"continuity":2,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":null,"drought":1,"heat":2,"wind":2,"slr":2},"waste":{"flood":1,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":1},"energy":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":3},"infrastructure":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":2,"slr":2},"workforce":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"supplies":{"flood":3,"landslide":null,"drought":3,"heat":2,"wind":3,"slr":3},"leadership":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"earlywarning":{"flood":2,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":1},"continuity":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":2,"landslide":null,"drought":2,"heat":1,"wind":2,"slr":1}},"vuln":{"water":4.12,"waste":4.36,"energy":3.36,"infrastructure":3.24,"workforce":3.6,"supplies":3.12,"leadership":4.0,"earlywarning":4.24,"continuity":4.0,"alternatives":4.24},"vuln_h":{"water":{"flood":4,"landslide":null,"drought":5,"heat":4,"wind":4,"slr":4},"waste":{"flood":5,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":5},"energy":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":3},"infrastructure":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":4,"slr":4},"workforce":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"supplies":{"flood":3,"landslide":null,"drought":3,"heat":4,"wind":3,"slr":3},"leadership":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"earlywarning":{"flood":4,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":5},"continuity":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":4,"landslide":null,"drought":4,"heat":5,"wind":4,"slr":5}},"weight":{"water":5,"waste":4,"energy":4,"infrastructure":4,"workforce":5,"supplies":3,"leadership":3,"earlywarning":3,"continuity":5,"alternatives":3},"risk":35.1,"risk_h":{"flood":31.2,"landslide":0.0,"drought":45.7,"heat":49.2,"wind":46.8,"slr":48.0},"E":2.33,"S":2.33,"V":3.76,"ops":{"catchment_opd":8200,"catchment_vacc":275,"opd_adults":4890,"opd_under5":1552,"deliveries":64,"adm_adults":0,"adm_children":0,"pwd":7,"maternal_deaths":0,"water_storage_l":50000,"water_use_l":21586},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":2,"adequate":"No"},"Nurses":{"n":5,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":1,"adequate":"Yes"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":19,"adequate":"Yes"},"Support staff":{"n":3,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":2,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":4.12,"weight":5,"score":20.6,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Drought"},{"domain":"continuity","label":"Service delivery continuity","vuln":4.0,"weight":5,"score":20.0,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Drought"},{"domain":"workforce","label":"Health workforce","vuln":3.6,"weight":5,"score":18.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Drought"}]},{"name":"Junju Dispensary","mfl":"11601","subcounty":"Kilifi South","keph":2,"lat":-3.8604,"lon":39.7803,"zone":"coastal_rural","ownership":"MoH","years":19,"exposure":{"flood":3,"landslide":0,"drought":2,"heat":2,"wind":5,"slr":3},"exposure_comm":{"flood":4,"landslide":0,"drought":2,"heat":3,"wind":5,"slr":3},"severity":{"flood":4,"landslide":0,"drought":3,"heat":2,"wind":5,"slr":4},"trend":{"flood":{"past":3,"present":4,"future":4},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":2,"present":3,"future":3},"heat":{"past":2,"present":3,"future":4},"wind":{"past":3,"present":4,"future":4},"slr":{"past":4,"present":5,"future":5}},"routine":{"water":2,"waste":2,"energy":2,"infrastructure":2,"workforce":2,"supplies":2,"leadership":1,"earlywarning":2,"continuity":3,"alternatives":1},"stressed":{"water":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1},"waste":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1},"energy":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"infrastructure":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":1},"workforce":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":1},"supplies":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"leadership":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1},"earlywarning":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":1},"continuity":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":1,"landslide":null,"drought":1,"heat":1,"wind":1,"slr":1}},"vuln":{"water":4.6,"waste":4.6,"energy":4.12,"infrastructure":4.24,"workforce":4.36,"supplies":4.0,"leadership":5.0,"earlywarning":4.24,"continuity":3.6,"alternatives":5.0},"vuln_h":{"water":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5},"waste":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5},"energy":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"infrastructure":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":5},"workforce":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":5},"supplies":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"leadership":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5},"earlywarning":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":5},"continuity":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":5,"landslide":null,"drought":5,"heat":5,"wind":5,"slr":5}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":4,"workforce":4,"supplies":4,"leadership":2,"earlywarning":2,"continuity":5,"alternatives":3},"risk":47.8,"risk_h":{"flood":62.4,"landslide":0.0,"drought":42.8,"heat":34.9,"wind":97.3,"slr":65.1},"E":2.5,"S":3.0,"V":4.36,"ops":{"catchment_opd":12150,"catchment_vacc":373,"opd_adults":7113,"opd_under5":2435,"deliveries":0,"adm_adults":0,"adm_children":0,"pwd":6,"maternal_deaths":0,"water_storage_l":24000,"water_use_l":40915},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"No"},"Nurses":{"n":2,"adequate":"No"},"Laboratory staff":{"n":0,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":5,"adequate":"No"},"Support staff":{"n":1,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":4.6,"weight":5,"score":23.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Strong winds"},{"domain":"energy","label":"Energy services","vuln":4.12,"weight":5,"score":20.6,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Strong winds"},{"domain":"waste","label":"Waste, sanitation & sewerage","vuln":4.6,"weight":4,"score":18.4,"gap":"Placental pit and incinerator flood or become unusable in long rains","action":"Raise and bund waste structures; contract standby waste transport","hazard":"Strong winds"}]},{"name":"Ganze Health Centre","mfl":"11310","subcounty":"Ganze","keph":3,"lat":-3.5297,"lon":39.7104,"zone":"hinterland_dry","ownership":"MoH","years":41,"exposure":{"flood":4,"landslide":2,"drought":4,"heat":5,"wind":2,"slr":0},"exposure_comm":{"flood":5,"landslide":2,"drought":4,"heat":5,"wind":3,"slr":0},"severity":{"flood":4,"landslide":2,"drought":4,"heat":5,"wind":2,"slr":0},"trend":{"flood":{"past":3,"present":3,"future":3},"landslide":{"past":1,"present":2,"future":2},"drought":{"past":5,"present":5,"future":5},"heat":{"past":4,"present":5,"future":5},"wind":{"past":4,"present":5,"future":5},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":3,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":2,"slr":null},"waste":{"flood":1,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"energy":{"flood":2,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"workforce":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"supplies":{"flood":2,"landslide":2,"drought":2,"heat":1,"wind":3,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":1,"heat":1,"wind":1,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":1,"wind":2,"slr":null},"continuity":{"flood":2,"landslide":3,"drought":3,"heat":2,"wind":3,"slr":null},"alternatives":{"flood":1,"landslide":1,"drought":1,"heat":1,"wind":1,"slr":null}},"vuln":{"water":3.48,"waste":3.72,"energy":3.12,"infrastructure":3.6,"workforce":3.36,"supplies":3.6,"leadership":4.36,"earlywarning":3.72,"continuity":3.24,"alternatives":4.6},"vuln_h":{"water":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":null},"waste":{"flood":5,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"energy":{"flood":4,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"workforce":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"supplies":{"flood":4,"landslide":4,"drought":4,"heat":5,"wind":3,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":5,"heat":5,"wind":5,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":5,"wind":4,"slr":null},"continuity":{"flood":4,"landslide":3,"drought":3,"heat":4,"wind":3,"slr":null},"alternatives":{"flood":5,"landslide":5,"drought":5,"heat":5,"wind":5,"slr":null}},"weight":{"water":4,"waste":4,"energy":5,"infrastructure":4,"workforce":5,"supplies":3,"leadership":3,"earlywarning":2,"continuity":5,"alternatives":3},"risk":40.4,"risk_h":{"flood":66.1,"landslide":28.3,"drought":62.9,"heat":82.0,"wind":29.3,"slr":0.0},"E":2.83,"S":2.83,"V":3.56,"ops":{"catchment_opd":12299,"catchment_vacc":430,"opd_adults":6405,"opd_under5":2687,"deliveries":98,"adm_adults":0,"adm_children":0,"pwd":23,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":26606},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":2,"adequate":"Yes"},"Nurses":{"n":4,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":1,"adequate":"Yes"},"Counselling staff":{"n":1,"adequate":"Yes"},"CHPs":{"n":13,"adequate":"Yes"},"Support staff":{"n":2,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":1,"energy":2,"supply":1},"priorities":[{"domain":"workforce","label":"Health workforce","vuln":3.36,"weight":5,"score":16.8,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Extreme temperatures"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.24,"weight":5,"score":16.2,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Extreme temperatures"},{"domain":"energy","label":"Energy services","vuln":3.12,"weight":5,"score":15.6,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Extreme temperatures"}]},{"name":"Bamba Sub-County Hospital","mfl":"10731","subcounty":"Ganze","keph":4,"lat":-3.4702,"lon":39.4203,"zone":"hinterland_dry","ownership":"MoH","years":52,"exposure":{"flood":3,"landslide":2,"drought":5,"heat":5,"wind":2,"slr":0},"exposure_comm":{"flood":3,"landslide":3,"drought":5,"heat":5,"wind":3,"slr":1},"severity":{"flood":3,"landslide":1,"drought":4,"heat":4,"wind":2,"slr":0},"trend":{"flood":{"past":4,"present":4,"future":4},"landslide":{"past":3,"present":3,"future":3},"drought":{"past":2,"present":3,"future":4},"heat":{"past":4,"present":5,"future":5},"wind":{"past":2,"present":3,"future":4},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":4,"supplies":3,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":2},"stressed":{"water":{"flood":3,"landslide":3,"drought":1,"heat":2,"wind":3,"slr":null},"waste":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"supplies":{"flood":3,"landslide":3,"drought":3,"heat":2,"wind":3,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"continuity":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"alternatives":{"flood":2,"landslide":2,"drought":1,"heat":2,"wind":2,"slr":null}},"vuln":{"water":3.36,"waste":3.36,"energy":3.0,"infrastructure":3.6,"workforce":2.6,"supplies":3.12,"leadership":3.6,"earlywarning":4.0,"continuity":2.6,"alternatives":4.12},"vuln_h":{"water":{"flood":3,"landslide":3,"drought":5,"heat":4,"wind":3,"slr":null},"waste":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"supplies":{"flood":3,"landslide":3,"drought":3,"heat":4,"wind":3,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"continuity":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"alternatives":{"flood":4,"landslide":4,"drought":5,"heat":4,"wind":4,"slr":null}},"weight":{"water":4,"waste":4,"energy":5,"infrastructure":5,"workforce":4,"supplies":4,"leadership":3,"earlywarning":3,"continuity":5,"alternatives":2},"risk":33.9,"risk_h":{"flood":41.6,"landslide":18.9,"drought":66.5,"heat":66.5,"wind":26.8,"slr":0.0},"E":2.83,"S":2.33,"V":3.3,"ops":{"catchment_opd":24900,"catchment_vacc":912,"opd_adults":12716,"opd_under5":5472,"deliveries":289,"adm_adults":403,"adm_children":456,"pwd":50,"maternal_deaths":3,"water_storage_l":10000,"water_use_l":177345},"staff":{"Public Health Officers":{"n":1,"adequate":"Yes"},"Medical doctors":{"n":1,"adequate":"Yes"},"Clinical officers":{"n":4,"adequate":"Yes"},"Nurses":{"n":15,"adequate":"Yes"},"Laboratory staff":{"n":3,"adequate":"Yes"},"Radiology staff":{"n":1,"adequate":"No"},"Nutrition staff":{"n":1,"adequate":"Yes"},"Health information officers":{"n":1,"adequate":"Yes"},"Pharmacy staff":{"n":1,"adequate":"No"},"Counselling staff":{"n":1,"adequate":"No"},"CHPs":{"n":35,"adequate":"Yes"},"Support staff":{"n":9,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":2,"energy":3,"supply":2},"priorities":[{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.6,"weight":5,"score":18.0,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Drought"},{"domain":"energy","label":"Energy services","vuln":3.0,"weight":5,"score":15.0,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Drought"},{"domain":"water","label":"Water services","vuln":3.36,"weight":4,"score":13.4,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Drought"}]},{"name":"Kauma Dispensary","mfl":"11655","subcounty":"Ganze","keph":2,"lat":-3.5703,"lon":39.6702,"zone":"hinterland_dry","ownership":"MoH","years":16,"exposure":{"flood":4,"landslide":1,"drought":4,"heat":4,"wind":4,"slr":0},"exposure_comm":{"flood":5,"landslide":1,"drought":5,"heat":4,"wind":4,"slr":0},"severity":{"flood":4,"landslide":2,"drought":5,"heat":4,"wind":3,"slr":0},"trend":{"flood":{"past":4,"present":4,"future":4},"landslide":{"past":2,"present":2,"future":3},"drought":{"past":3,"present":3,"future":4},"heat":{"past":2,"present":3,"future":3},"wind":{"past":2,"present":3,"future":3},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":2,"waste":2,"energy":3,"infrastructure":3,"workforce":3,"supplies":2,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":2,"slr":null},"waste":{"flood":1,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"energy":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":1,"slr":null},"infrastructure":{"flood":2,"landslide":3,"drought":3,"heat":2,"wind":1,"slr":null},"workforce":{"flood":1,"landslide":3,"drought":2,"heat":2,"wind":2,"slr":null},"supplies":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"leadership":{"flood":1,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":1,"landslide":2,"drought":2,"heat":2,"wind":1,"slr":null},"continuity":{"flood":1,"landslide":3,"drought":2,"heat":2,"wind":2,"slr":null},"alternatives":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":1,"slr":null}},"vuln":{"water":4.36,"waste":4.12,"energy":3.6,"infrastructure":3.48,"workforce":3.6,"supplies":4.0,"leadership":4.12,"earlywarning":4.24,"continuity":3.6,"alternatives":4.48},"vuln_h":{"water":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":4,"slr":null},"waste":{"flood":5,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"energy":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":5,"slr":null},"infrastructure":{"flood":4,"landslide":3,"drought":3,"heat":4,"wind":5,"slr":null},"workforce":{"flood":5,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":null},"supplies":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"leadership":{"flood":5,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":5,"landslide":4,"drought":4,"heat":4,"wind":5,"slr":null},"continuity":{"flood":5,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":null},"alternatives":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":5,"slr":null}},"weight":{"water":4,"waste":3,"energy":5,"infrastructure":3,"workforce":5,"supplies":3,"leadership":2,"earlywarning":3,"continuity":5,"alternatives":3},"risk":45.5,"risk_h":{"flood":73.7,"landslide":20.0,"drought":72.2,"heat":66.3,"wind":60.9,"slr":0.0},"E":2.83,"S":3.0,"V":3.9,"ops":{"catchment_opd":5400,"catchment_vacc":162,"opd_adults":1982,"opd_under5":1213,"deliveries":0,"adm_adults":0,"adm_children":0,"pwd":33,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":19783},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"No"},"Nurses":{"n":2,"adequate":"No"},"Laboratory staff":{"n":0,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":7,"adequate":"No"},"Support staff":{"n":1,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"energy","label":"Energy services","vuln":3.6,"weight":5,"score":18.0,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Drought"},{"domain":"workforce","label":"Health workforce","vuln":3.6,"weight":5,"score":18.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Heavy rainfall / flooding"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.6,"weight":5,"score":18.0,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Heavy rainfall / flooding"}]},{"name":"Malindi Sub-County Hospital","mfl":"11745","subcounty":"Malindi","keph":5,"lat":-3.2175,"lon":40.1191,"zone":"coastal_urban","ownership":"MoH","years":74,"exposure":{"flood":4,"landslide":0,"drought":2,"heat":5,"wind":3,"slr":2},"exposure_comm":{"flood":4,"landslide":0,"drought":2,"heat":5,"wind":3,"slr":2},"severity":{"flood":3,"landslide":0,"drought":1,"heat":4,"wind":2,"slr":1},"trend":{"flood":{"past":1,"present":2,"future":2},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":2,"present":3,"future":4},"heat":{"past":4,"present":4,"future":4},"wind":{"past":4,"present":4,"future":5},"slr":{"past":4,"present":5,"future":5}},"routine":{"water":4,"waste":4,"energy":4,"infrastructure":4,"workforce":4,"supplies":4,"leadership":4,"earlywarning":4,"continuity":4,"alternatives":3},"stressed":{"water":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"waste":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"energy":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":3,"slr":4},"infrastructure":{"flood":2,"landslide":null,"drought":4,"heat":2,"wind":3,"slr":3},"workforce":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":4},"supplies":{"flood":4,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"leadership":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"earlywarning":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":3,"slr":4},"continuity":{"flood":3,"landslide":null,"drought":4,"heat":3,"wind":3,"slr":4},"alternatives":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":3,"slr":3}},"vuln":{"water":2.6,"waste":2.72,"energy":2.36,"infrastructure":2.72,"workforce":2.48,"supplies":2.12,"leadership":2.6,"earlywarning":2.36,"continuity":2.36,"alternatives":3.24},"vuln_h":{"water":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"waste":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"energy":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":3,"slr":2},"infrastructure":{"flood":4,"landslide":null,"drought":2,"heat":4,"wind":3,"slr":3},"workforce":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":2},"supplies":{"flood":2,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"leadership":{"flood":3,"landslide":null,"drought":3,"heat":3,"wind":3,"slr":3},"earlywarning":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":3,"slr":2},"continuity":{"flood":3,"landslide":null,"drought":2,"heat":3,"wind":3,"slr":2},"alternatives":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":3,"slr":3}},"weight":{"water":5,"waste":3,"energy":5,"infrastructure":4,"workforce":5,"supplies":4,"leadership":2,"earlywarning":3,"continuity":5,"alternatives":3},"risk":22.0,"risk_h":{"flood":42.9,"landslide":0.0,"drought":14.1,"heat":56.0,"wind":28.1,"slr":13.9},"E":2.67,"S":1.83,"V":2.48,"ops":{"catchment_opd":60899,"catchment_vacc":1850,"opd_adults":35288,"opd_under5":14743,"deliveries":702,"adm_adults":1318,"adm_children":1124,"pwd":47,"maternal_deaths":1,"water_storage_l":100000,"water_use_l":457512},"staff":{"Public Health Officers":{"n":2,"adequate":"Yes"},"Medical doctors":{"n":3,"adequate":"Yes"},"Clinical officers":{"n":12,"adequate":"No"},"Nurses":{"n":43,"adequate":"No"},"Laboratory staff":{"n":5,"adequate":"Yes"},"Radiology staff":{"n":2,"adequate":"No"},"Nutrition staff":{"n":3,"adequate":"No"},"Health information officers":{"n":3,"adequate":"Yes"},"Pharmacy staff":{"n":5,"adequate":"Yes"},"Counselling staff":{"n":4,"adequate":"Yes"},"CHPs":{"n":143,"adequate":"Yes"},"Support staff":{"n":28,"adequate":"No"},"Morticians":{"n":1,"adequate":"Yes"}},"disruption":{"water":3,"waste":2,"energy":3,"supply":3},"priorities":[{"domain":"water","label":"Water services","vuln":2.6,"weight":5,"score":13.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Extreme temperatures"},{"domain":"workforce","label":"Health workforce","vuln":2.48,"weight":5,"score":12.4,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Extreme temperatures"},{"domain":"energy","label":"Energy services","vuln":2.36,"weight":5,"score":11.8,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Extreme temperatures"}]},{"name":"Watamu Health Centre","mfl":"12921","subcounty":"Malindi","keph":3,"lat":-3.3561,"lon":40.0201,"zone":"coastal_urban","ownership":"MoH","years":36,"exposure":{"flood":4,"landslide":0,"drought":1,"heat":3,"wind":2,"slr":2},"exposure_comm":{"flood":5,"landslide":0,"drought":1,"heat":3,"wind":2,"slr":3},"severity":{"flood":4,"landslide":0,"drought":1,"heat":3,"wind":2,"slr":2},"trend":{"flood":{"past":1,"present":2,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":4,"present":4,"future":5},"heat":{"past":3,"present":4,"future":4},"wind":{"past":4,"present":4,"future":4},"slr":{"past":2,"present":3,"future":4}},"routine":{"water":2,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":2,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"waste":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"energy":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"infrastructure":{"flood":1,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"workforce":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"supplies":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"leadership":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"earlywarning":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"continuity":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":1,"landslide":null,"drought":2,"heat":1,"wind":1,"slr":1}},"vuln":{"water":4.12,"waste":3.72,"energy":3.72,"infrastructure":3.6,"workforce":3.48,"supplies":4.0,"leadership":4.12,"earlywarning":4.0,"continuity":3.6,"alternatives":4.48},"vuln_h":{"water":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"waste":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"energy":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"infrastructure":{"flood":5,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"workforce":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"supplies":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"leadership":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"earlywarning":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"continuity":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":5,"landslide":null,"drought":4,"heat":5,"wind":5,"slr":5}},"weight":{"water":5,"waste":3,"energy":5,"infrastructure":4,"workforce":5,"supplies":3,"leadership":3,"earlywarning":2,"continuity":5,"alternatives":3},"risk":30.5,"risk_h":{"flood":74.7,"landslide":0.0,"drought":14.8,"heat":48.0,"wind":32.0,"slr":32.0},"E":2.0,"S":2.0,"V":3.82,"ops":{"catchment_opd":16400,"catchment_vacc":558,"opd_adults":9788,"opd_under5":4140,"deliveries":111,"adm_adults":0,"adm_children":0,"pwd":56,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":57076},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"Yes"},"Nurses":{"n":6,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":1,"adequate":"No"},"CHPs":{"n":13,"adequate":"Yes"},"Support staff":{"n":3,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":4.12,"weight":5,"score":20.6,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Heavy rainfall / flooding"},{"domain":"energy","label":"Energy services","vuln":3.72,"weight":5,"score":18.6,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Heavy rainfall / flooding"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.6,"weight":5,"score":18.0,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Heavy rainfall / flooding"}]},{"name":"Gede Health Centre","mfl":"11331","subcounty":"Malindi","keph":3,"lat":-3.3102,"lon":40.0172,"zone":"coastal_rural","ownership":"MoH","years":29,"exposure":{"flood":4,"landslide":0,"drought":3,"heat":3,"wind":4,"slr":4},"exposure_comm":{"flood":5,"landslide":1,"drought":3,"heat":3,"wind":5,"slr":4},"severity":{"flood":4,"landslide":0,"drought":3,"heat":3,"wind":4,"slr":4},"trend":{"flood":{"past":2,"present":2,"future":3},"landslide":{"past":0,"present":0,"future":0},"drought":{"past":2,"present":3,"future":3},"heat":{"past":4,"present":5,"future":5},"wind":{"past":4,"present":5,"future":5},"slr":{"past":3,"present":4,"future":4}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":2,"workforce":3,"supplies":3,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":3,"slr":3},"waste":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"energy":{"flood":2,"landslide":null,"drought":3,"heat":2,"wind":2,"slr":2},"infrastructure":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":1},"workforce":{"flood":2,"landslide":null,"drought":2,"heat":3,"wind":2,"slr":2},"supplies":{"flood":2,"landslide":null,"drought":3,"heat":3,"wind":2,"slr":2},"leadership":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"earlywarning":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":1,"slr":2},"continuity":{"flood":1,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2},"alternatives":{"flood":2,"landslide":null,"drought":2,"heat":2,"wind":2,"slr":2}},"vuln":{"water":3.36,"waste":3.72,"energy":3.48,"infrastructure":4.24,"workforce":3.48,"supplies":3.36,"leadership":4.12,"earlywarning":4.12,"continuity":3.72,"alternatives":4.0},"vuln_h":{"water":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":3,"slr":3},"waste":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"energy":{"flood":4,"landslide":null,"drought":3,"heat":4,"wind":4,"slr":4},"infrastructure":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":5},"workforce":{"flood":4,"landslide":null,"drought":4,"heat":3,"wind":4,"slr":4},"supplies":{"flood":4,"landslide":null,"drought":3,"heat":3,"wind":4,"slr":4},"leadership":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"earlywarning":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":5,"slr":4},"continuity":{"flood":5,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4},"alternatives":{"flood":4,"landslide":null,"drought":4,"heat":4,"wind":4,"slr":4}},"weight":{"water":4,"waste":3,"energy":4,"infrastructure":4,"workforce":5,"supplies":4,"leadership":2,"earlywarning":3,"continuity":5,"alternatives":3},"risk":44.2,"risk_h":{"flood":67.9,"landslide":0.0,"drought":44.7,"heat":44.3,"wind":64.6,"slr":64.0},"E":3.0,"S":3.0,"V":3.69,"ops":{"catchment_opd":14349,"catchment_vacc":436,"opd_adults":5955,"opd_under5":3607,"deliveries":93,"adm_adults":0,"adm_children":0,"pwd":6,"maternal_deaths":0,"water_storage_l":20000,"water_use_l":30496},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"Yes"},"Nurses":{"n":5,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"Yes"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":19,"adequate":"No"},"Support staff":{"n":3,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":1,"energy":2,"supply":2},"priorities":[{"domain":"continuity","label":"Service delivery continuity","vuln":3.72,"weight":5,"score":18.6,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Heavy rainfall / flooding"},{"domain":"workforce","label":"Health workforce","vuln":3.48,"weight":5,"score":17.4,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Heavy rainfall / flooding"},{"domain":"infrastructure","label":"Facility infrastructure","vuln":4.24,"weight":4,"score":17.0,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Heavy rainfall / flooding"}]},{"name":"Marafa Health Centre","mfl":"11771","subcounty":"Magarini","keph":4,"lat":-2.9981,"lon":39.9803,"zone":"hinterland_dry","ownership":"MoH","years":44,"exposure":{"flood":3,"landslide":1,"drought":5,"heat":5,"wind":3,"slr":0},"exposure_comm":{"flood":4,"landslide":2,"drought":5,"heat":5,"wind":3,"slr":1},"severity":{"flood":3,"landslide":1,"drought":5,"heat":4,"wind":3,"slr":0},"trend":{"flood":{"past":2,"present":2,"future":3},"landslide":{"past":3,"present":4,"future":5},"drought":{"past":2,"present":3,"future":3},"heat":{"past":3,"present":4,"future":5},"wind":{"past":4,"present":5,"future":5},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":4,"infrastructure":3,"workforce":3,"supplies":3,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":2,"drought":1,"heat":2,"wind":3,"slr":null},"waste":{"flood":2,"landslide":3,"drought":3,"heat":2,"wind":3,"slr":null},"energy":{"flood":3,"landslide":4,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":3,"heat":2,"wind":2,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"supplies":{"flood":2,"landslide":3,"drought":2,"heat":1,"wind":3,"slr":null},"leadership":{"flood":3,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":1,"wind":2,"slr":null},"continuity":{"flood":2,"landslide":4,"drought":3,"heat":3,"wind":3,"slr":null},"alternatives":{"flood":2,"landslide":2,"drought":1,"heat":1,"wind":1,"slr":null}},"vuln":{"water":3.6,"waste":3.24,"energy":2.48,"infrastructure":3.48,"workforce":3.24,"supplies":3.48,"leadership":3.48,"earlywarning":4.12,"continuity":2.6,"alternatives":4.36},"vuln_h":{"water":{"flood":4,"landslide":4,"drought":5,"heat":4,"wind":3,"slr":null},"waste":{"flood":4,"landslide":3,"drought":3,"heat":4,"wind":3,"slr":null},"energy":{"flood":3,"landslide":2,"drought":3,"heat":3,"wind":3,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":3,"heat":4,"wind":4,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"supplies":{"flood":4,"landslide":3,"drought":4,"heat":5,"wind":3,"slr":null},"leadership":{"flood":3,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":5,"wind":4,"slr":null},"continuity":{"flood":4,"landslide":2,"drought":3,"heat":3,"wind":3,"slr":null},"alternatives":{"flood":4,"landslide":4,"drought":5,"heat":5,"wind":5,"slr":null}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":4,"workforce":4,"supplies":5,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":3},"risk":36.5,"risk_h":{"flood":43.5,"landslide":13.1,"drought":75.0,"heat":72.7,"wind":39.4,"slr":0.0},"E":2.83,"S":2.67,"V":3.32,"ops":{"catchment_opd":24900,"catchment_vacc":929,"opd_adults":9704,"opd_under5":5408,"deliveries":259,"adm_adults":418,"adm_children":381,"pwd":41,"maternal_deaths":4,"water_storage_l":20000,"water_use_l":298221},"staff":{"Public Health Officers":{"n":1,"adequate":"No"},"Medical doctors":{"n":1,"adequate":"No"},"Clinical officers":{"n":5,"adequate":"Yes"},"Nurses":{"n":11,"adequate":"Yes"},"Laboratory staff":{"n":3,"adequate":"Yes"},"Radiology staff":{"n":1,"adequate":"No"},"Nutrition staff":{"n":1,"adequate":"No"},"Health information officers":{"n":1,"adequate":"Yes"},"Pharmacy staff":{"n":1,"adequate":"No"},"Counselling staff":{"n":2,"adequate":"No"},"CHPs":{"n":38,"adequate":"Yes"},"Support staff":{"n":10,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":2,"energy":3,"supply":1},"priorities":[{"domain":"water","label":"Water services","vuln":3.6,"weight":5,"score":18.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Drought"},{"domain":"supplies","label":"Medical products & equipment","vuln":3.48,"weight":5,"score":17.4,"gap":"Cold chain at risk in outages; stock-outs when access roads cut","action":"Buffer stock policy + solar direct-drive fridges; pre-positioned kits","hazard":"Drought"},{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.48,"weight":4,"score":13.9,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Extreme temperatures"}]},{"name":"Adu Health Centre","mfl":"10611","subcounty":"Magarini","keph":3,"lat":-2.9503,"lon":40.1002,"zone":"hinterland_dry","ownership":"MoH","years":25,"exposure":{"flood":3,"landslide":2,"drought":5,"heat":5,"wind":3,"slr":0},"exposure_comm":{"flood":3,"landslide":2,"drought":5,"heat":5,"wind":3,"slr":0},"severity":{"flood":3,"landslide":2,"drought":5,"heat":4,"wind":3,"slr":0},"trend":{"flood":{"past":2,"present":3,"future":4},"landslide":{"past":1,"present":2,"future":2},"drought":{"past":4,"present":4,"future":4},"heat":{"past":5,"present":5,"future":5},"wind":{"past":3,"present":4,"future":5},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":2,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":3,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":2,"drought":1,"heat":2,"wind":3,"slr":null},"waste":{"flood":1,"landslide":2,"drought":1,"heat":2,"wind":1,"slr":null},"energy":{"flood":2,"landslide":2,"drought":2,"heat":1,"wind":2,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":3,"heat":2,"wind":2,"slr":null},"workforce":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":3,"slr":null},"supplies":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"continuity":{"flood":1,"landslide":2,"drought":1,"heat":2,"wind":2,"slr":null},"alternatives":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":1,"slr":null}},"vuln":{"water":3.6,"waste":4.36,"energy":3.72,"infrastructure":3.48,"workforce":3.48,"supplies":3.36,"leadership":4.0,"earlywarning":3.6,"continuity":3.84,"alternatives":4.48},"vuln_h":{"water":{"flood":4,"landslide":4,"drought":5,"heat":4,"wind":3,"slr":null},"waste":{"flood":5,"landslide":4,"drought":5,"heat":4,"wind":5,"slr":null},"energy":{"flood":4,"landslide":4,"drought":4,"heat":5,"wind":4,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":3,"heat":4,"wind":4,"slr":null},"workforce":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":3,"slr":null},"supplies":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"continuity":{"flood":5,"landslide":4,"drought":5,"heat":4,"wind":4,"slr":null},"alternatives":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":5,"slr":null}},"weight":{"water":4,"waste":4,"energy":4,"infrastructure":3,"workforce":5,"supplies":4,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":2},"risk":43.1,"risk_h":{"flood":49.7,"landslide":30.9,"drought":83.4,"heat":74.0,"wind":44.3,"slr":0.0},"E":3.0,"S":2.83,"V":3.7,"ops":{"catchment_opd":12299,"catchment_vacc":447,"opd_adults":7224,"opd_under5":1878,"deliveries":149,"adm_adults":0,"adm_children":0,"pwd":43,"maternal_deaths":0,"water_storage_l":20000,"water_use_l":38917},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":2,"adequate":"No"},"Nurses":{"n":6,"adequate":"No"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":1,"adequate":"Yes"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":12,"adequate":"No"},"Support staff":{"n":3,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"waste","label":"Waste, sanitation & sewerage","vuln":4.36,"weight":4,"score":17.4,"gap":"Placental pit and incinerator flood or become unusable in long rains","action":"Raise and bund waste structures; contract standby waste transport","hazard":"Drought"},{"domain":"workforce","label":"Health workforce","vuln":3.48,"weight":5,"score":17.4,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Drought"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.84,"weight":4,"score":15.4,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Drought"}]},{"name":"Garashi Dispensary","mfl":"11322","subcounty":"Magarini","keph":2,"lat":-3.0502,"lon":40.0503,"zone":"hinterland_dry","ownership":"MoH","years":18,"exposure":{"flood":3,"landslide":1,"drought":5,"heat":4,"wind":2,"slr":0},"exposure_comm":{"flood":4,"landslide":2,"drought":5,"heat":5,"wind":3,"slr":0},"severity":{"flood":3,"landslide":2,"drought":5,"heat":4,"wind":3,"slr":0},"trend":{"flood":{"past":2,"present":3,"future":3},"landslide":{"past":2,"present":3,"future":4},"drought":{"past":2,"present":3,"future":4},"heat":{"past":3,"present":4,"future":5},"wind":{"past":3,"present":4,"future":4},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":2,"waste":2,"energy":2,"infrastructure":2,"workforce":2,"supplies":3,"leadership":2,"earlywarning":2,"continuity":2,"alternatives":2},"stressed":{"water":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":2,"slr":null},"waste":{"flood":1,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"energy":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":2,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":2,"heat":1,"wind":2,"slr":null},"workforce":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"supplies":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":2,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":1,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":1,"heat":1,"wind":2,"slr":null},"continuity":{"flood":2,"landslide":2,"drought":1,"heat":2,"wind":2,"slr":null},"alternatives":{"flood":1,"landslide":2,"drought":1,"heat":1,"wind":1,"slr":null}},"vuln":{"water":4.36,"waste":4.12,"energy":4.36,"infrastructure":4.12,"workforce":4.0,"supplies":3.48,"leadership":4.12,"earlywarning":4.24,"continuity":4.12,"alternatives":4.48},"vuln_h":{"water":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":4,"slr":null},"waste":{"flood":5,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"energy":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":4,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":4,"heat":5,"wind":4,"slr":null},"workforce":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"supplies":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":5,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":5,"heat":5,"wind":4,"slr":null},"continuity":{"flood":4,"landslide":4,"drought":5,"heat":4,"wind":4,"slr":null},"alternatives":{"flood":5,"landslide":4,"drought":5,"heat":5,"wind":5,"slr":null}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":4,"workforce":5,"supplies":4,"leadership":2,"earlywarning":3,"continuity":4,"alternatives":3},"risk":43.7,"risk_h":{"flood":53.2,"landslide":21.9,"drought":89.4,"heat":72.5,"wind":39.2,"slr":0.0},"E":2.5,"S":2.83,"V":4.11,"ops":{"catchment_opd":10800,"catchment_vacc":344,"opd_adults":3953,"opd_under5":1640,"deliveries":0,"adm_adults":0,"adm_children":0,"pwd":46,"maternal_deaths":0,"water_storage_l":24000,"water_use_l":33368},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"Yes"},"Nurses":{"n":2,"adequate":"Yes"},"Laboratory staff":{"n":0,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":0,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":4,"adequate":"No"},"Support staff":{"n":1,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":1,"waste":1,"energy":1,"supply":2},"priorities":[{"domain":"water","label":"Water services","vuln":4.36,"weight":5,"score":21.8,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Drought"},{"domain":"energy","label":"Energy services","vuln":4.36,"weight":5,"score":21.8,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Drought"},{"domain":"workforce","label":"Health workforce","vuln":4.0,"weight":5,"score":20.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Drought"}]},{"name":"Kaloleni Sub-County Hospital","mfl":"11631","subcounty":"Kaloleni","keph":4,"lat":-3.8302,"lon":39.6601,"zone":"hills","ownership":"MoH","years":57,"exposure":{"flood":3,"landslide":4,"drought":4,"heat":3,"wind":3,"slr":0},"exposure_comm":{"flood":4,"landslide":5,"drought":4,"heat":3,"wind":3,"slr":0},"severity":{"flood":3,"landslide":4,"drought":3,"heat":3,"wind":3,"slr":0},"trend":{"flood":{"past":1,"present":2,"future":3},"landslide":{"past":4,"present":4,"future":5},"drought":{"past":3,"present":4,"future":5},"heat":{"past":2,"present":3,"future":3},"wind":{"past":3,"present":3,"future":4},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":3,"earlywarning":2,"continuity":3,"alternatives":3},"stressed":{"water":{"flood":3,"landslide":3,"drought":2,"heat":3,"wind":3,"slr":null},"waste":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":2,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":3,"heat":2,"wind":2,"slr":null},"workforce":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"supplies":{"flood":2,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"continuity":{"flood":3,"landslide":2,"drought":3,"heat":3,"wind":2,"slr":null},"alternatives":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null}},"vuln":{"water":3.12,"waste":3.6,"energy":3.12,"infrastructure":3.48,"workforce":3.6,"supplies":3.12,"leadership":3.6,"earlywarning":4.0,"continuity":3.24,"alternatives":3.6},"vuln_h":{"water":{"flood":3,"landslide":3,"drought":4,"heat":3,"wind":3,"slr":null},"waste":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":4,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":3,"heat":4,"wind":4,"slr":null},"workforce":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"supplies":{"flood":4,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"continuity":{"flood":3,"landslide":4,"drought":3,"heat":3,"wind":4,"slr":null},"alternatives":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":5,"workforce":5,"supplies":5,"leadership":3,"earlywarning":2,"continuity":5,"alternatives":3},"risk":37.3,"risk_h":{"flood":44.5,"landslide":56.9,"drought":49.3,"heat":42.7,"wind":44.5,"slr":0.0},"E":2.83,"S":2.67,"V":3.39,"ops":{"catchment_opd":16600,"catchment_vacc":586,"opd_adults":9123,"opd_under5":3552,"deliveries":102,"adm_adults":420,"adm_children":298,"pwd":39,"maternal_deaths":0,"water_storage_l":20000,"water_use_l":80826},"staff":{"Public Health Officers":{"n":1,"adequate":"Yes"},"Medical doctors":{"n":1,"adequate":"Yes"},"Clinical officers":{"n":3,"adequate":"Yes"},"Nurses":{"n":17,"adequate":"No"},"Laboratory staff":{"n":2,"adequate":"Yes"},"Radiology staff":{"n":1,"adequate":"No"},"Nutrition staff":{"n":1,"adequate":"No"},"Health information officers":{"n":1,"adequate":"Yes"},"Pharmacy staff":{"n":2,"adequate":"Yes"},"Counselling staff":{"n":2,"adequate":"No"},"CHPs":{"n":39,"adequate":"No"},"Support staff":{"n":10,"adequate":"Yes"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":2,"energy":2,"supply":2},"priorities":[{"domain":"workforce","label":"Health workforce","vuln":3.6,"weight":5,"score":18.0,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Landslides / mudslides"},{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.48,"weight":5,"score":17.4,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Landslides / mudslides"},{"domain":"continuity","label":"Service delivery continuity","vuln":3.24,"weight":5,"score":16.2,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Landslides / mudslides"}]},{"name":"Mariakani Sub-County Hospital","mfl":"11781","subcounty":"Kaloleni","keph":4,"lat":-3.8603,"lon":39.4704,"zone":"hills","ownership":"MoH","years":61,"exposure":{"flood":2,"landslide":2,"drought":3,"heat":3,"wind":4,"slr":0},"exposure_comm":{"flood":2,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":1},"severity":{"flood":2,"landslide":2,"drought":3,"heat":2,"wind":4,"slr":0},"trend":{"flood":{"past":3,"present":4,"future":5},"landslide":{"past":4,"present":4,"future":5},"drought":{"past":3,"present":3,"future":3},"heat":{"past":3,"present":4,"future":4},"wind":{"past":3,"present":4,"future":5},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":3,"earlywarning":3,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"waste":{"flood":2,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":2,"slr":null},"infrastructure":{"flood":2,"landslide":3,"drought":3,"heat":3,"wind":2,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":2,"heat":3,"wind":2,"slr":null},"supplies":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"leadership":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"earlywarning":{"flood":2,"landslide":3,"drought":3,"heat":2,"wind":2,"slr":null},"continuity":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":2,"slr":null},"alternatives":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null}},"vuln":{"water":3.0,"waste":3.12,"energy":3.12,"infrastructure":3.24,"workforce":3.24,"supplies":3.0,"leadership":3.0,"earlywarning":3.36,"continuity":3.48,"alternatives":4.0},"vuln_h":{"water":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"waste":{"flood":4,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":4,"slr":null},"infrastructure":{"flood":4,"landslide":3,"drought":3,"heat":3,"wind":4,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":4,"heat":3,"wind":4,"slr":null},"supplies":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"leadership":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"earlywarning":{"flood":4,"landslide":3,"drought":3,"heat":4,"wind":4,"slr":null},"continuity":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":4,"slr":null},"alternatives":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":5,"workforce":5,"supplies":5,"leadership":3,"earlywarning":3,"continuity":5,"alternatives":3},"risk":28.2,"risk_h":{"flood":26.7,"landslide":24.0,"drought":37.7,"heat":30.2,"wind":56.2,"slr":0.0},"E":2.33,"S":2.17,"V":3.13,"ops":{"catchment_opd":37350,"catchment_vacc":1270,"opd_adults":16927,"opd_under5":5230,"deliveries":402,"adm_adults":787,"adm_children":700,"pwd":44,"maternal_deaths":0,"water_storage_l":100000,"water_use_l":413223},"staff":{"Public Health Officers":{"n":1,"adequate":"No"},"Medical doctors":{"n":1,"adequate":"Yes"},"Clinical officers":{"n":4,"adequate":"Yes"},"Nurses":{"n":13,"adequate":"Yes"},"Laboratory staff":{"n":2,"adequate":"No"},"Radiology staff":{"n":1,"adequate":"Yes"},"Nutrition staff":{"n":1,"adequate":"No"},"Health information officers":{"n":1,"adequate":"No"},"Pharmacy staff":{"n":2,"adequate":"Yes"},"Counselling staff":{"n":1,"adequate":"No"},"CHPs":{"n":57,"adequate":"No"},"Support staff":{"n":8,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":3,"waste":2,"energy":2,"supply":3},"priorities":[{"domain":"continuity","label":"Service delivery continuity","vuln":3.48,"weight":5,"score":17.4,"gap":"Maternity, vaccination and chronic-care visits lapse during events","action":"Service continuity plan with priority service list and catch-up clinics","hazard":"Strong winds"},{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.24,"weight":5,"score":16.2,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Strong winds"},{"domain":"workforce","label":"Health workforce","vuln":3.24,"weight":5,"score":16.2,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Strong winds"}]},{"name":"Rabai Rural Demonstration Health Centre","mfl":"12401","subcounty":"Rabai","keph":4,"lat":-3.9401,"lon":39.5902,"zone":"hills","ownership":"MoH","years":49,"exposure":{"flood":3,"landslide":4,"drought":2,"heat":3,"wind":3,"slr":0},"exposure_comm":{"flood":3,"landslide":5,"drought":2,"heat":3,"wind":3,"slr":0},"severity":{"flood":2,"landslide":3,"drought":2,"heat":3,"wind":3,"slr":0},"trend":{"flood":{"past":1,"present":2,"future":3},"landslide":{"past":3,"present":3,"future":3},"drought":{"past":4,"present":5,"future":5},"heat":{"past":3,"present":4,"future":4},"wind":{"past":5,"present":5,"future":5},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":4,"infrastructure":3,"workforce":4,"supplies":4,"leadership":3,"earlywarning":3,"continuity":4,"alternatives":3},"stressed":{"water":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"waste":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":2,"slr":null},"infrastructure":{"flood":3,"landslide":2,"drought":3,"heat":3,"wind":3,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":4,"heat":3,"wind":4,"slr":null},"supplies":{"flood":4,"landslide":3,"drought":4,"heat":3,"wind":4,"slr":null},"leadership":{"flood":2,"landslide":2,"drought":3,"heat":3,"wind":3,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":3,"heat":2,"wind":2,"slr":null},"continuity":{"flood":3,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"alternatives":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null}},"vuln":{"water":3.0,"waste":3.0,"energy":2.72,"infrastructure":3.12,"workforce":2.36,"supplies":2.24,"leadership":3.24,"earlywarning":3.48,"continuity":2.36,"alternatives":3.6},"vuln_h":{"water":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"waste":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":3,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":4,"slr":null},"infrastructure":{"flood":3,"landslide":4,"drought":3,"heat":3,"wind":3,"slr":null},"workforce":{"flood":3,"landslide":3,"drought":2,"heat":3,"wind":2,"slr":null},"supplies":{"flood":2,"landslide":3,"drought":2,"heat":3,"wind":2,"slr":null},"leadership":{"flood":4,"landslide":4,"drought":3,"heat":3,"wind":3,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":3,"heat":4,"wind":4,"slr":null},"continuity":{"flood":3,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"alternatives":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null}},"weight":{"water":5,"waste":4,"energy":5,"infrastructure":5,"workforce":5,"supplies":5,"leadership":3,"earlywarning":3,"continuity":5,"alternatives":3},"risk":26.4,"risk_h":{"flood":29.7,"landslide":45.9,"drought":21.7,"heat":37.0,"wind":35.3,"slr":0.0},"E":2.5,"S":2.17,"V":2.84,"ops":{"catchment_opd":33200,"catchment_vacc":1060,"opd_adults":18424,"opd_under5":8029,"deliveries":401,"adm_adults":769,"adm_children":310,"pwd":32,"maternal_deaths":3,"water_storage_l":100000,"water_use_l":171582},"staff":{"Public Health Officers":{"n":1,"adequate":"No"},"Medical doctors":{"n":1,"adequate":"No"},"Clinical officers":{"n":5,"adequate":"Yes"},"Nurses":{"n":17,"adequate":"No"},"Laboratory staff":{"n":2,"adequate":"Yes"},"Radiology staff":{"n":1,"adequate":"Yes"},"Nutrition staff":{"n":1,"adequate":"No"},"Health information officers":{"n":1,"adequate":"No"},"Pharmacy staff":{"n":2,"adequate":"Yes"},"Counselling staff":{"n":2,"adequate":"Yes"},"CHPs":{"n":40,"adequate":"Yes"},"Support staff":{"n":9,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":3,"waste":3,"energy":2,"supply":3},"priorities":[{"domain":"infrastructure","label":"Facility infrastructure","vuln":3.12,"weight":5,"score":15.6,"gap":"Roof cover and drainage fail under strong winds; ward floods at ground level","action":"Roof strengthening, gutter/drainage works, raise thresholds","hazard":"Landslides / mudslides"},{"domain":"water","label":"Water services","vuln":3.0,"weight":5,"score":15.0,"gap":"Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer","action":"Install/expand rain harvesting and elevated storage; borehole rehabilitation","hazard":"Landslides / mudslides"},{"domain":"energy","label":"Energy services","vuln":2.72,"weight":5,"score":13.6,"gap":"KPLC outages during storms; generator present but no fuel budget","action":"Solar PV with battery backup for maternity, lab and cold chain","hazard":"Landslides / mudslides"}]},{"name":"Ribe Health Centre","mfl":"12451","subcounty":"Rabai","keph":3,"lat":-3.9102,"lon":39.6202,"zone":"hills","ownership":"MoH","years":33,"exposure":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":0},"exposure_comm":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":0},"severity":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":0},"trend":{"flood":{"past":1,"present":2,"future":2},"landslide":{"past":4,"present":4,"future":5},"drought":{"past":5,"present":5,"future":5},"heat":{"past":4,"present":5,"future":5},"wind":{"past":2,"present":3,"future":4},"slr":{"past":0,"present":0,"future":0}},"routine":{"water":3,"waste":3,"energy":3,"infrastructure":3,"workforce":3,"supplies":3,"leadership":2,"earlywarning":2,"continuity":3,"alternatives":2},"stressed":{"water":{"flood":2,"landslide":3,"drought":2,"heat":2,"wind":3,"slr":null},"waste":{"flood":2,"landslide":2,"drought":3,"heat":3,"wind":2,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":2,"slr":null},"infrastructure":{"flood":2,"landslide":2,"drought":3,"heat":3,"wind":2,"slr":null},"workforce":{"flood":2,"landslide":3,"drought":2,"heat":3,"wind":2,"slr":null},"supplies":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"leadership":{"flood":2,"landslide":1,"drought":2,"heat":2,"wind":2,"slr":null},"earlywarning":{"flood":2,"landslide":2,"drought":2,"heat":2,"wind":2,"slr":null},"continuity":{"flood":3,"landslide":2,"drought":2,"heat":3,"wind":2,"slr":null},"alternatives":{"flood":1,"landslide":1,"drought":1,"heat":1,"wind":2,"slr":null}},"vuln":{"water":3.36,"waste":3.36,"energy":3.12,"infrastructure":3.36,"workforce":3.36,"supplies":3.6,"leadership":4.12,"earlywarning":4.0,"continuity":3.36,"alternatives":4.48},"vuln_h":{"water":{"flood":4,"landslide":3,"drought":4,"heat":4,"wind":3,"slr":null},"waste":{"flood":4,"landslide":4,"drought":3,"heat":3,"wind":4,"slr":null},"energy":{"flood":3,"landslide":3,"drought":3,"heat":3,"wind":4,"slr":null},"infrastructure":{"flood":4,"landslide":4,"drought":3,"heat":3,"wind":4,"slr":null},"workforce":{"flood":4,"landslide":3,"drought":4,"heat":3,"wind":4,"slr":null},"supplies":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"leadership":{"flood":4,"landslide":5,"drought":4,"heat":4,"wind":4,"slr":null},"earlywarning":{"flood":4,"landslide":4,"drought":4,"heat":4,"wind":4,"slr":null},"continuity":{"flood":3,"landslide":4,"drought":4,"heat":3,"wind":4,"slr":null},"alternatives":{"flood":5,"landslide":5,"drought":5,"heat":5,"wind":4,"slr":null}},"weight":{"water":4,"waste":4,"energy":4,"infrastructure":4,"workforce":5,"supplies":4,"leadership":3,"earlywarning":2,"continuity":4,"alternatives":3},"risk":27.8,"risk_h":{"flood":30.9,"landslide":44.0,"drought":28.8,"heat":27.5,"wind":46.4,"slr":0.0},"E":2.0,"S":2.0,"V":3.48,"ops":{"catchment_opd":12299,"catchment_vacc":348,"opd_adults":7249,"opd_under5":2564,"deliveries":125,"adm_adults":0,"adm_children":0,"pwd":37,"maternal_deaths":0,"water_storage_l":10000,"water_use_l":48167},"staff":{"Public Health Officers":{"n":0,"adequate":"No"},"Medical doctors":{"n":0,"adequate":"No"},"Clinical officers":{"n":1,"adequate":"Yes"},"Nurses":{"n":4,"adequate":"Yes"},"Laboratory staff":{"n":1,"adequate":"No"},"Radiology staff":{"n":0,"adequate":"No"},"Nutrition staff":{"n":0,"adequate":"No"},"Health information officers":{"n":0,"adequate":"No"},"Pharmacy staff":{"n":1,"adequate":"No"},"Counselling staff":{"n":0,"adequate":"No"},"CHPs":{"n":12,"adequate":"No"},"Support staff":{"n":3,"adequate":"No"},"Morticians":{"n":0,"adequate":"No"}},"disruption":{"water":2,"waste":2,"energy":2,"supply":2},"priorities":[{"domain":"workforce","label":"Health workforce","vuln":3.36,"weight":5,"score":16.8,"gap":"No staff trained on climate-sensitive disease management or surge protocols","action":"Cascade training on heat illness, cholera, surge and risk communication","hazard":"Strong winds"},{"domain":"supplies","label":"Medical products & equipment","vuln":3.6,"weight":4,"score":14.4,"gap":"Cold chain at risk in outages; stock-outs when access roads cut","action":"Buffer stock policy + solar direct-drive fridges; pre-positioned kits","hazard":"Landslides / mudslides"},{"domain":"alternatives","label":"Alternative service provision","vuln":4.48,"weight":3,"score":13.4,"gap":"Outreach and telemedicine exist on paper only; no fuel or airtime","action":"Resource and test outreach/CHP kits; referral MoUs with neighbouring facility","hazard":"Landslides / mudslides"}]}]};
+const F = DATA.facilities;
+const HAZ = DATA.meta.hazards, HK = HAZ.map(h => h.key);
+const DOMS = DATA.meta.domains;
+const HLAB = Object.fromEntries(HAZ.map(h => [h.key, h.label]));
+const DLAB = Object.fromEntries(DOMS.map(d => [d.key, d.label]));
+const SUMDOM = DOMS.slice(0, 8).map(d => d.key);
+const SUBS = [...new Set(F.map(f => f.subcounty))].sort();
+
+/* counties in the programme — only Kilifi has been assessed so far */
+const COUNTIES = [
+  {name: "Kirinyaga", live: false, note: "Assessment not yet scheduled"},
+  {name: "Kilifi",    live: true,  note: "Assessed March–May 2026"},
+  {name: "Kisumu",    live: false, note: "Assessment not yet scheduled"},
+  {name: "Turkana",   live: false, note: "Assessment not yet scheduled"}
+];
+
+const BANDS = [
+  {max: 30, name: "Low", cls: "low", v: "--b1"},
+  {max: 40, name: "Moderate", cls: "mod", v: "--b2"},
+  {max: 50, name: "High", cls: "high", v: "--b3"},
+  {max: 1e9, name: "Very high", cls: "vhigh", v: "--b4"}
+];
+const band = r => BANDS.find(b => r < b.max);
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const RAMP = ["--s1","--s2","--s3","--s4","--s5","--s6","--s7"];
+const rampFill = (v, max) => cssv(RAMP[Math.floor(Math.max(0, Math.min(.999, v / max)) * RAMP.length)]);
+const rampInk = (v, max) => (v / max) < .40;
+const fmt = n => n.toLocaleString("en-KE");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const shortName = n => n.replace(/ (Rural Demonstration Health Centre|Model Health Centre)$/, " HC")
+  .replace(/ Sub-County Hospital$/, " Sub-Cty Hosp").replace(/ Health Centre$/, " HC")
+  .replace(/ County Hospital$/, " County Hosp");
+
+let state = {screen: "counties", haz: "", sub: "", sel: null};
+
+/* ---------------- tooltip ---------------- */
+const tip = document.getElementById("tip");
+function bindTip(el, html){
+  el.addEventListener("mousemove", e => {
+    tip.innerHTML = html; tip.style.opacity = 1;
+    const r = tip.getBoundingClientRect();
+    let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+    if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  });
+  el.addEventListener("mouseleave", () => tip.style.opacity = 0);
+}
+
+/* ---------------- shared measures ---------------- */
+const inSub = s => F.filter(f => f.subcounty === s);
+const exposedTo = h => F.filter(f => f.exposure[h] > 0);
+function hazVuln(f, h){
+  let ws = 0, s = 0;
+  SUMDOM.forEach(d => { const v = f.vuln_h[d][h]; if (v !== null){ s += v * f.weight[d]; ws += f.weight[d]; } });
+  return ws ? s / ws : 0;
+}
+const leadHazard = list => HK.map(h => {
+  const ex = list.filter(f => f.exposure[h] > 0);
+  return {h, m: ex.length ? mean(ex.map(f => f.risk_h[h])) : 0, n: ex.length};
+}).sort((a, b) => b.m - a.m);
+
+function topGaps(list){
+  const tally = {};
+  list.forEach(f => f.priorities.forEach(p => {
+    tally[p.domain] = tally[p.domain] || {n: 0, score: 0, label: p.label};
+    tally[p.domain].n++; tally[p.domain].score += p.score;
+  }));
+  return Object.entries(tally).map(([k, v]) => ({k, ...v, avg: v.score / v.n}))
+    .sort((a, b) => b.n - a.n || b.avg - a.avg);
+}
+
+/* ---------------- reusable pieces ---------------- */
+function barList(el, rows, opts = {}){
+  const max = Math.max(1, ...rows.map(r => r.v));
+  el.innerHTML = rows.map(r => `
+    <button class="bar-row" type="button" data-k="${esc(r.key)}" aria-current="${r.current === true}">
+      <span class="nm">${esc(r.label)}</span>
+      <span class="bar-track"><span class="bar-fill"
+        style="width:${(r.v / max * 100).toFixed(1)}%;background:${r.color || rampFill(r.v, opts.scaleMax || max)}"></span></span>
+      <span class="val tnum">${r.display !== undefined ? r.display : r.v.toFixed(0)}</span></button>`).join("");
+  el.querySelectorAll(".bar-row").forEach(b => {
+    const r = rows.find(x => String(x.key) === b.dataset.k);
+    if (r.tip) bindTip(b, r.tip);
+    if (r.onClick) b.addEventListener("click", r.onClick);
+  });
+}
+
+function facilityRows(list, valueOf, opts = {}){
+  return list.map(f => {
+    const v = valueOf(f), b = band(v);
+    return {
+      key: f.name, label: shortName(f.name), v,
+      color: cssv(b.v), display: v.toFixed(0),
+      tip: `<div class="t">${esc(f.name)}</div>
+        <div class="r"><span>${esc(f.subcounty)} · Level ${f.keph}</span></div>
+        <div class="r"><span>${opts.metric || "Overall risk"}</span><b>${v.toFixed(0)} · ${b.name}</b></div>
+        <div class="r"><span>People served</span><b>${fmt(f.ops.catchment_opd)}</b></div>
+        <div class="r" style="margin-top:4px;color:var(--muted)">Click to open this facility</div>`,
+      onClick: () => openFacility(f.name)
+    };
+  }).sort((a, b) => b.v - a.v);
+}
+
+function riskLegend(el){
+  el.innerHTML = `<span class="item" style="color:var(--muted)">Risk band</span>` +
+    BANDS.map(b => `<span class="item"><span class="swatch" style="background:${cssv(b.v)}"></span>${b.name}</span>`).join("");
+}
+
+/* ---------------- map ---------------- */
+const LON = [39.34, 40.24], LAT = [-3.99, -2.88], MW = 560, MH = 470, PAD = {l:26, r:26, t:18, b:34};
+const mx_ = v => PAD.l + (v - LON[0]) / (LON[1] - LON[0]) * (MW - PAD.l - PAD.r);
+const my_ = v => PAD.t + (LAT[1] - v) / (LAT[1] - LAT[0]) * (MH - PAD.t - PAD.b);
+
+function drawMap(svgEl, list, valueOf, opts = {}){
+  const maxPop = Math.max(...F.map(f => f.ops.catchment_opd));
+  const rOf = p => 5 + Math.sqrt(p / maxPop) * 13;
+  const shore = [[39.68,-3.99],[39.75,-3.94],[39.86,-3.63],[39.95,-3.47],[40.03,-3.36],
+                 [40.09,-3.29],[40.14,-3.19],[40.20,-3.02],[40.24,-2.88]];
+  const sp = shore.map(p => `${mx_(p[0]).toFixed(1)},${my_(p[1]).toFixed(1)}`).join(" ");
+  const ocean = sp + ` ${MW-PAD.r},${my_(-2.88).toFixed(1)} ${MW-PAD.r},${MH-PAD.b} ${mx_(39.68).toFixed(1)},${MH-PAD.b}`;
+  const g = [];
+  for (let lo = 39.5; lo <= 40.2; lo += .25) g.push(`<line x1="${mx_(lo)}" y1="${PAD.t}" x2="${mx_(lo)}" y2="${MH-PAD.b}" stroke="${cssv("--grid")}"/>`);
+  for (let la = -3.9; la <= -2.9; la += .25) g.push(`<line x1="${PAD.l}" y1="${my_(la)}" x2="${MW-PAD.r}" y2="${my_(la)}" stroke="${cssv("--grid")}"/>`);
+
+  const shownSet = new Set(list.map(f => f.name));
+  const faded = opts.showAll ? F.filter(f => !shownSet.has(f.name)) : [];
+  const fadedDots = faded.map(f => `<circle cx="${mx_(f.lon).toFixed(1)}" cy="${my_(f.lat).toFixed(1)}"
+      r="${rOf(f.ops.catchment_opd).toFixed(1)}" fill="${cssv("--axis")}" fill-opacity=".22"
+      stroke="${cssv("--surface")}" stroke-width="1.4"/>`).join("");
+
+  const dots = [...list].sort((a, b) => b.ops.catchment_opd - a.ops.catchment_opd).map(f => {
+    const v = valueOf(f), b = band(v), sel = state.sel === f.name;
+    return `<circle class="dot" tabindex="0" role="button" data-n="${esc(f.name)}"
+      cx="${mx_(f.lon).toFixed(1)}" cy="${my_(f.lat).toFixed(1)}" r="${rOf(f.ops.catchment_opd).toFixed(1)}"
+      fill="${cssv(b.v)}" fill-opacity="${sel ? 1 : .9}"
+      stroke="${sel ? cssv("--ink") : cssv("--surface")}" stroke-width="${sel ? 2.5 : 1.8}"><title>${esc(f.name)}</title></circle>`;
+  }).join("");
+
+  const labels = list.filter(f => f.keph >= 4 || list.length <= 5).map(f =>
+    `<text x="${(mx_(f.lon) + rOf(f.ops.catchment_opd) + 5).toFixed(1)}" y="${(my_(f.lat) + 3.5).toFixed(1)}"
+      font-size="10" fill="${cssv("--ink-2")}" font-family="IBM Plex Mono, monospace"
+      >${esc(shortName(f.name).replace(/ (HC|Sub-Cty Hosp|County Hosp|Dispensary)$/, ""))}</text>`).join("");
+
+  svgEl.innerHTML = `${g.join("")}
+    <polygon points="${ocean}" fill="${cssv("--ocean")}"/>
+    <polyline points="${sp}" fill="none" stroke="${cssv("--axis")}" stroke-width="1.5"/>
+    <text x="${MW-PAD.r-4}" y="${my_(-3.74)}" font-size="10.5" fill="${cssv("--muted")}" text-anchor="end"
+      font-family="IBM Plex Mono, monospace" letter-spacing="1.5">INDIAN OCEAN</text>
+    ${fadedDots}${dots}${labels}
+    <text x="${PAD.l}" y="${MH-10}" font-size="10" fill="${cssv("--muted")}" font-family="IBM Plex Mono, monospace">39.4°E</text>
+    <text x="${MW-PAD.r}" y="${MH-10}" font-size="10" fill="${cssv("--muted")}" text-anchor="end" font-family="IBM Plex Mono, monospace">40.2°E</text>`;
+
+  svgEl.querySelectorAll(".dot").forEach(c => {
+    const f = F.find(x => x.name === c.dataset.n), v = valueOf(f);
+    bindTip(c, `<div class="t">${esc(f.name)}</div>
+      <div class="r"><span>${esc(f.subcounty)} · Level ${f.keph}</span></div>
+      <div class="r"><span>${opts.metric || "Overall risk"}</span><b>${v.toFixed(0)} · ${band(v).name}</b></div>
+      <div class="r"><span>People served</span><b>${fmt(f.ops.catchment_opd)}</b></div>`);
+    c.addEventListener("click", () => openFacility(f.name));
+    c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openFacility(f.name); } });
+  });
+}
+
+/* ---------------- screen 1: counties ---------------- */
+function drawCounties(){
+  document.getElementById("counties").innerHTML = COUNTIES.map(c => {
+    if (!c.live) return `<button class="county" type="button" disabled>
+      <span class="tag soon">Not yet assessed</span>
+      <h3>${esc(c.name)}</h3><span class="status">${esc(c.note)}</span>
+      <span class="figs"><span><b>—</b>facilities</span></span></button>`;
+    const hi = F.filter(f => f.risk >= 40).length;
+    return `<button class="county" type="button" data-c="${esc(c.name)}">
+      <span class="tag live">Ready</span>
+      <h3>${esc(c.name)}</h3><span class="status">${esc(c.note)}</span>
+      <span class="figs"><span><b>${F.length}</b>facilities</span><span><b>${hi}</b>at high risk</span></span>
+      <span class="go">Open assessment →</span></button>`;
+  }).join("");
+  document.querySelectorAll("#counties .county[data-c]").forEach(b =>
+    b.addEventListener("click", () => go("overview")));
+}
+
+/* ---------------- screen 2: overview ---------------- */
+const LENSES = [
+  {k: "hazard", t: "By climate hazard", d: "Start from the weather. See which hazard does the most damage across the county, which facilities it threatens and what it breaks.",
+   ico: '<path d="M6 22h14a5 5 0 0 0 .6-10A7 7 0 0 0 7.3 11 4.5 4.5 0 0 0 6 22z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 26l-2 5M17 26l-2 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+  {k: "sub", t: "By sub-county", d: "Start from geography. Compare the seven sub-counties, then look inside the one you are responsible for.",
+   ico: '<path d="M6 10l7-3 6 3 7-3v20l-7 3-6-3-7 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 7v20M19 10v20" stroke="currentColor" stroke-width="2"/>'},
+  {k: "scores", t: "By overall score", d: "Start from the ranking. Every facility scored, what to fix first county-wide, and the full hazard-by-facility table.",
+   ico: '<path d="M7 26V17M15 26V10M23 26v-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M5 30h22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
+];
+
+function drawOverview(){
+  const hi = F.filter(f => f.risk >= 40);
+  const pop = hi.reduce((a, f) => a + f.ops.catchment_opd, 0);
+  const lead = leadHazard(F)[0];
+  const gaps = topGaps(F);
+
+  document.getElementById("ov-lede").innerHTML =
+    `Twenty facilities across seven sub-counties have been assessed. <strong>${hi.length} of them carry high risk</strong>, between them serving about <strong>${fmt(pop)} people</strong>.
+     The weather that does most damage county-wide is <strong>${esc(lead.h === "heat" ? "extreme heat" : HLAB[lead.h].toLowerCase())}</strong>,
+     and the system facilities most often name as their weakest link is
+     <strong>${esc(gaps[0].label.toLowerCase())}</strong>.`;
+
+  document.getElementById("ov-stats").innerHTML = `
+    <div class="stat"><span class="k">Facilities assessed</span><span class="v">${F.length}</span>
+      <span class="sub">KEPH Levels II–V</span></div>
+    <div class="stat"><span class="k">In the high-risk band</span>
+      <span class="v" style="color:${cssv("--critical")}">${hi.length}</span>
+      <span class="sub">composite score 40+</span></div>
+    <div class="stat"><span class="k">People behind them</span><span class="v">${fmt(pop)}</span>
+      <span class="sub">outpatient catchment</span></div>
+    <div class="stat"><span class="k">Leading hazard</span>
+      <span class="v" style="font-size:21px;line-height:1.3">${esc(HLAB[lead.h])}</span>
+      <span class="sub">mean risk ${lead.m.toFixed(0)} · ${lead.n} facilities exposed</span></div>`;
+
+  drawMap(document.getElementById("ov-map"), F, f => f.risk);
+  riskLegend(document.getElementById("ov-maplegend"));
+  barList(document.getElementById("ov-top"), facilityRows(F, f => f.risk).slice(0, 10));
+
+  document.getElementById("lenses").innerHTML = LENSES.map(l => `
+    <button class="lens" type="button" data-l="${l.k}">
+      <span class="ico"><svg viewBox="0 0 32 34" width="22" height="23" aria-hidden="true">${l.ico}</svg></span>
+      <h3>${esc(l.t)}</h3><p>${esc(l.d)}</p><span class="go">Choose this view →</span></button>`).join("");
+  document.querySelectorAll("#lenses .lens").forEach(b =>
+    b.addEventListener("click", () => go(b.dataset.l)));
+}
+
+/* ---------------- screen 3a: hazard lens ---------------- */
+function drawHazardPicker(){
+  const rows = leadHazard(F);
+  document.getElementById("haz-pick").innerHTML = rows.map(r => `
+    <button class="pick" type="button" data-h="${r.h}" aria-pressed="${state.haz === r.h}">
+      <span class="nm">${esc(HLAB[r.h])}</span>
+      <span class="mt">${r.n} of ${F.length} facilities exposed</span>
+      <span class="sc" style="color:${r.m ? rampFill(r.m, 70) : cssv("--muted")}">${r.m.toFixed(0)}<small>MEAN RISK</small></span>
+    </button>`).join("");
+  document.querySelectorAll("#haz-pick .pick").forEach(b =>
+    b.addEventListener("click", () => { state.haz = b.dataset.h; drawHazardPicker(); drawHazardDetail(); }));
+}
+
+function drawHazardDetail(){
+  const box = document.getElementById("haz-detail");
+  if (!state.haz){ box.hidden = true; return; }
+  box.hidden = false;
+  const h = state.haz, lab = HLAB[h];
+  const ex = exposedTo(h).sort((a, b) => b.risk_h[h] - a.risk_h[h]);
+  const m = mean(ex.map(f => f.risk_h[h]));
+  const worst = ex[0];
+  const bySub = SUBS.map(s => {
+    const l = inSub(s).filter(f => f.exposure[h] > 0);
+    return {s, n: l.length, m: l.length ? mean(l.map(f => f.risk_h[h])) : 0};
+  }).filter(x => x.n).sort((a, b) => b.m - a.m);
+  const sysRows = SUMDOM.map(d => {
+    const vals = ex.map(f => f.vuln_h[d][h]).filter(v => v !== null);
+    return {k: d, label: DLAB[d], v: mean(vals)};
+  }).sort((a, b) => b.v - a.v);
+  const notExposed = F.length - ex.length;
+
+  box.innerHTML = `
+    <div class="readout">
+      <b>${esc(lab)}</b> affects <b>${ex.length} of the county's ${F.length} assessed facilities</b>,
+      with a mean risk score of <b>${m.toFixed(0)}</b> out of 100.
+      ${notExposed ? `The remaining ${notExposed} report no exposure to it.` : ""}
+      The facility most at risk is <b>${esc(worst.name)}</b> in ${esc(worst.subcounty)}
+      (score ${worst.risk_h[h].toFixed(0)}), and the system that holds up worst under it across the
+      county is <b>${esc(sysRows[0].label.toLowerCase())}</b>.
+      <span class="small">Within this lens, every figure counts only the ${ex.length} exposed facilities.</span>
+    </div>
+    <div class="cols-e">
+      <div class="panel">
+        <header><h3>Facilities at risk from ${esc(lab.toLowerCase())}</h3>
+          <span class="mono" style="font-size:11px;color:var(--muted)">0–100</span></header>
+        <div class="bars" id="hz-fac"></div>
+        <div class="legend" id="hz-leg"></div>
+      </div>
+      <div class="stack">
+        <div class="panel">
+          <header><h3>What it breaks</h3></header>
+          <p class="note">How vulnerable each system is under ${esc(lab.toLowerCase())}, averaged across
+            the exposed facilities. 1 is well protected, 5 is very likely to fail.</p>
+          <div class="bars" id="hz-sys"></div>
+        </div>
+        <div class="panel">
+          <header><h3>Where it concentrates</h3></header>
+          <p class="note">Mean risk by sub-county, counting exposed facilities only.</p>
+          <div class="bars" id="hz-sub"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <header><h3>Where these facilities are</h3>
+        <span class="mono" style="font-size:11px;color:var(--muted)">exposed facilities coloured</span></header>
+      <p class="note">Grey circles are facilities that report no exposure to ${esc(lab.toLowerCase())}.</p>
+      <div class="mapwrap"><svg id="hz-map" viewBox="0 0 560 470" role="img"
+        aria-label="Facilities exposed to ${esc(lab)}"></svg></div>
+    </div>`;
+
+  barList(document.getElementById("hz-fac"), facilityRows(ex, f => f.risk_h[h], {metric: lab + " risk"}));
+  riskLegend(document.getElementById("hz-leg"));
+  barList(document.getElementById("hz-sys"), sysRows.map(r => ({
+    key: r.k, label: r.label, v: r.v, display: r.v.toFixed(1), color: rampFill(r.v, 5),
+    tip: `<div class="t">${esc(r.label)}</div>
+      <div class="r"><span>Mean vulnerability</span><b>${r.v.toFixed(1)} / 5</b></div>
+      <div class="r"><span>Under</span><b>${esc(lab)}</b></div>`
+  })), {scaleMax: 5});
+  barList(document.getElementById("hz-sub"), bySub.map(r => ({
+    key: r.s, label: r.s, v: r.m, display: r.m.toFixed(0), color: rampFill(r.m, 100),
+    tip: `<div class="t">${esc(r.s)}</div>
+      <div class="r"><span>Mean risk</span><b>${r.m.toFixed(0)}</b></div>
+      <div class="r"><span>Exposed facilities</span><b>${r.n}</b></div>
+      <div class="r" style="margin-top:4px;color:var(--muted)">Click to open this sub-county</div>`,
+    onClick: () => { state.sub = r.s; go("sub"); }
+  })));
+  drawMap(document.getElementById("hz-map"), ex, f => f.risk_h[h], {showAll: true, metric: lab + " risk"});
+}
+
+/* ---------------- screen 3b: sub-county lens ---------------- */
+function drawSubPicker(){
+  const rows = SUBS.map(s => {
+    const l = inSub(s);
+    return {s, n: l.length, m: mean(l.map(f => f.risk)), lead: leadHazard(l)[0]};
+  }).sort((a, b) => b.m - a.m);
+  document.getElementById("sub-pick").innerHTML = rows.map(r => `
+    <button class="pick" type="button" data-s="${esc(r.s)}" aria-pressed="${state.sub === r.s}">
+      <span class="nm">${esc(r.s)}</span>
+      <span class="mt">${r.n} ${r.n === 1 ? "facility" : "facilities"} · ${esc(HLAB[r.lead.h].toLowerCase())}</span>
+      <span class="sc" style="color:${rampFill(r.m, 70)}">${r.m.toFixed(0)}<small>MEAN RISK</small></span>
+    </button>`).join("");
+  document.querySelectorAll("#sub-pick .pick").forEach(b =>
+    b.addEventListener("click", () => { state.sub = b.dataset.s; drawSubPicker(); drawSubDetail(); }));
+}
+
+function drawSubDetail(){
+  const box = document.getElementById("sub-detail");
+  if (!state.sub){ box.hidden = true; return; }
+  box.hidden = false;
+  const s = state.sub, list = inSub(s);
+  const m = mean(list.map(f => f.risk));
+  const hi = list.filter(f => f.risk >= 40);
+  const pop = list.reduce((a, f) => a + f.ops.catchment_opd, 0);
+  const lead = leadHazard(list);
+  const gaps = topGaps(list);
+  const worst = [...list].sort((a, b) => b.risk - a.risk)[0];
+
+  box.innerHTML = `
+    <div class="readout">
+      <b>${esc(s)}</b> has <b>${list.length} assessed ${list.length === 1 ? "facility" : "facilities"}</b>
+      serving about <b>${fmt(pop)} people</b>, with a mean risk score of <b>${m.toFixed(0)}</b>.
+      ${hi.length ? `<b>${hi.length}</b> of them ${hi.length === 1 ? "sits" : "sit"} in the high-risk band` :
+        "None sit in the high-risk band"}, the worst being <b>${esc(worst.name)}</b>
+      (score ${worst.risk.toFixed(0)}). The weather that drives risk here is
+      <b>${esc(lead[0].h === "heat" ? "extreme heat" : HLAB[lead[0].h].toLowerCase())}</b>, and the
+      system named most often as a top-three gap is <b>${esc(gaps[0].label.toLowerCase())}</b>
+      (${gaps[0].n} of ${list.length} facilities).
+      <span class="small">Select any facility to see its full assessment and recommended actions.</span>
+    </div>
+    <div class="cols">
+      <div class="panel">
+        <header><h3>Facilities in ${esc(s)}</h3>
+          <span class="mono" style="font-size:11px;color:var(--muted)">0–100</span></header>
+        <div class="bars" id="sb-fac"></div>
+        <div class="legend" id="sb-leg"></div>
+      </div>
+      <div class="panel">
+        <header><h3>Where they sit</h3></header>
+        <p class="note">Grey circles are facilities in other sub-counties, for orientation.</p>
+        <div class="mapwrap"><svg id="sb-map" viewBox="0 0 560 470" role="img"
+          aria-label="Facilities in ${esc(s)}"></svg></div>
+      </div>
+    </div>
+    <div class="cols-e">
+      <div class="panel">
+        <header><h3>Hazard profile for ${esc(s)}</h3></header>
+        <p class="note">Mean risk per hazard among the facilities here that are exposed to it.</p>
+        <div class="bars" id="sb-haz"></div>
+      </div>
+      <div class="panel">
+        <header><h3>Most common gaps</h3></header>
+        <p class="note">How many of the ${list.length} facilities put each system in their own
+          top three priorities.</p>
+        <div class="bars" id="sb-gap"></div>
+      </div>
+    </div>`;
+
+  barList(document.getElementById("sb-fac"), facilityRows(list, f => f.risk));
+  riskLegend(document.getElementById("sb-leg"));
+  drawMap(document.getElementById("sb-map"), list, f => f.risk, {showAll: true});
+  barList(document.getElementById("sb-haz"), lead.filter(r => r.n).map(r => ({
+    key: r.h, label: HLAB[r.h], v: r.m, display: r.m.toFixed(0), color: rampFill(r.m, 100),
+    tip: `<div class="t">${esc(HLAB[r.h])}</div>
+      <div class="r"><span>Mean risk here</span><b>${r.m.toFixed(0)}</b></div>
+      <div class="r"><span>Exposed facilities</span><b>${r.n} of ${list.length}</b></div>
+      <div class="r" style="margin-top:4px;color:var(--muted)">Click to open this hazard</div>`,
+    onClick: () => { state.haz = r.h; go("hazard"); }
+  })));
+  barList(document.getElementById("sb-gap"), gaps.map(g => ({
+    key: g.k, label: g.label, v: g.n, display: `${g.n}/${list.length}`, color: rampFill(g.avg, 25),
+    tip: `<div class="t">${esc(g.label)}</div>
+      <div class="r"><span>In the top three at</span><b>${g.n} of ${list.length}</b></div>
+      <div class="r"><span>Mean priority score</span><b>${g.avg.toFixed(0)}</b></div>`
+  })));
+}
+
+/* ---------------- screen 3c: overall scores ---------------- */
+function drawScores(){
+  const ranked = [...F].sort((a, b) => b.risk - a.risk);
+  const gaps = topGaps(F);
+  const hi = F.filter(f => f.risk >= 40);
+  document.getElementById("sco-readout").innerHTML =
+    `Across the county, scores run from <b>${ranked[ranked.length-1].risk.toFixed(0)}</b>
+     (${esc(ranked[ranked.length-1].name)}) to <b>${ranked[0].risk.toFixed(0)}</b> (${esc(ranked[0].name)}).
+     <b>${hi.length} of the 20 sit at 40 or above, the high-risk band.</b> Risk runs almost exactly inverse to facility
+     level — the referral hospitals absorb a shock, the dispensaries do not — so the gap is capacity
+     rather than exposure. County-wide, <b>${esc(gaps[0].label.toLowerCase())}</b> is the most
+     frequently named weak point.
+     <span class="small">Select any facility to open its assessment and recommended actions.</span>`;
+
+  barList(document.getElementById("sco-rank"), facilityRows(F, f => f.risk));
+  riskLegend(document.getElementById("sco-legend"));
+  drawPrio();
+  drawMatrix();
+  drawTable();
+}
+
+function drawPrio(){
+  const W = 520, H = 320, P = {l:50, r:22, t:16, b:46};
+  const pts = DOMS.map(d => ({
+    k: d.key, lab: d.label,
+    v: mean(F.map(f => f.vuln[d.key])), w: mean(F.map(f => f.weight[d.key])),
+    top: F.filter(f => f.priorities.some(p => p.domain === d.key)).length
+  })).sort((a, b) => b.v * b.w - a.v * a.w);
+  pts.forEach((p, i) => p.rank = i + 1);
+
+  const dom = vals => {
+    let lo = Math.min(...vals), hi = Math.max(...vals), pad = Math.max((hi - lo) * .22, .35);
+    lo = Math.max(1, lo - pad); hi = Math.min(5, hi + pad);
+    if (hi - lo < .9){ const mid = (hi + lo) / 2; lo = Math.max(1, mid - .45); hi = Math.min(5, mid + .45); }
+    return [lo, hi];
+  };
+  const [x0, x1] = dom(pts.map(p => p.w)), [y0, y1] = dom(pts.map(p => p.v));
+  const sx = v => P.l + (v - x0) / (x1 - x0) * (W - P.l - P.r);
+  const sy = v => H - P.b - (v - y0) / (y1 - y0) * (H - P.t - P.b);
+  const ticks = (a, b) => { const st = (b - a) > 2.2 ? 1 : ((b - a) > 1.1 ? .5 : .25); const o = [];
+    for (let t = Math.ceil(a / st) * st; t <= b + 1e-9; t += st) o.push(+t.toFixed(2)); return o; };
+  const g = [];
+  ticks(x0, x1).forEach(t => { g.push(`<line x1="${sx(t).toFixed(1)}" y1="${P.t}" x2="${sx(t).toFixed(1)}" y2="${H-P.b}" stroke="${cssv("--grid")}"/>`);
+    g.push(`<text x="${sx(t).toFixed(1)}" y="${H-P.b+16}" font-size="10" text-anchor="middle" fill="${cssv("--muted")}" font-family="IBM Plex Mono, monospace">${t}</text>`); });
+  ticks(y0, y1).forEach(t => { g.push(`<line x1="${P.l}" y1="${sy(t).toFixed(1)}" x2="${W-P.r}" y2="${sy(t).toFixed(1)}" stroke="${cssv("--grid")}"/>`);
+    g.push(`<text x="${P.l-9}" y="${(sy(t)+3.5).toFixed(1)}" font-size="10" text-anchor="end" fill="${cssv("--muted")}" font-family="IBM Plex Mono, monospace">${t}</text>`); });
+
+  const maxTop = Math.max(1, ...pts.map(p => p.top));
+  const marks = pts.map(p => {
+    const r = 9 + Math.sqrt(p.top / maxTop) * 6, fill = rampFill(p.v * p.w, 25);
+    return `<g class="dot" data-k="${p.k}"><circle cx="${sx(p.w).toFixed(1)}" cy="${sy(p.v).toFixed(1)}"
+      r="${r.toFixed(1)}" fill="${fill}" stroke="${cssv("--surface")}" stroke-width="2"/>
+      <text x="${sx(p.w).toFixed(1)}" y="${(sy(p.v)+3.8).toFixed(1)}" text-anchor="middle" font-size="10.5"
+        font-weight="600" font-family="IBM Plex Mono, monospace"
+        fill="${rampInk(p.v * p.w, 25) ? cssv("--ink") : "#ffffff"}">${p.rank}</text></g>`;
+  }).join("");
+
+  document.getElementById("sco-prio").innerHTML = `${g.join("")}
+    <line x1="${P.l}" y1="${H-P.b}" x2="${W-P.r}" y2="${H-P.b}" stroke="${cssv("--axis")}" stroke-width="1.5"/>
+    <line x1="${P.l}" y1="${P.t}" x2="${P.l}" y2="${H-P.b}" stroke="${cssv("--axis")}" stroke-width="1.5"/>
+    ${marks}
+    <text x="${(P.l + W - P.r)/2}" y="${H-8}" font-size="10.5" text-anchor="middle" fill="${cssv("--muted")}"
+      font-family="IBM Plex Mono, monospace" letter-spacing=".08em">HOW CRITICAL →</text>
+    <text x="13" y="${(P.t + H - P.b)/2}" font-size="10.5" text-anchor="middle" fill="${cssv("--muted")}"
+      font-family="IBM Plex Mono, monospace" letter-spacing=".08em"
+      transform="rotate(-90 13 ${(P.t + H - P.b)/2})">HOW WEAK →</text>`;
+
+  document.getElementById("sco-priokey").innerHTML = pts.map(p =>
+    `<div class="row" data-k="${p.k}"><span class="n">${p.rank}</span><span>${esc(p.lab)}</span>
+     <span class="s">${(p.v * p.w).toFixed(0)}</span></div>`).join("");
+
+  const lbl = p => `<div class="t">${p.rank}. ${esc(p.lab)}</div>
+    <div class="r"><span>How weak (1–5)</span><b>${p.v.toFixed(1)}</b></div>
+    <div class="r"><span>How critical (1–5)</span><b>${p.w.toFixed(1)}</b></div>
+    <div class="r"><span>Priority score</span><b>${(p.v * p.w).toFixed(1)}</b></div>
+    <div class="r"><span>In top-3 gaps at</span><b>${p.top} facilities</b></div>`;
+  document.querySelectorAll("#sco-prio .dot, #sco-priokey .row").forEach(el =>
+    bindTip(el, lbl(pts.find(x => x.k === el.dataset.k))));
+}
+
+function drawMatrix(){
+  const fs = [...F].sort((a, b) => b.risk - a.risk);
+  const head = `<thead><tr><th></th>${HAZ.map(h => `<th class="rot">${esc(h.label)}</th>`).join("")}
+    <th class="rot">Overall</th></tr></thead>`;
+  const body = fs.map(f => {
+    const cells = HK.map(h => {
+      if (f.exposure[h] === 0) return `<td><div class="cell na" title="Not exposed">—</div></td>`;
+      const v = f.risk_h[h];
+      return `<td><div class="cell${rampInk(v, 100) ? " lo" : ""}" data-n="${esc(f.name)}" data-h="${h}"
+        style="background:${rampFill(v, 100)}">${v.toFixed(0)}</div></td>`;
+    }).join("");
+    return `<tr><td class="lbl" data-n="${esc(f.name)}" title="${esc(f.name)}">${esc(f.name)}</td>${cells}
+      <td><div class="cell${rampInk(f.risk, 100) ? " lo" : ""}" data-n="${esc(f.name)}" data-h=""
+        style="background:${rampFill(f.risk, 100)};box-shadow:0 0 0 1px ${cssv("--hair")} inset">${f.risk.toFixed(0)}</div></td></tr>`;
+  }).join("");
+  document.getElementById("sco-mx").innerHTML = head + `<tbody>${body}</tbody>`;
+  document.querySelectorAll("#sco-mx .cell[data-n]").forEach(el => {
+    const f = F.find(x => x.name === el.dataset.n), h = el.dataset.h, v = h ? f.risk_h[h] : f.risk;
+    bindTip(el, `<div class="t">${esc(f.name)}</div>
+      <div class="r"><span>${h ? esc(HLAB[h]) : "Overall"}</span><b>${v.toFixed(0)} · ${band(v).name}</b></div>
+      ${h ? `<div class="r"><span>How often it hits</span><b>${f.exposure[h]} / 5</b></div>
+             <div class="r"><span>How bad when it does</span><b>${f.severity[h]} / 5</b></div>` : ""}`);
+    el.addEventListener("click", () => openFacility(f.name));
+  });
+  document.querySelectorAll("#sco-mx td.lbl").forEach(el =>
+    el.addEventListener("click", () => openFacility(el.dataset.n)));
+  document.getElementById("sco-mxlegend").innerHTML =
+    `<span class="item" style="color:var(--muted)">Lower risk</span>
+     <span class="rampbar">${RAMP.map(r => `<span style="background:${cssv(r)}"></span>`).join("")}</span>
+     <span class="item" style="color:var(--muted)">Higher risk</span>
+     <span class="item" style="margin-left:8px"><span class="swatch" style="background:var(--surface-2)"></span>Not exposed</span>`;
+}
+
+function drawTable(){
+  const fs = [...F].sort((a, b) => b.risk - a.risk);
+  document.getElementById("sco-tbl").innerHTML =
+    `<thead><tr><th>Facility</th><th>Sub-county</th><th class="num">Level</th>
+      <th class="num">Exposure</th><th class="num">Severity</th><th class="num">Weakness</th>
+      <th class="num">Risk</th><th>Band</th><th class="num">People served</th><th>Top gap</th></tr></thead>
+     <tbody>${fs.map(f => { const b = band(f.risk); return `<tr tabindex="0" data-n="${esc(f.name)}">
+      <td>${esc(f.name)}</td><td>${esc(f.subcounty)}</td><td class="num">${f.keph}</td>
+      <td class="num">${f.E.toFixed(1)}</td><td class="num">${f.S.toFixed(1)}</td>
+      <td class="num">${f.V.toFixed(1)}</td><td class="num"><b>${f.risk.toFixed(0)}</b></td>
+      <td><span class="chip ${b.cls}"><span class="ic" aria-hidden="true"></span>${b.name}</span></td>
+      <td class="num">${fmt(f.ops.catchment_opd)}</td><td>${esc(f.priorities[0].label)}</td></tr>`; }).join("")}</tbody>`;
+  document.querySelectorAll("#sco-tbl tbody tr").forEach(tr => {
+    tr.addEventListener("click", () => openFacility(tr.dataset.n));
+    tr.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); openFacility(tr.dataset.n); } });
+  });
+}
+
+/* ---------------- facility drawer ---------------- */
+let lastFocus = null;
+function openFacility(name){
+  const f = F.find(x => x.name === name); if (!f) return;
+  lastFocus = document.activeElement;
+  state.sel = name;
+  const b = band(f.risk);
+  const hazLens = state.screen === "hazard" && state.haz ? state.haz : null;
+
+  const doms = DOMS.map(d => ({k: d.key, lab: d.label,
+    v: hazLens && f.vuln_h[d.key][hazLens] !== null ? f.vuln_h[d.key][hazLens] : f.vuln[d.key],
+    w: f.weight[d.key]})).sort((a, b2) => b2.v * b2.w - a.v * a.w);
+
+  const domBars = doms.map(d => `
+    <div class="bar-row" style="grid-template-columns:150px minmax(0,1fr) 74px;cursor:default">
+      <span class="nm">${esc(d.lab)}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${(d.v/5*100).toFixed(1)}%;background:${rampFill(d.v,5)}"></span></span>
+      <span class="val tnum">${d.v.toFixed(1)}<span style="color:var(--muted);font-weight:400"> ×${d.w}</span></span></div>`).join("");
+
+  const expBars = HK.map(h => `
+    <div class="bar-row" style="grid-template-columns:132px minmax(0,1fr) 92px;cursor:default">
+      <span class="nm">${esc(HLAB[h])}</span>
+      <span class="bar-track">${f.exposure[h] === 0
+        ? `<span style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;font-size:10.5px;color:var(--muted)">not exposed</span>`
+        : `<span class="bar-fill" style="width:${(f.exposure[h]/5*100).toFixed(1)}%;background:${rampFill(f.exposure[h],5)}"></span>`}</span>
+      <span class="val tnum" style="font-size:11.5px;color:var(--ink-2)">${f.exposure[h]}<span style="color:var(--muted)">/5 · sev ${f.severity[h]}</span></span></div>`).join("");
+
+  const acts = f.priorities.map((p, i) => `
+    <li class="action"><div class="top"><span class="dm">${i+1}. ${esc(p.label)}</span>
+      <span class="sc">weak ${p.vuln.toFixed(1)} × critical ${p.weight} = ${p.score.toFixed(0)}</span></div>
+      <p class="gp">${esc(p.gap)}</p><p class="ac"><b>Action:</b> ${esc(p.action)}</p>
+      <span class="hazpill">worst under ${esc(p.hazard.toLowerCase())}</span></li>`).join("");
+
+  const st = Object.entries(f.staff).filter(([, v]) => v.n > 0);
+  const inad = st.filter(([, v]) => v.adequate === "No").length;
+
+  document.getElementById("drawer").innerHTML = `
+    <div class="drawer-head">
+      <div><h3 id="drawer-title">${esc(f.name)}</h3>
+        <div class="meta"><span>${esc(f.subcounty)} sub-county</span><span>KEPH Level ${f.keph}</span>
+          <span class="mono">MFL ${esc(f.mfl)}</span>
+          <span class="mono">${f.lat.toFixed(4)}, ${f.lon.toFixed(4)}</span>
+          <span>${f.years} years in operation</span></div></div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="text-align:right">
+          <span class="chip ${b.cls}"><span class="ic" aria-hidden="true"></span>${b.name} risk · ${f.risk.toFixed(0)}</span>
+          <div class="mono" style="font-size:11px;color:var(--muted);margin-top:6px">
+            exposure ${f.E.toFixed(1)} · severity ${f.S.toFixed(1)} · weakness ${f.V.toFixed(1)}</div>
+        </div>
+        <button class="closebtn" id="drawerclose" type="button" aria-label="Close">×</button></div>
+    </div>
+    <div class="drawer-body">
+      <div>
+        <h4>What to do first</h4><ul class="actions">${acts}</ul>
+        <h4 style="margin-top:20px">Facility profile</h4>
+        <dl class="kv">
+          <dt>People served (OPD)</dt><dd>${fmt(f.ops.catchment_opd)}</dd>
+          <dt>Children for vaccination</dt><dd>${fmt(f.ops.catchment_vacc)}</dd>
+          <dt>Outpatient visits</dt><dd>${fmt(f.ops.opd_adults)} adults · ${fmt(f.ops.opd_under5)} under-5</dd>
+          <dt>Deliveries</dt><dd>${f.ops.deliveries ? fmt(f.ops.deliveries) : "no maternity"}</dd>
+          <dt>Water storage</dt><dd>${fmt(f.ops.water_storage_l)} L</dd>
+          <dt>Water used</dt><dd>${fmt(f.ops.water_use_l)} L/month</dd>
+          <dt>Staff</dt><dd>${st.reduce((a, [, v]) => a + v.n, 0)} across ${st.length} cadres · ${inad} rated inadequate</dd>
+        </dl>
+      </div>
+      <div>
+        <h4>How weak each system is${hazLens ? ` under ${esc(HLAB[hazLens].toLowerCase())}` : ""}
+          <span style="text-transform:none;letter-spacing:0;font-weight:400">(1–5, × how critical)</span></h4>
+        <div class="bars">${domBars}</div>
+        <h4 style="margin-top:20px">Hazards here
+          <span style="text-transform:none;letter-spacing:0;font-weight:400">(how often / how bad)</span></h4>
+        <div class="bars">${expBars}</div>
+      </div>
+    </div>`;
+  const scrim = document.getElementById("scrim");
+  scrim.hidden = false;
+  document.body.style.overflow = "hidden";
+  document.getElementById("drawerclose").focus();
+  document.getElementById("drawerclose").addEventListener("click", closeFacility);
+}
+function closeFacility(){
+  document.getElementById("scrim").hidden = true;
+  document.body.style.overflow = "";
+  state.sel = null;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+/* ---------------- routing ---------------- */
+const SCREENS = {counties: "sc-counties", overview: "sc-overview", hazard: "sc-hazard",
+                 sub: "sc-sub", scores: "sc-scores"};
+const TITLES = {hazard: "By climate hazard", sub: "By sub-county", scores: "By overall score"};
+
+function drawCrumb(){
+  const c = document.getElementById("crumb");
+  if (state.screen === "counties"){ c.hidden = true; return; }
+  c.hidden = false;
+  const parts = [`<button type="button" data-go="counties">Counties</button>`];
+  if (state.screen === "overview") parts.push(`<span class="sep">›</span><span class="now">Kilifi</span>`);
+  else {
+    parts.push(`<span class="sep">›</span><button type="button" data-go="overview">Kilifi</button>`);
+    parts.push(`<span class="sep">›</span><span class="now">${esc(TITLES[state.screen])}</span>`);
+  }
+  c.querySelector(".shell").innerHTML = parts.join("");
+  c.querySelectorAll("button[data-go]").forEach(b =>
+    b.addEventListener("click", () => go(b.dataset.go)));
+}
+
+function go(screen){
+  state.screen = screen;
+  Object.entries(SCREENS).forEach(([k, id]) => document.getElementById(id).hidden = (k !== screen));
+  document.getElementById("restart").hidden = (screen === "counties");
+  drawCrumb();
+  if (screen === "overview") drawOverview();
+  if (screen === "hazard"){ if (!state.haz) state.haz = leadHazard(F)[0].h; drawHazardPicker(); drawHazardDetail(); }
+  if (screen === "sub"){ if (!state.sub) state.sub = SUBS[0]; drawSubPicker(); drawSubDetail(); }
+  if (screen === "scores") drawScores();
+  window.scrollTo({top: 0, behavior: "instant"});
+}
+
+function redraw(){
+  if (state.screen === "overview") drawOverview();
+  else if (state.screen === "hazard"){ drawHazardPicker(); drawHazardDetail(); }
+  else if (state.screen === "sub"){ drawSubPicker(); drawSubDetail(); }
+  else if (state.screen === "scores") drawScores();
+  else drawCounties();
+}
+
+/* ---------------- boot ---------------- */
+drawCounties();
+document.getElementById("restart").addEventListener("click", () => go("counties"));
+document.getElementById("scrim").addEventListener("click", e => { if (e.target.id === "scrim") closeFacility(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !document.getElementById("scrim").hidden) closeFacility();
+});
+document.getElementById("themebtn").addEventListener("click", () => {
+  const r = document.documentElement;
+  const dark = r.getAttribute("data-theme") === "dark" ||
+    (!r.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+  r.setAttribute("data-theme", dark ? "light" : "dark");
+  redraw();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
+
+</script>
+</body>
+</html>
