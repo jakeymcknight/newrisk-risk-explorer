@@ -125,3 +125,32 @@ because the tool's scales run in two directions:
 
 Every RAG marker pairs its colour with a letter (R/A/G) so it survives
 colour-blindness, mono printing and forced-colours mode.
+
+## Flood, poverty and population layers
+
+| Layer | What it is | Source |
+|---|---|---|
+| Heavy-rain flood proxy | Rx5day: mean annual maximum consecutive 5-day rainfall, 2005-2024 | ERA5 via [Open-Meteo](https://open-meteo.com/) |
+| River flood (GloFAS) | Mean annual maximum river discharge, m3/s, 2005-2024. Drawn at the model's own grid cells, NOT interpolated | Copernicus GloFAS via Open-Meteo |
+| Relative poverty | Relative Wealth Index, ~2.4 km. Darker is poorer | [Meta Data for Good](https://data.humdata.org/dataset/relative-wealth-index) |
+| Population | Sub-county totals, proportional circles | [Kenya Census 2019 (KNBS) via HDX](https://data.humdata.org/dataset/cod-ps-ken) |
+
+`data/Kilifi_flood_poverty_population_sources.csv` holds every underlying value.
+
+### Three honest limits on these layers
+
+1. **Rx5day is a rainfall proxy, not a flood model.** It says where extreme rain
+   falls, not where water ends up. Terrain, drainage and river channels all matter
+   and none are in it. A real inundation layer (Fathom, JBA, or a Kenya-specific
+   model) would replace it directly - the plumbing takes a PNG plus one entry in
+   the `layers` object.
+2. **River discharge is shown as points, deliberately.** An earlier version
+   interpolated it into a surface and produced a checkerboard artefact - discharge
+   follows channels, so interpolating between cells invents water that isn't there.
+   The circles are the model's own cells.
+3. **RWI is relative, not a poverty rate.** 0 is Kenya's mean; Kilifi's median is
+   -0.40, so the county is poorer than national average. It is not the KNBS poverty
+   headcount and should not be quoted as one.
+
+Population is at sub-county resolution because WorldPop's gridded API rate-limited
+during collection. Swapping in a WorldPop raster would give a continuous surface.
