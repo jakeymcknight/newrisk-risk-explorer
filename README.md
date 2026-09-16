@@ -86,3 +86,42 @@ within a minute or two.
    tick "Enforce HTTPS" once the certificate is issued.
 
 Note that the repo must be **public** for Pages on a free GitHub account.
+
+## Map data sources
+
+| Layer | Source |
+|---|---|
+| County boundary | [OpenStreetMap relation 3495545](https://www.openstreetmap.org/relation/3495545), admin_level 4, simplified to 100 vertices. (c) OpenStreetMap contributors, ODbL |
+| Unassessed facilities | OpenStreetMap health sites (`amenity=clinic/hospital/doctors`, `healthcare=*`) clipped to the county boundary - 47 named sites. (c) OpenStreetMap contributors, ODbL |
+| Rainfall layer | ERA5 reanalysis via the [Open-Meteo](https://open-meteo.com/) historical API. Mean annual precipitation, 2005-2024, 72 grid points, inverse-distance interpolated |
+| Extreme heat layer | ERA5 reanalysis via Open-Meteo. Mean days per year with Tmax >= 35 C, same grid and period |
+
+`data/ERA5_Kilifi_climate_grid_2005-2024.csv` holds the raw grid the two rasters
+were interpolated from, so the layers can be regenerated or replaced.
+
+**Coverage caveat.** OpenStreetMap does not contain every facility on the Ministry
+of Health's Master Facility List - the MFL lists several hundred in Kilifi, OSM has
+47 named ones. The map therefore shows "facilities mapped in OpenStreetMap", not
+"all facilities in Kilifi". Replacing this layer with a KMHFL extract is the single
+biggest improvement available to the map.
+
+**Resolution caveat.** The rasters are interpolated from a 0.15 degree grid. They are
+a county-scale picture, not a site-level one - do not read a single facility's flood
+risk off a pixel. ERA5 is reanalysis: reliable for gradients and trends, but it
+smooths local extremes. CHIRPS is the better rainfall source if you need precision,
+and is station-corrected for Africa specifically.
+
+## Red / amber / green
+
+RAG is assigned by the *meaning* of each ECHRRA-K rubric, not the raw number,
+because the tool's scales run in two directions:
+
+- **Weakness, exposure and severity** (tables 1, 6, 13) run 1 best -> 5 worst,
+  so 4-5 = Red, 3 = Amber, 1-2 = Green.
+- **Function and readiness** (tables 3, 7-12) run 1 worst -> 5 best, so the
+  mapping inverts. `ragGood()` in the script handles this direction and is
+  what to use when loading raw REDCap scores, which are stored in the
+  good-direction form.
+
+Every RAG marker pairs its colour with a letter (R/A/G) so it survives
+colour-blindness, mono printing and forced-colours mode.
