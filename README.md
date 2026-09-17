@@ -12,9 +12,9 @@ self-contained page; no build step, no server code.
     logos/newrisk.png                 project mark
     logos/nihr.png                    funder lockup
     logos/kemri.png  logos/oxford.png partner marks
-    data/ECHRRA-K_..._REDCap_export.csv   assessments in the live REDCap layout (690 cols)
-    data/ECHRRA-K_..._derived_scores.json derived scores the tool reads
-    data/Kilifi_facilities_geocoded.csv   all 153 KMHFR facilities, 101 with GPS
+    data/echrra_redcap_export.csv         assessments in the live REDCap layout (690 cols)
+    data/echrra_derived_scores.json       derived scores the tool reads
+    data/Kilifi_government_facilities.csv all 148 government facilities, 99 with GPS
     data/Kilifi_population_risk.csv       catchment population and hazard per facility
     layers/*.png                          rainfall, heat, flood and poverty overlays
 
@@ -23,10 +23,12 @@ by relative path.
 
 ## What is real and what is not
 
-Real: the facility register (Kenya Master Health Facility Registry, Sept 2026) with
-MFL codes, KEPH levels, sub-counties and wards; GPS coordinates for 101 of the 153,
-joined by name from Maina et al. (2019) *Scientific Data* 6:134; ERA5 rainfall,
-temperature and Rx5day; Copernicus GloFAS river discharge; Meta Relative Wealth
+Real: the facility register (Kenya Master Health Facility Registry, Sept 2026),
+**government-owned (Ministry of Health) facilities only** — 148 in Kilifi — with
+MFL codes, KEPH levels, sub-counties and wards; GPS coordinates for 99 of them,
+joined by name from Maina et al. (2019) *Scientific Data* 6:134; sub-county
+boundaries from OpenStreetMap admin_level=6; ERA5 rainfall,
+temperature, Rx5day and wind gusts; Copernicus GloFAS river discharge; Meta Relative Wealth
 Index; KNBS 2019 census; published travel-time accessibility from Moturi et al.
 (2022) *Frontiers in Public Health* 10:1002975. Facility hazard **exposure** is
 interpolated from those surfaces at each facility's true position.
@@ -38,7 +40,10 @@ a real REDCap export and the tool works unchanged.
 ## Traffic lights
 
 Overall risk = (√(exposure × severity) / 5) × (weighted weakness / 5) × 100.
-Red at 35 and above, amber 25–34, green below 25. The thresholds are county-relative
+Red at 35 and above, amber 25–34, green below 25. Most facilities land in amber,
+because the composite averages ten weighted systems and averages cluster — the
+traffic light flags the tails, and the per-system R/A/G chips are where the
+detail is. The thresholds are county-relative
 priority tiers, not absolute risk classes — a red facility is one carrying real
 hazard whose critical systems score around 4 of 5 for weakness.
 

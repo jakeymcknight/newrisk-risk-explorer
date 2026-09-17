@@ -1,0 +1,149 @@
+mfl_code,facility_name,keph_level,facility_type,sub_county,ward,owner_type,beds,latitude,longitude,coord_source,assessed
+25679,Muyu Wa Kae,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,,,,no
+25626,Mbudzi Community Health Centre,Level 2,Dispensary,Ganze,Jaribuni,Ministry of Health,0,,,,no
+25369,Kavunyalalo Paziani Dispensary,Level 2,Dispensary,Malindi,Kakuyuni,Ministry of Health,0,,,,no
+25238,Migodomani Dispensary,Level 2,Dispensary,Ganze,Ganze,Ministry of Health,0,,,,no
+25168,Kaembeni Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,,,,no
+24889,Ndigiria Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,,,,no
+24363,Marikano Dispensary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,,,,no
+24209,Kaloleni GK Prison Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,0,,,,no
+24138,Tunzanani dispensary,Level 2,Dispensary,Kilifi South,Mtepeni,Ministry of Health,0,,,,no
+24137,Mtwapa dispensary-Shimo la Tewa,Level 2,Dispensary,Kilifi South,Shimo La Tewa,Ministry of Health,0,,,,no
+24136,Mwembe kati dispensary,Level 2,Dispensary,Kilifi South,Mwarakaya,Ministry of Health,0,,,,no
+24134,Kwajuaje Dispensary,Level 2,Dispensary,Rabai,Mwawesa,Ministry of Health,1,,,,no
+24133,Chiferi dispensary,Level 2,Dispensary,Rabai,Mwawesa,Ministry of Health,2,,,,no
+24135,Kanyumbuni Dispensary,Level 2,Dispensary,Rabai,Mwawesa,Ministry of Health,1,,,,no
+24131,Milalani Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,1,,,,no
+24130,Bandari Dispensary,Level 2,Dispensary,Ganze,Bamba,Ministry of Health,0,,,,no
+24127,Mikiriani Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,4,,,,no
+24121,Katsifitseni Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,4,,,,no
+24119,Kavunyalalo Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,4,,,,no
+24118,Mrima Wa Ndege Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,,,,yes
+24117,Shirango Dispensary,Level 2,Dispensary,Ganze,Bamba,Ministry of Health,0,,,,no
+24115,Chumani Dispensary,Level 2,Dispensary,Kilifi North,Matsangoni,Ministry of Health,0,,,,no
+24120,Bore Imani Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,4,,,,no
+24108,Boyani Dispensary-TC,Level 2,Dispensary,Rabai,Rabai/Kisurutini,Ministry of Health,2,,,,no
+24049,Magarini Dispendary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,0,,,,no
+23958,Zowerani Dispensary,Level 2,Dispensary,Kilifi North,Tezo,Ministry of Health,0,,,,no
+23925,Uwanja Wa ndege Dispensary,Level 2,Dispensary,Rabai,Rabai/Kisurutini,Ministry of Health,2,,,,no
+21547,Ndatani Dispensary (Kaloleni),Level 2,Dispensary,Kaloleni,Kayafungo,Ministry of Health,1,,,,no
+23666,Makomboani Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,0,,,,no
+23653,Madzimbani Dispensary,Level 2,Dispensary,Kaloleni,Mariakani,Ministry of Health,1,,,,no
+23593,Mitsajeni Dispensary,Level 2,Dispensary,Rabai,Kambe/Ribe,Ministry of Health,1,,,,no
+21546,Kasemeni dispensary,Level 2,Dispensary,Kaloleni,Kayafungo,Ministry of Health,2,,,,no
+23118,Shakahola Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,,,,yes
+23121,Kamale Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,,,,no
+21539,Konjora Dispensary,Level 2,Dispensary,Kilifi North,Kibarani,Ministry of Health,0,,,,no
+21545,Kachororoni Dispensary,Level 2,Dispensary,Ganze,Ganze,Ministry of Health,0,,,,no
+22766,Jimba Dispensary,Level 2,Dispensary,Kilifi North,Watamu,Ministry of Health,0,,,,no
+22481,Kilifi GK Prison VCT,Level 2,VCT,Kilifi North,Sokoni,Ministry of Health,0,,,,no
+21541,Mkondoni Dispensary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,,,,no
+21542,Sosobora Dispesary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,,,,no
+21787,Mulunguni Dispensary,Level 2,Dispensary,Magarini,Marafa,Ministry of Health,1,-2.9790797,39.7715075,Google Earth,no
+21257,Mkanyeni Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,,,,no
+21213,Mjanaheri Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,0,-3.0793,40.1409,GPS,no
+21119,Mwapula Dispensary,Level 2,Dispensary,Ganze,Jaribuni,Ministry of Health,0,-3.6186,39.7034,GPS,yes
+20935,Kilifi County Beyond Zero Campaign Mobile Dispensary,Level 2,Dispensary,Kilifi North,Sokoni,Ministry of Health,0,,,,no
+20344,Karimboni Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.0959,39.9935,GPS,no
+20342,Malanga Dispensary (Vitengeni),Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,10,-3.2818,39.7904,GPS,no
+20309,Bore Singwaya Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.0526,39.9066,GPS,no
+20308,Chamari Dispensary,Level 2,Dispensary,Magarini,Marafa,Ministry of Health,0,-2.9027,39.8974,GPS,yes
+20307,Shomella Dispensary,Level 2,Dispensary,Magarini,Gongoni,Ministry of Health,0,-2.9802,40.0561,GPS,no
+20300,Mshongoleni Community Dispensary,Level 2,Dispensary,Malindi,Ganda,Ministry of Health,0,-3.2469,40.0273,GPS,no
+20036,Mmangani Dispensary,Level 2,Dispensary,Malindi,Kakuyuni,Ministry of Health,0,-3.11,39.5847,GPS,no
+19189,Kamkomani Dispensary,Level 2,Dispensary,Kaloleni,Mariakani,Ministry of Health,2,-3.8844,39.5189,GPS,no
+19024,Dungicha Dispensary,Level 2,Dispensary,Ganze,Ganze,Ministry of Health,0,-3.4724,39.6598,GPS,no
+18482,Mavueni Dispensary,Level 2,Dispensary,Kilifi North,Mnarani,Ministry of Health,0,-3.678,39.79902,GPS,yes
+18374,Ziani Dispensary,Level 2,Dispensary,Kilifi South,Chasimba,Ministry of Health,0,-3.75564,39.71749,GPS,no
+18309,Mtoroni Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,-2.86116,40.15056,GPS,no
+18300,Gandini Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.4215,39.422,GPS,no
+17689,Viragoni Dispensary,Level 2,Dispensary,Kaloleni,Mwanamwinga,Ministry of Health,0,-3.7012,39.534,Google Earth,no
+17017,Kokotoni Dispensary,Level 2,Dispensary,Rabai,Rabai/Kisurutini,Ministry of Health,0,-3.92054,39.52444,Google Earth,no
+16189,Shangia Dispensary,Level 2,Dispensary,Kaloleni,Mariakani,Ministry of Health,0,-3.8028,39.4083,GPS,yes
+16191,Chalani Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,0,-3.754814,39.630511,Google Earth,no
+16190,Vishakani Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,0,-3.83063,39.62322,GPS,yes
+11297,Dagamra Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.1824,39.9364,GPS,no
+11498,Kombeni Dispensary,Level 2,Dispensary,Rabai,Ruruma,Ministry of Health,0,-3.9128,39.5871,GPS,yes
+11266,Bwagamoyo Dispensary,Level 2,Dispensary,Rabai,Mwawesa,Ministry of Health,0,-3.9202,39.6445,GPS,yes
+11666,Mtepeni Dispensary,Level 2,Dispensary,Kilifi South,Mtepeni,Ministry of Health,0,-3.9002,39.7316,GPS,no
+11445,Kadaina Community Dispensary,Level 2,Dispensary,Kilifi North,Matsangoni,Ministry of Health,0,-3.379185,39.930862,Google Earth,yes
+11761,Sabaki Dispensary,Level 2,Dispensary,Magarini,Sabaki,Ministry of Health,0,-3.1637,40.0829,GPS,yes
+11305,Dida Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,-3.4288,39.8054,GPS,no
+11618,Mirihini Dispensary,Level 2,Dispensary,Ganze,Ganze,Ministry of Health,0,-3.43813,39.59241,GPS,no
+11404,Gotani Dispensary,Level 2,Dispensary,Kaloleni,Kayafungo,Ministry of Health,0,-3.7865,39.5406,GPS,yes
+11452,Kakoneni Dispensary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,-3.1644,39.8659,GPS,no
+11667,Mtondia Dispensary,Level 2,Dispensary,Kilifi North,Tezo,Ministry of Health,0,-3.5712,39.8675,GPS,yes
+11625,Mizijini Dispensary,Level 2,Dispensary,Magarini,Marafa,Ministry of Health,0,-2.96167,40.00046,GPS,no
+11379,Fundi Issa Dispensary,Level 2,Dispensary,Magarini,Gongoni,Ministry of Health,0,-2.92982,40.09493,GPS,no
+11359,Dzikunze Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,8,-3.2956,39.7508,GPS,no
+11244,Baolala Dispensary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,-3.17962,39.78562,GPS,yes
+11659,Msumarini Dispensary,Level 2,Dispensary,Kilifi South,Mtepeni,Ministry of Health,0,-3.87227,39.79793,GPS,yes
+11380,Gahaleni Dispensary,Level 2,Dispensary,Malindi,Ganda,Ministry of Health,0,-3.2687,40.0937,GPS,no
+11255,Bomani Dispensary,Level 2,Dispensary,Kilifi South,Junju,Ministry of Health,0,-3.8843,39.7494,GPS,yes
+11384,Garashi Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.13088,39.8913,GPS,yes
+11836,Takaungu Dispensary,Level 2,Dispensary,Kilifi North,Mnarani,Ministry of Health,0,-3.6828,39.8592,GPS,yes
+11617,Rimarapera Dispensary,Level 2,Dispensary,Ganze,Bamba,Ministry of Health,0,-3.6256,39.3965,GPS,no
+11653,Muryachakwe Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,-3.2885,39.5768,GPS,yes
+11493,Kiwandani Dispensary,Level 2,Dispensary,Kilifi North,Sokoni,Ministry of Health,0,-3.5717037,39.8719258,Google Earth,no
+11532,Madamani Dispensary,Level 2,Dispensary,Ganze,Sokoke,Ministry of Health,0,-3.3938,39.7484,GPS,no
+11453,Kakuyuni Dispensary (Malindi),Level 2,Dispensary,Malindi,Kakuyuni,Ministry of Health,1,-3.22034,40.0019,GPS,no
+11713,Ngerenya Dispensary,Level 2,Dispensary,Kilifi North,Tezo,Ministry of Health,0,-3.5135,39.8623,GPS,no
+11805,Sosoni Dispensary,Level 2,Dispensary,Magarini,Marafa,Ministry of Health,0,-3.028,39.8229,GPS,no
+11636,Mnarani Dispensary,Level 2,Dispensary,Kilifi North,Mnarani,Ministry of Health,0,-3.6412,39.8459,GPS,no
+11859,Tsangatsini Dispensary,Level 2,Dispensary,Kaloleni,Kayafungo,Ministry of Health,0,-3.7144,39.4498,GPS,yes
+11547,Makanzani Dispensary,Level 2,Dispensary,Rabai,Ruruma,Ministry of Health,0,-3.8655,39.6068,GPS,no
+11802,Sokoke Dispensary,Level 2,Dispensary,Ganze,Ganze,Ministry of Health,0,-3.5215,39.767,GPS,no
+11756,Ribe Dispensary,Level 2,Dispensary,Rabai,Kambe/Ribe,Ministry of Health,0,-3.8854,39.6315,GPS,yes
+11481,Kinarani Dispensary,Level 2,Dispensary,Kaloleni,Mwanamwinga,Ministry of Health,0,-3.7296,39.5792,GPS,no
+11559,Mambrui Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,4,-3.1184,40.1569,GPS,no
+11430,Jaribuni Dispensary,Level 2,Dispensary,Ganze,Jaribuni,Ministry of Health,0,-3.6326,39.7427,GPS,no
+11609,Midoina Dispensary,Level 2,Dispensary,Ganze,Bamba,Ministry of Health,0,-3.5017,39.3872,GPS,no
+11444,Junju Dispensary,Level 2,Dispensary,Kilifi South,Junju,Ministry of Health,0,-3.8299,39.7611,GPS,no
+11895,Watamu Dispensary,Level 2,Dispensary,Kilifi North,Watamu,Ministry of Health,0,-3.3501,40.0123,GPS,yes
+11752,Rainbow Medical Burangi,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,0,-3.2619,40.0897,GPS,no
+11738,Pingilikani Dispensary,Level 2,Dispensary,Kilifi South,Mwarakaya,Ministry of Health,0,-3.7744,39.7735,GPS,no
+11447,Kadzinuni Dispensary,Level 2,Dispensary,Kilifi North,Mnarani,Ministry of Health,0,-3.74511,39.81237,GPS,no
+11382,Ganda Dispensary,Level 2,Dispensary,Malindi,Ganda,Ministry of Health,0,-3.2181,40.0941,GPS,no
+11433,Jilore Dispensary,Level 2,Dispensary,Malindi,Jilore,Ministry of Health,0,-3.1892,39.9058,GPS,no
+11851,Timboni Community Dispensary,Level 2,Dispensary,Kilifi North,Dabaso,Ministry of Health,0,-3.1843,39.7403,GPS,no
+11601,Mgamboni Dispensary,Level 2,Dispensary,Kaloleni,Kaloleni,Ministry of Health,0,-3.8452,39.6634,GPS,no
+11610,Mijomboni Dispensary,Level 2,Dispensary,Kilifi North,Dabaso,Ministry of Health,2,-3.2621,40.0016,GPS,no
+11198,Adu Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,-2.8398,39.9799,GPS,no
+11276,Chakama Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,-3.122,39.6335,GPS,yes
+16192,Kambe Dispensary,Level 2,Dispensary,Rabai,Kambe/Ribe,Ministry of Health,0,-3.8487,39.6324,GPS,no
+11689,Mwangatini Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,0,-3.1434,40.0495,GPS,no
+11758,Roka Maweni Dispensary,Level 2,Dispensary,Kilifi North,Matsangoni,Ministry of Health,0,-3.4436,39.92867,GPS,no
+11730,Palakumi Dispensary,Level 2,Dispensary,Ganze,Jaribuni,Ministry of Health,0,-3.6213,39.6059,GPS,yes
+11578,Matolani Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,-3.10202,39.66969,GPS,no
+11394,GK Prison Dispensary (Magarini),Level 2,Dispensary,Magarini,Sabaki,Ministry of Health,0,,,,no
+11534,Madunguni Dispensary,Level 2,Dispensary,Malindi,Kakuyuni,Ministry of Health,0,-3.1837,39.9748,GPS,yes
+11256,Bombi Dispensary,Level 2,Dispensary,Magarini,Adu,Ministry of Health,0,-3.07925,39.47874,Google Earth,no
+11571,Marikebuni Dispensary,Level 2,Dispensary,Magarini,Magarini,Ministry of Health,0,-3.0903,40.1121,GPS,no
+11517,Lenga Dispensary,Level 2,Dispensary,Rabai,Kambe/Ribe,Ministry of Health,0,-3.8669,39.6618,GPS,no
+11248,Baricho Dispensary,Level 2,Dispensary,Magarini,Garashi,Ministry of Health,0,-3.1037,39.7846,GPS,no
+11293,Cowdray Dispensary,Level 2,Dispensary,Kilifi North,Watamu,Ministry of Health,0,-3.2886,40.0766,GPS,no
+17662,Pwani University College Clinic,Level 2,Dispensary,Kilifi North,Kibarani,Ministry of Health,0,,,,no
+22679,Mtwapa drop in and resource centre,Level 2,VCT,Kilifi South,Shimo La Tewa,Ministry of Health,0,,,,no
+23924,Chilodi CrossFit Health Centre,Level 3,Basic Health Centre,Rabai,Ruruma,Ministry of Health,2,,,,yes
+21544,Jila Model Health Centre,Level 3,Basic Health Centre,Ganze,Ganze,Ministry of Health,0,,,,yes
+11563,Marereni Dispensary,Level 3,Basic Health Centre,Magarini,Adu,Ministry of Health,6,-2.863,40.1446,GPS,no
+11562,Marafa Health Centre,Level 3,Basic Health Centre,Magarini,Marafa,Ministry of Health,17,-3.0283,39.9597,GPS,yes
+11497,Kizingo Health Centre,Level 3,Basic Health Centre,Kilifi South,Mwarakaya,Ministry of Health,0,-3.7821,39.677,GPS,no
+11715,Ngomeni Health Centre (Magarini),Level 3,Basic Health Centre,Magarini,Gongoni,Ministry of Health,0,,,,no
+11401,Gongoni Health Centre,Level 3,Basic Health Centre,Magarini,Gongoni,Ministry of Health,10,-3.0361,40.1334,GPS,yes
+11748,Rabai Rural Health Demonstration Centre,Level 3,Basic Health Centre,Rabai,Rabai/Kisurutini,Ministry of Health,12,-3.939,39.5664,GPS,yes
+11387,Gede Health Centre,Level 3,Basic Health Centre,Kilifi North,Dabaso,Ministry of Health,14,-3.2847,40.0507,GPS,yes
+11751,Rainbow Community Care,Level 3,Basic Health Centre,Magarini,Sabaki,Ministry of Health,8,-3.18099,40.11512,GPS,no
+11282,Chasimba Health Centre,Level 3,Basic Health Centre,Kilifi South,Chasimba,Ministry of Health,10,-3.7349,39.7,GPS,yes
+11383,Ganze Health Centre,Level 3,Basic Health Centre,Ganze,Ganze,Ministry of Health,10,-3.5424,39.672,GPS,no
+11580,Matsangoni Model Health Centre,Level 3,Basic Health Centre,Kilifi North,Matsangoni,Ministry of Health,6,-3.3904,39.9286,GPS,yes
+11677,Muyeye Health Centre (Municipal),Level 3,Basic Health Centre,Malindi,Shella,Ministry of Health,6,-3.2327,40.1149,GPS,yes
+11672,Mtwapa Health Centre,Level 3,Basic Health Centre,Kilifi South,Shimo La Tewa,Ministry of Health,0,-3.9179,39.7382,GPS,no
+11881,Vipingo Rural Demonstration Health Centre,Level 3,Basic Health Centre,Kilifi South,Junju,Ministry of Health,17,-3.8193,39.8094,GPS,yes
+11883,Vitengeni Health Centre,Level 3,Basic Health Centre,Ganze,Sokoke,Ministry of Health,5,-3.3591,39.708,GPS,yes
+21474,Kemri Mtwapa,Level 3,Medical Center,Kilifi South,Shimo La Tewa,Ministry of Health,3,,,,no
+11237,Bamba Sub-County Hospital,Level 4,Primary care hospitals,Ganze,Bamba,Ministry of Health,12,-3.5454,39.5237,GPS,yes
+11566,Mariakani District Hospital,Level 4,Primary care hospitals,Kaloleni,Mariakani,Ministry of Health,72,-3.8567,39.4939,GPS,yes
+11555,Malindi District Hospital,Level 4,Primary care hospitals,Malindi,Shella,Ministry of Health,183,-3.2165,40.1182,GPS,yes
+11474,Kilifi County Hospital,Level 4,Primary care hospitals,Kilifi North,Sokoni,Ministry of Health,172,-3.63205,39.85722,Google Earth,yes
+11432,Jibana Sub District Hospital,Level 4,Primary care hospitals,Kaloleni,Kaloleni,Ministry of Health,20,-3.8311,39.6865,GPS,yes
