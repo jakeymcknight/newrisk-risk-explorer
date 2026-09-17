@@ -206,6 +206,8 @@ h1,h2,h3{font-family:Molengo,"Public Sans",system-ui,sans-serif;font-weight:400;
 .layerkey .item{display:flex;gap:5px;align-items:center}
 .layerkey .src{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:10px}
 .layerkey .note{color:var(--muted);font-size:11px;line-height:1.4;flex:1 1 100%;max-width:70ch}
+.legend .item.note{display:block;flex:1 1 100%;max-width:92ch;color:var(--muted);
+  font-size:11.5px;line-height:1.5;margin-top:2px}
 .sym{cursor:default}
 .legend .item svg{display:block}
 .geosrc{font-size:11px;color:var(--muted);margin:2px 0 0;line-height:1.45}
@@ -618,8 +620,10 @@ table.data tbody tr.static:hover{background:transparent}
         </div>
         <div class="panel">
           <header><h3>Where those people are</h3></header>
-          <p class="note" data-src="rwi era5 glofas">Each dot is a populated cell, shaded by how exposed it is. Circles are
-            facilities, sized by the at-risk population that depends on them.</p>
+          <p class="note" data-src="rwi era5 glofas">Each square is a populated cell, shaded by how exposed it
+            is on the question above. Every mapped facility is drawn: a filled circle carries people who
+            are both exposed and poor, sized by how many; a small hollow ring is a facility that carries
+            none on this measure. <b>A ring is a facility, not a gap.</b></p>
           <div id="pp-layers"></div>
           <div class="mapwrap big"><svg id="pp-map" viewBox="0 0 620 860" role="img"
             aria-label="Population risk across Kilifi County"></svg></div>
@@ -1543,16 +1547,22 @@ const QUESTIONS = [
    sub: "Days above 35 °C", metric: "hot_days", unit: "days/yr",
    cellKey: 5, cellMax: 72, atRisk: "heat", atRiskPoor: "heat_poor",
    qfield: "hot", qlabel: "Days above 35 °C",
+   atRiskLabel: "Heat-exposed and in the poorest 40%",
+   zeroWhy: "the sea breeze keeps the coastal strip humid rather than hot — no cell within 15 km of the sea reaches even 5 days a year above 35 °C, against the 20-day threshold",
    blurb: "Cells counted as heat-exposed have more than 20 days a year above 35 °C."},
   {k: "flood", t: "Who lives with river flooding?",
    sub: "Mean annual maximum discharge", metric: "river", unit: "m³/s",
    cellKey: 7, cellMax: 190, atRisk: "flood", atRiskPoor: "flood_poor",
    qfield: "river", qlabel: "River discharge (m³/s)",
+   atRiskLabel: "Flood-exposed and in the poorest 40%",
+   zeroWhy: "no modelled river within 20 km carries more than 50 m³/s at its annual peak",
    blurb: "Cells counted as flood-exposed sit within 20 km of a modelled river carrying more than 50 m³/s at its annual peak."},
   {k: "far",   t: "Who is furthest from care?",
    sub: "Straight-line distance to the nearest facility", metric: "km", unit: "km",
    cellKey: 8, cellMax: 30, atRisk: "far", atRiskPoor: "far",
    qfield: "km", qlabel: "Km to nearest facility",
+   atRiskLabel: "More than 10 km away and in the poorest 40%",
+   zeroWhy: "everyone in the catchment is within 10 km of a facility",
    blurb: "Cells counted as far sit more than 10 km from the nearest facility in a straight line."}
 ];
 const Q = () => QUESTIONS.find(q => q.k === state.q);
@@ -1709,42 +1719,56 @@ function drawPeople(){
 function drawPeopleMap(){
   const q = Q(), svgEl = document.getElementById("pp-map");
   const cells = POP.cells;
+  const side = Math.max(4, 2.4 * pxPerKm);
   const cellRects = cells.map(c => {
     const v = c[q.cellKey];
     const t = Math.max(0, Math.min(1, v / q.cellMax));
     const poor = c[2] <= 1;
-    const side = Math.max(4, 2.4 * pxPerKm);
     return `<rect x="${(mx_(c[1]) - side / 2).toFixed(1)}" y="${(my_(c[0]) - side / 2).toFixed(1)}"
       width="${side.toFixed(1)}" height="${side.toFixed(1)}"
       rx="1.2" fill="${rampFill(v, q.cellMax)}" fill-opacity="${(0.3 + t * 0.65).toFixed(2)}"
       ${poor && t > .25 ? `stroke="${cssv("--critical")}" stroke-width=".7" stroke-opacity=".8"` : ""}/>`;
   }).join("");
 
-  const rows = POP.catchments.filter(c => c[q.atRiskPoor] > 0);
-  const mx = Math.max(1, ...rows.map(r => r[q.atRiskPoor]));
-  const dots = [...rows].sort((a, b) => b[q.atRiskPoor] - a[q.atRiskPoor]).map(r => {
-    const rad = 3.5 + Math.sqrt(r[q.atRiskPoor] / mx) * 14;
+  /* EVERY facility is drawn. A hollow ring means the facility is there but
+     carries nobody who is both exposed on this measure and in the poorest 40% —
+     which is not the same thing as no facility, and the coast is the case that
+     matters: it has the county's densest network and almost no days over 35 C. */
+  const carrying = POP.catchments.filter(c => c[q.atRiskPoor] > 0);
+  const empty = POP.catchments.filter(c => c[q.atRiskPoor] === 0);
+  const mx = Math.max(1, ...carrying.map(r => r[q.atRiskPoor]));
+
+  const emptyDots = empty.map(r =>
+    `<circle class="pdot" data-n="${esc(r.name)}" cx="${mx_(r.lon).toFixed(1)}"
+       cy="${my_(r.lat).toFixed(1)}" r="2.8" fill="${cssv("--surface")}" fill-opacity=".85"
+       stroke="${cssv("--ink-2")}" stroke-width="1.1"/>`).join("");
+
+  const dots = [...carrying].sort((a, b) => b[q.atRiskPoor] - a[q.atRiskPoor]).map(r => {
+    const rad = 4 + Math.sqrt(r[q.atRiskPoor] / mx) * 14;
     const b = r.assessed ? band(r.risk) : null;
     return `<circle class="pdot" data-n="${esc(r.name)}" cx="${mx_(r.lon).toFixed(1)}"
       cy="${my_(r.lat).toFixed(1)}" r="${rad.toFixed(1)}"
-      fill="${b ? cssv(b.rag.v) : cssv("--surface")}" fill-opacity="${b ? .92 : .8}"
-      stroke="${b ? "#ffffff" : cssv("--ink-2")}" stroke-width="${b ? 1.8 : 1.4}"/>`;
+      fill="${b ? cssv(b.rag.v) : cssv("--b1")}" fill-opacity=".92"
+      stroke="#ffffff" stroke-width="1.8"/>`;
   }).join("");
 
-  svgEl.innerHTML = baseMap(cellRects + symbolLayer() + dots);
+  svgEl.innerHTML = baseMap(cellRects + symbolLayer() + emptyDots + dots);
   bindSubcounties(svgEl);
   svgEl.querySelectorAll(".pdot").forEach(el => {
     const r = POP.catchments.find(x => x.name === el.dataset.n);
+    const n = r[q.atRiskPoor];
     bindTip(el, `<div class="t">${esc(r.name)}</div>
       <div class="r"><span>${esc(r.sub)} · ${esc(r.keph)}</span></div>
       <div class="r"><span>Population nearest</span><b>${fmt(r.pop)}</b></div>
-      <div class="r"><span>Exposed and poor</span><b>${fmt(r[q.atRiskPoor])}</b></div>
+      <div class="r"><span>In the poorest 40%</span><b>${fmt(r.poor40)}</b></div>
+      <div class="r"><span>${esc(q.atRiskLabel)}</span><b>${fmt(n)}</b></div>
+      ${n === 0 ? `<div class="r" style="display:block;margin-top:4px;color:var(--ink-2)">
+        Nobody in this catchment is exposed on this measure &mdash; ${esc(q.zeroWhy)}</div>` : ""}
       <div class="r"><span>Mean distance</span><b>${r.km} km</b></div>
       <div class="r" style="margin-top:4px;color:var(--muted)">${r.assessed
         ? "Assessed — risk " + r.risk.toFixed(0) : "Not yet assessed"}</div>`);
     if (r.assessed) el.addEventListener("click", () => openFacility(r.name));
   });
-  bindSymbols(svgEl);
 
   document.getElementById("pp-maplegend").innerHTML =
     `<span class="item" style="color:var(--muted)">${esc(q.sub)}: low</span>
@@ -1752,8 +1776,19 @@ function drawPeopleMap(){
      <span class="item" style="color:var(--muted)">high</span>
      <span class="item" style="margin-left:8px"><svg width="14" height="14" aria-hidden="true">
        <rect x="2" y="2" width="10" height="10" rx="2" fill="none" stroke="${cssv("--critical")}" stroke-width="1.2"/></svg>
-       outlined = in the poorest 40%</span>
-     <span class="item" style="color:var(--muted)">Circle area &prop; exposed and poor people served</span>`;
+       cell is in the poorest 40%</span>
+     <span class="item" style="margin-left:8px"><svg width="34" height="18" aria-hidden="true">
+       <circle cx="8" cy="9" r="5" fill="${cssv("--b1")}" stroke="#fff" stroke-width="1.4"/>
+       <circle cx="24" cy="9" r="8" fill="${cssv("--b1")}" stroke="#fff" stroke-width="1.4"/></svg>
+       facility carrying exposed and poor people (area &prop; how many)</span>
+     <span class="item"><svg width="13" height="13" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.8"
+       fill="none" stroke="${cssv("--ink-2")}" stroke-width="1.1"/></svg>
+       facility carrying none on this measure (${empty.length})</span>
+     <span class="item note"><b style="color:var(--ink)">A hollow ring is a facility, not a gap.</b>
+       ${carrying.length} of the ${POP.catchments.length} mapped facilities carry somebody who is both
+       exposed on this measure and in the poorest 40%; the other ${empty.length} do not. On the coast
+       that is because ${esc(q.zeroWhy)} &mdash; not because there are no facilities there. Fills are
+       the traffic light where a facility has been assessed.</span>`;
 }
 
 /* ---------------- facility drawer ---------------- */
