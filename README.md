@@ -1,8 +1,11 @@
 # NEWRISK — County Risk Explorer
 
 A planner's tool for the ECHRRA-K health facility climate risk assessment.
-The user picks a county, gets an overview, then explores by hazard, by sub-county
-or by overall score. Single self-contained page; no build step, no server code.
+The user picks a county, gets an overview, then chooses one of two views:
+**Facilities and the assessment** (every assessed facility scored green, amber or
+red, what drives the score, what to fix first) or **Population risk** (who lives
+with heat, flooding and distance, and which facilities carry them). Single
+self-contained page; no build step, no server code.
 
 ## Files
     index.html                        the whole tool
@@ -11,8 +14,33 @@ or by overall score. Single self-contained page; no build step, no server code.
     logos/kemri.png  logos/oxford.png partner marks
     data/ECHRRA-K_..._REDCap_export.csv   assessments in the live REDCap layout (690 cols)
     data/ECHRRA-K_..._derived_scores.json derived scores the tool reads
+    data/Kilifi_facilities_geocoded.csv   all 153 KMHFR facilities, 101 with GPS
+    data/Kilifi_population_risk.csv       catchment population and hazard per facility
+    layers/*.png                          rainfall, heat, flood and poverty overlays
 
-Keep the folder structure — index.html references `logos/` and `data/` by relative path.
+Keep the folder structure — index.html references `logos/`, `layers/` and `data/`
+by relative path.
+
+## What is real and what is not
+
+Real: the facility register (Kenya Master Health Facility Registry, Sept 2026) with
+MFL codes, KEPH levels, sub-counties and wards; GPS coordinates for 101 of the 153,
+joined by name from Maina et al. (2019) *Scientific Data* 6:134; ERA5 rainfall,
+temperature and Rx5day; Copernicus GloFAS river discharge; Meta Relative Wealth
+Index; KNBS 2019 census; published travel-time accessibility from Moturi et al.
+(2022) *Frontiers in Public Health* 10:1002975. Facility hazard **exposure** is
+interpolated from those surfaces at each facility's true position.
+
+Synthetic: every assessment answer — readiness and vulnerability scores, staffing
+figures, utility readings, narrative gaps and actions. Replace `payload.json` from
+a real REDCap export and the tool works unchanged.
+
+## Traffic lights
+
+Overall risk = (√(exposure × severity) / 5) × (weighted weakness / 5) × 100.
+Red at 35 and above, amber 25–34, green below 25. The thresholds are county-relative
+priority tiers, not absolute risk classes — a red facility is one carrying real
+hazard whose critical systems score around 4 of 5 for weakness.
 
 ## Deploying
 
@@ -91,66 +119,28 @@ Note that the repo must be **public** for Pages on a free GitHub account.
 
 | Layer | Source |
 |---|---|
-| County boundary | [OpenStreetMap relation 3495545](https://www.openstreetmap.org/relation/3495545), admin_level 4, simplified to 100 vertices. (c) OpenStreetMap contributors, ODbL |
-| Unassessed facilities | OpenStreetMap health sites (`amenity=clinic/hospital/doctors`, `healthcare=*`) clipped to the county boundary - 47 named sites. (c) OpenStreetMap contributors, ODbL |
-| Rainfall layer | ERA5 reanalysis via the [Open-Meteo](https://open-meteo.com/) historical API. Mean annual precipitation, 2005-2024, 72 grid points, inverse-distance interpolated |
-| Extreme heat layer | ERA5 reanalysis via Open-Meteo. Mean days per year with Tmax >= 35 C, same grid and period |
+| County boundary | [OpenStreetMap relation 3495545](https://www.openstreetmap.org/relation/3495545), admin_level 4, simplified to 100 vertices. © OpenStreetMap contributors, ODbL |
+| Unassessed facilities | OpenStreetMap health sites (`amenity=clinic/hospital/doctors`, `healthcare=*`) clipped to the county boundary — 47 named sites. © OpenStreetMap contributors, ODbL |
+| Rainfall layer | ERA5 reanalysis via the [Open-Meteo](https://open-meteo.com/) historical API. Mean annual precipitation, 2005–2024, 72 grid points, inverse-distance interpolated |
+| Extreme heat layer | ERA5 reanalysis via Open-Meteo. Mean days per year with Tmax ≥ 35 °C, same grid and period |
 
 `data/ERA5_Kilifi_climate_grid_2005-2024.csv` holds the raw grid the two rasters
 were interpolated from, so the layers can be regenerated or replaced.
 
 **Coverage caveat.** OpenStreetMap does not contain every facility on the Ministry
-of Health's Master Facility List - the MFL lists several hundred in Kilifi, OSM has
+of Health's Master Facility List — the MFL lists several hundred in Kilifi, OSM has
 47 named ones. The map therefore shows "facilities mapped in OpenStreetMap", not
 "all facilities in Kilifi". Replacing this layer with a KMHFL extract is the single
 biggest improvement available to the map.
-
-**Resolution caveat.** The rasters are interpolated from a 0.15 degree grid. They are
-a county-scale picture, not a site-level one - do not read a single facility's flood
-risk off a pixel. ERA5 is reanalysis: reliable for gradients and trends, but it
-smooths local extremes. CHIRPS is the better rainfall source if you need precision,
-and is station-corrected for Africa specifically.
 
 ## Red / amber / green
 
 RAG is assigned by the *meaning* of each ECHRRA-K rubric, not the raw number,
 because the tool's scales run in two directions:
 
-- **Weakness, exposure and severity** (tables 1, 6, 13) run 1 best -> 5 worst,
-  so 4-5 = Red, 3 = Amber, 1-2 = Green.
-- **Function and readiness** (tables 3, 7-12) run 1 worst -> 5 best, so the
+- **Weakness, exposure and severity** (tables 1, 6, 13) run 1 best → 5 worst,
+  so 4–5 = Red, 3 = Amber, 1–2 = Green.
+- **Function and readiness** (tables 3, 7–12) run 1 worst → 5 best, so the
   mapping inverts. `ragGood()` in the script handles this direction and is
   what to use when loading raw REDCap scores, which are stored in the
   good-direction form.
-
-Every RAG marker pairs its colour with a letter (R/A/G) so it survives
-colour-blindness, mono printing and forced-colours mode.
-
-## Flood, poverty and population layers
-
-| Layer | What it is | Source |
-|---|---|---|
-| Heavy-rain flood proxy | Rx5day: mean annual maximum consecutive 5-day rainfall, 2005-2024 | ERA5 via [Open-Meteo](https://open-meteo.com/) |
-| River flood (GloFAS) | Mean annual maximum river discharge, m3/s, 2005-2024. Drawn at the model's own grid cells, NOT interpolated | Copernicus GloFAS via Open-Meteo |
-| Relative poverty | Relative Wealth Index, ~2.4 km. Darker is poorer | [Meta Data for Good](https://data.humdata.org/dataset/relative-wealth-index) |
-| Population | Sub-county totals, proportional circles | [Kenya Census 2019 (KNBS) via HDX](https://data.humdata.org/dataset/cod-ps-ken) |
-
-`data/Kilifi_flood_poverty_population_sources.csv` holds every underlying value.
-
-### Three honest limits on these layers
-
-1. **Rx5day is a rainfall proxy, not a flood model.** It says where extreme rain
-   falls, not where water ends up. Terrain, drainage and river channels all matter
-   and none are in it. A real inundation layer (Fathom, JBA, or a Kenya-specific
-   model) would replace it directly - the plumbing takes a PNG plus one entry in
-   the `layers` object.
-2. **River discharge is shown as points, deliberately.** An earlier version
-   interpolated it into a surface and produced a checkerboard artefact - discharge
-   follows channels, so interpolating between cells invents water that isn't there.
-   The circles are the model's own cells.
-3. **RWI is relative, not a poverty rate.** 0 is Kenya's mean; Kilifi's median is
-   -0.40, so the county is poorer than national average. It is not the KNBS poverty
-   headcount and should not be quoted as one.
-
-Population is at sub-county resolution because WorldPop's gridded API rate-limited
-during collection. Swapping in a WorldPop raster would give a continuous surface.

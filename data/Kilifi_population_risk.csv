@@ -1,0 +1,101 @@
+name,code,keph,sub,lat,lon,pop,poorest,poor40,heat,flood,heat_poor,flood_poor,far,rwi,hot_days,rx5,river,km,max_km,assessed,risk,V
+Rimarapera Dispensary,11617,Level 2,Ganze,-3.6256,39.3965,54265,22695,31498,666,23460,0,16131,26168,-0.487,14.6,76.9,42.1,11.4,25.8,False,,
+Adu Dispensary,11198,Level 2,Magarini,-2.8398,39.9799,39558,17307,32141,0,0,0,0,6181,-0.574,3.6,90.4,23.5,7.0,24.6,True,35.3,4.09
+Tsangatsini Dispensary,11859,Level 2,Kaloleni,-3.7144,39.4498,32280,5614,16841,0,0,0,0,0,-0.44,10.7,80.6,24.8,4.8,9.6,False,,
+Sokoke Dispensary,11802,Level 2,Ganze,-3.5215,39.767,32053,15183,20244,0,32053,0,20244,0,-0.512,3.3,91.3,152.0,4.1,6.6,False,,
+Mtoroni Dispensary,18309,Level 2,Magarini,-2.86116,40.15056,29669,9890,13598,0,0,0,0,19779,-0.477,1.7,93.1,6.0,13.8,26.6,False,,
+Palakumi Dispensary,11730,Level 2,Ganze,-3.6213,39.6059,26311,13226,18698,0,13013,0,10277,0,-0.579,4.1,82.3,89.8,4.8,8.0,False,,
+Madamani Dispensary,11532,Level 2,Ganze,-3.3938,39.7484,26142,5061,16020,0,26142,0,16020,0,-0.464,8.5,88.2,152.0,3.9,7.3,False,,
+Viragoni Dispensary,17689,Level 2,Kaloleni,-3.7012,39.534,25262,5614,9824,0,0,0,0,0,-0.36,6.5,80.7,28.9,4.4,8.6,False,,
+Jaribuni Dispensary,11430,Level 2,Ganze,-3.6326,39.7427,23648,1687,7238,0,10367,0,3374,0,-0.279,1.5,94.1,76.8,3.6,5.9,False,,
+Gongoni Health Centre,11401,Level 3,Magarini,-3.0361,40.1334,22719,0,3787,0,0,0,0,1262,-0.024,0.2,99.9,4.0,4.9,10.6,False,,
+Fundi Issa Dispensary,11379,Level 2,Magarini,-2.92982,40.09493,22537,6233,9994,0,0,0,0,0,-0.444,0.5,91.3,7.1,4.5,7.7,False,,
+Bamba Sub-County Hospital,11237,Level 4,Ganze,-3.5454,39.5237,21985,2665,8661,0,19986,0,7995,0,-0.369,10.1,75.7,114.9,5.4,8.4,True,24.8,3.4
+Karimboni Dispensary,20344,Level 2,Magarini,-3.0959,39.9935,21457,8835,12622,0,0,0,0,0,-0.522,1.6,103.7,46.4,4.0,6.9,False,,
+Mirihini Dispensary,11618,Level 2,Ganze,-3.43813,39.59241,21319,1332,11992,1332,21319,1332,11992,666,-0.409,13.5,79.1,151.2,5.8,11.2,True,38.3,4.43
+Chasimba Health Centre,11282,Level 3,Kilifi South,-3.7349,39.7,21255,0,5797,0,0,0,0,0,-0.221,1.1,96.4,28.9,4.0,7.1,True,24.0,3.44
+Gotani Dispensary,11404,Level 2,Kaloleni,-3.7865,39.5406,21052,1403,5614,0,0,0,0,0,-0.291,4.7,85.5,28.9,3.8,7.4,False,,
+Bombi Dispensary,11256,Level 2,Magarini,-3.07925,39.47874,20638,11222,18069,20638,0,18069,0,9512,-0.634,54.1,73.4,17.4,10.0,27.4,False,,
+Baricho Dispensary,11248,Level 2,Magarini,-3.1037,39.7846,20065,5023,6285,18803,0,5023,0,0,-0.396,22.4,85.0,49.1,3.8,6.0,False,,
+Mizijini Dispensary,11625,Level 2,Magarini,-2.96167,40.00046,19857,6181,14860,0,0,0,0,0,-0.528,3.2,93.3,48.0,3.9,6.3,False,,
+Shangia Dispensary,16189,Level 2,Kaloleni,-3.8028,39.4083,19648,4210,8421,0,5614,0,1403,2807,-0.229,11.3,80.1,60.7,6.3,16.1,False,,
+Mavueni Dispensary,18482,Level 2,Kilifi North,-3.678,39.79902,19322,0,1932,0,0,0,0,0,-0.038,0.5,99.3,3.1,3.0,5.0,False,,
+Ngerenya Dispensary,11713,Level 2,Kilifi North,-3.5135,39.8623,18557,0,3374,0,6748,0,0,0,-0.265,0.1,98.6,55.8,3.5,5.8,True,35.7,3.84
+Chalani Dispensary,16191,Level 2,Kaloleni,-3.754814,39.630511,18428,4739,7546,0,0,0,0,0,-0.317,2.1,91.7,28.9,3.5,6.5,False,,
+Mwapula Dispensary,21119,Level 2,Ganze,-3.6186,39.7034,17949,3864,14684,0,14084,0,10819,0,-0.511,2.1,90.4,125.5,3.1,5.5,False,,
+Shomella Dispensary,20307,Level 2,Magarini,-2.9802,40.0561,17645,3787,5049,0,0,0,0,0,-0.334,0.9,98.8,24.0,3.8,7.0,False,,
+Marafa Health Centre,11562,Level 3,Magarini,-3.0283,39.9597,17593,2498,7495,0,0,0,0,0,-0.342,5.1,97.2,49.1,3.8,7.8,True,31.7,3.96
+Kadzinuni Dispensary,11447,Level 2,Kilifi North,-3.74511,39.81237,17390,1932,3864,0,0,0,0,0,-0.193,0.1,102.6,2.9,2.8,4.3,False,,
+Marereni Dispensary,11563,Level 3,Magarini,-2.863,40.1446,17359,6181,8653,0,0,0,0,1236,-0.442,0.5,91.8,5.9,5.1,12.4,False,,
+Timboni Community Dispensary,11851,Level 2,Kilifi North,-3.1843,39.7403,16408,2524,5049,16408,2524,5049,1262,0,-0.458,22.7,84.2,27.6,4.1,8.0,False,,
+Sosoni Dispensary,11805,Level 2,Magarini,-3.028,39.8229,16097,2498,11152,12388,0,8679,0,0,-0.469,20.5,84.8,49.1,3.5,5.8,False,,
+Muryachakwe Dispensary,11653,Level 2,Ganze,-3.2885,39.5768,15919,5926,13254,10589,15919,8591,13254,666,-0.565,21.4,86.4,134.0,6.4,11.2,False,,
+Dida Dispensary,11305,Level 2,Ganze,-3.4288,39.8054,15183,5061,11809,0,15183,0,11809,0,-0.627,4.2,90.4,152.0,3.9,6.4,False,,
+Mariakani District Hospital,11566,Level 4,Kaloleni,-3.8567,39.4939,15097,1403,1403,0,8079,0,0,0,0.083,6.6,89.7,111.8,3.3,5.7,True,23.8,2.88
+Bore Singwaya Dispensary,20309,Level 2,Magarini,-3.0526,39.9066,15094,3787,7573,0,0,0,0,0,-0.485,12.7,90.7,49.1,3.5,6.1,False,,
+Ganze Health Centre,11383,Level 3,Ganze,-3.5424,39.672,15054,2665,8704,0,15054,0,8704,0,-0.381,4.7,84.2,152.0,4.5,7.6,True,31.1,3.88
+Kamkomani Dispensary,19189,Level 2,Kaloleni,-3.8844,39.5189,14793,0,0,0,4931,0,0,0,0.07,4.9,96.2,70.2,2.8,4.9,False,,
+Kombeni Dispensary,11498,Level 2,Rabai,-3.9128,39.5871,14793,0,0,0,0,0,0,0,0.202,2.8,105.9,12.4,2.4,3.8,False,,
+Bwagamoyo Dispensary,11266,Level 2,Rabai,-3.9202,39.6445,14793,0,0,0,0,0,0,0,-0.155,1.5,110.6,12.4,2.7,5.1,False,,
+Rabai Rural Health Demonstration Centre,11748,Level 3,Rabai,-3.939,39.5664,14793,0,0,0,0,0,0,0,0.105,3.0,107.2,12.4,2.6,5.1,True,27.0,3.12
+Dungicha Dispensary,19024,Level 2,Ganze,-3.4724,39.6598,14700,4706,8704,0,14700,0,8704,0,-0.545,7.3,83.1,152.0,4.6,6.9,False,,
+Vitengeni Health Centre,11883,Level 3,Ganze,-3.3591,39.708,14660,4593,10378,0,14660,0,10378,0,-0.529,13.6,88.5,152.0,4.3,7.4,False,,
+Midoina Dispensary,11609,Level 2,Ganze,-3.5017,39.3872,14657,7328,9327,11326,14657,7328,9327,7995,-0.59,22.0,74.4,86.2,10.4,21.0,False,,
+Vishakani Dispensary,16190,Level 2,Kaloleni,-3.83063,39.62322,14601,0,0,0,0,0,0,0,0.166,2.3,95.4,28.9,2.8,5.0,False,,
+Mtwapa Health Centre,11672,Level 3,Kilifi South,-3.9179,39.7382,14592,0,0,0,0,0,0,0,0.442,0.2,113.8,12.4,2.8,4.8,True,34.7,3.71
+Kinarani Dispensary,11481,Level 2,Kaloleni,-3.7296,39.5792,14035,1403,5614,0,0,0,0,0,-0.348,3.5,85.3,28.9,3.3,5.8,False,,
+Baolala Dispensary,11244,Level 2,Malindi,-3.17962,39.78562,13884,2524,3787,3787,0,0,0,0,-0.344,17.3,85.3,28.7,3.5,6.1,False,,
+Garashi Dispensary,11384,Level 2,Magarini,-3.13088,39.8913,13884,2524,8835,0,0,0,0,0,-0.482,11.3,90.8,49.1,3.3,5.5,True,33.9,4.24
+Ziani Dispensary,18374,Level 2,Kilifi South,-3.75564,39.71749,13526,0,1932,0,0,0,0,0,-0.242,0.4,100.6,21.9,3.1,6.0,False,,
+Junju Dispensary,11444,Level 2,Kilifi South,-3.8299,39.7611,13526,0,1932,0,0,0,0,0,-0.18,0.1,107.9,9.7,2.4,3.5,True,35.0,3.76
+Mtondia Dispensary,11667,Level 2,Kilifi North,-3.5712,39.8675,13496,0,0,0,3374,0,0,0,0.119,0.1,101.5,38.9,3.4,5.4,False,,
+Mnarani Dispensary,11636,Level 2,Kilifi North,-3.6412,39.8459,13496,0,1687,0,1687,0,0,0,0.056,0.2,99.9,21.7,3.7,7.4,False,,
+Kadaina Community Dispensary,11445,Level 2,Kilifi North,-3.379185,39.930862,13059,2949,5474,0,0,0,0,0,-0.244,0.7,93.2,2.9,3.7,6.5,False,,
+Chamari Dispensary,20308,Level 2,Magarini,-2.9027,39.8974,12362,4945,9890,0,0,0,0,0,-0.574,9.3,87.1,49.1,4.6,7.1,False,,
+Makanzani Dispensary,11547,Level 2,Rabai,-3.8655,39.6068,12328,0,2466,0,0,0,0,0,-0.23,2.4,99.1,19.0,2.7,5.2,False,,
+Roka Maweni Dispensary,11758,Level 2,Kilifi North,-3.4436,39.92867,11809,0,3374,0,0,0,0,0,-0.277,0.1,96.3,2.3,2.9,4.5,False,,
+Vipingo Rural Demonstration Health Centre,11881,Level 3,Kilifi South,-3.8193,39.8094,11593,1932,1932,0,0,0,0,0,0.139,0.1,105.9,1.3,2.4,4.0,True,41.1,3.98
+Jibana Sub District Hospital,11432,Level 4,Kaloleni,-3.8311,39.6865,11593,1932,1932,0,0,0,0,0,-0.28,0.5,104.9,17.9,2.4,4.1,True,20.0,2.61
+Mwangatini Dispensary,11689,Level 2,Magarini,-3.1434,40.0495,11360,6311,7573,0,0,0,0,0,-0.52,0.4,104.4,3.9,3.1,4.4,False,,
+Marikebuni Dispensary,11571,Level 2,Magarini,-3.0903,40.1121,11360,0,1262,0,0,0,0,0,-0.208,0.2,103.5,4.0,3.4,5.8,False,,
+Mtepeni Dispensary,11666,Level 2,Kilifi South,-3.9002,39.7316,10728,4398,4398,0,0,0,0,0,-0.422,0.3,112.6,12.4,3.1,4.7,False,,
+Watamu Dispensary,11895,Level 2,Kilifi North,-3.3501,40.0123,10522,1262,1262,0,0,0,0,0,0.153,0.1,99.6,2.9,3.2,4.5,True,40.8,4.22
+Matsangoni Model Health Centre,11580,Level 3,Kilifi North,-3.3904,39.9286,10122,0,0,0,0,0,0,0,0.077,0.3,94.3,2.9,2.6,4.2,True,28.8,3.2
+Kakoneni Dispensary,11452,Level 2,Malindi,-3.1644,39.8659,10097,3787,3787,0,0,0,0,0,-0.333,12.7,86.8,49.1,3.0,4.7,False,,
+Madunguni Dispensary,11534,Level 2,Malindi,-3.1837,39.9748,10097,0,1262,0,0,0,0,0,-0.226,2.5,100.7,20.2,2.8,4.2,False,,
+Matolani Dispensary,11578,Level 2,Magarini,-3.10202,39.66969,9942,1236,6233,9942,0,6233,0,0,-0.445,31.8,83.1,24.0,3.8,6.1,False,,
+Msumarini Dispensary,11659,Level 2,Kilifi South,-3.87227,39.79793,9661,0,0,0,0,0,0,0,0.214,0.1,111.9,12.4,2.2,3.3,False,,
+Pingilikani Dispensary,11738,Level 2,Kilifi South,-3.7744,39.7735,9661,0,3864,0,0,0,0,0,-0.24,0.2,102.8,3.1,2.1,3.8,False,,
+Kizingo Health Centre,11497,Level 3,Kilifi South,-3.7821,39.677,9661,0,0,0,0,0,0,0,-0.153,0.6,99.9,28.9,2.1,3.1,False,,
+Lenga Dispensary,11517,Level 2,Rabai,-3.8669,39.6618,9329,4398,4398,0,0,0,0,0,-0.315,0.7,110.5,12.4,2.5,3.6,False,,
+Gandini Dispensary,18300,Level 2,Magarini,-3.4215,39.422,9327,4663,6662,4663,8661,3331,5996,666,-0.56,21.5,77.4,105.5,7.6,22.3,False,,
+Dzikunze Dispensary,11359,Level 2,Ganze,-3.2956,39.7508,8835,2524,3787,1262,7573,0,3787,0,-0.408,16.7,87.1,111.6,5.1,7.4,False,,
+Kakuyuni Dispensary (Malindi),11453,Level 2,Malindi,-3.22034,40.0019,8835,1262,2524,0,0,0,0,0,-0.167,0.9,103.5,2.9,2.4,3.6,False,,
+Bomani Dispensary,11255,Level 2,Kilifi South,-3.8843,39.7494,7729,0,0,0,0,0,0,0,-0.056,0.1,112.4,12.4,2.2,3.7,False,,
+Takaungu Dispensary,11836,Level 2,Kilifi North,-3.6828,39.8592,7729,1932,1932,0,0,0,0,0,0.099,0.1,102.2,2.3,2.6,4.5,False,,
+Malanga Dispensary (Vitengeni),20342,Level 2,Ganze,-3.2818,39.7904,7573,3787,5049,0,0,0,0,0,-0.618,13.6,86.3,4.2,5.3,7.6,False,,
+Mulunguni Dispensary,21787,Level 2,Magarini,-2.9790797,39.7715075,7417,4945,7417,7417,0,7417,0,0,-0.716,24.5,82.0,49.1,3.8,7.1,False,,
+Mmangani Dispensary,20036,Level 2,Malindi,-3.11,39.5847,7417,4945,7417,7417,0,7417,0,0,-0.685,45.3,78.4,20.4,3.6,5.7,False,,
+Ribe Dispensary,11756,Level 2,Rabai,-3.8854,39.6315,7397,0,0,0,0,0,0,0,0.04,1.4,107.7,12.4,1.7,2.4,True,37.7,4.05
+Mgamboni Dispensary,11601,Level 2,Kaloleni,-3.8452,39.6634,6863,0,1932,0,0,0,0,0,-0.299,1.2,102.4,18.3,1.8,2.2,False,,
+Kiwandani Dispensary,11493,Level 2,Kilifi North,-3.5717037,39.8719258,6748,0,0,0,0,0,0,0,0.238,0.0,104.3,0.8,2.7,3.6,False,,
+Mshongoleni Community Dispensary,20300,Level 2,Malindi,-3.2469,40.0273,6311,1262,1262,0,0,0,0,0,-0.158,0.2,105.6,2.9,2.2,3.8,False,,
+Sabaki Dispensary,11761,Level 2,Magarini,-3.1637,40.0829,6311,0,1262,0,0,0,0,0,-0.31,0.3,104.3,3.8,2.8,5.5,False,,
+Ganda Dispensary,11382,Level 2,Malindi,-3.2181,40.0941,6311,0,0,0,0,0,0,0,0.162,0.1,104.7,3.1,2.5,3.9,False,,
+Mijomboni Dispensary,11610,Level 2,Kilifi North,-3.2621,40.0016,6311,0,1262,0,0,0,0,0,-0.043,0.5,101.9,2.9,3.3,6.9,False,,
+Rainbow Community Care,11751,Level 3,Magarini,-3.18099,40.11512,6311,0,0,0,0,0,0,0,0.406,0.1,104.3,4.0,2.4,3.8,False,,
+Mjanaheri Dispensary,21213,Level 2,Magarini,-3.0793,40.1409,5049,0,1262,0,0,0,0,0,0.121,0.1,102.7,4.0,1.8,2.3,False,,
+Mambrui Dispensary,11559,Level 2,Magarini,-3.1184,40.1569,5049,0,1262,0,0,0,0,0,-0.15,0.2,103.7,4.0,2.1,2.9,False,,
+Jilore Dispensary,11433,Level 2,Malindi,-3.1892,39.9058,5049,1262,1262,0,0,0,0,0,-0.237,9.6,88.2,49.1,1.8,2.4,False,,
+Cowdray Dispensary,11293,Level 2,Kilifi North,-3.2886,40.0766,5049,0,3787,0,0,0,0,0,-0.488,0.0,105.9,2.9,1.8,2.3,False,,
+Gede Health Centre,11387,Level 3,Kilifi North,-3.2847,40.0507,5049,1262,1262,0,0,0,0,0,-0.139,0.0,104.6,2.9,2.5,3.8,True,36.7,3.8
+Kokotoni Dispensary,17017,Level 2,Rabai,-3.92054,39.52444,4931,0,0,0,4931,0,0,0,0.837,3.5,105.0,187.1,2.3,2.8,False,,
+Dagamra Dispensary,11297,Level 2,Magarini,-3.1824,39.9364,3787,0,1262,0,0,0,0,0,-0.337,6.5,93.8,33.7,2.0,3.4,False,,
+Rainbow Medical Burangi,11752,Level 2,Magarini,-3.2619,40.0897,3787,0,0,0,0,0,0,0,0.382,0.1,106.4,2.9,2.1,3.6,False,,
+Chakama Dispensary,11276,Level 2,Magarini,-3.122,39.6335,3735,0,1236,3735,1262,1236,0,0,-0.375,34.7,81.8,55.8,3.3,7.1,False,,
+Kilifi County Hospital,11474,Level 4,Kilifi North,-3.63205,39.85722,3374,0,0,0,0,0,0,0,1.13,0.0,100.4,0.8,2.5,2.6,True,31.4,3.15
+Gahaleni Dispensary,11380,Level 2,Malindi,-3.2687,40.0937,2524,0,0,0,0,0,0,0,0.476,0.1,105.3,2.9,2.3,2.5,False,,
+Kambe Dispensary,16192,Level 2,Rabai,-3.8487,39.6324,2466,0,0,0,0,0,0,0,0.545,1.8,100.4,12.4,0.7,0.7,False,,
+Muyeye Health Centre (Municipal),11677,Level 3,Malindi,-3.2327,40.1149,1262,0,0,0,0,0,0,0,0.878,0.1,104.9,2.9,0.8,0.8,False,,
+Tawfiq Muslim Hospital,11843,Level 4,Malindi,-3.2209,40.1127,1262,0,0,0,0,0,0,0,1.557,0.0,104.5,2.9,0.4,0.4,False,,
+Africa Muslim Agency Dispensary (Kilifi),20320,Level 2,Kilifi North,-3.2337,39.557,666,666,666,666,666,666,666,0,-0.639,29.9,83.2,125.0,3.1,3.1,False,,
