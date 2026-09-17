@@ -72,7 +72,147 @@
     "key": "alternatives",
     "label": "Alternative service provision"
    }
-  ]
+  ],
+  "n_register": 148,
+  "n_geocoded": 100,
+  "sources": [
+   {
+    "id": "echrra",
+    "n": 1,
+    "short": "ECHRRA-K v3.0",
+    "full": "Ministry of Health, Republic of Kenya (2026). Extreme Weather and Climatic Events Health Facility Risk and Readiness Assessment tool (ECHRRA-K), version 3.0, January 2026.",
+    "url": "",
+    "use": "The assessment instrument itself: the 13 scoring rubrics, the six hazards, the ten facility systems and the KEPH level definitions. Responses are held in REDCap; the export here uses the live 690-column layout."
+   },
+   {
+    "id": "kmhfr",
+    "n": 2,
+    "short": "KMHFR",
+    "full": "Ministry of Health, Republic of Kenya. Kenya Master Health Facility Registry. Public facility export, September 2026.",
+    "url": "https://kmhfr.health.go.ke/",
+    "use": "The facility register: official name, MFL code, KEPH level, facility type, sub-county, ward, ownership and bed count. This tool uses the government-owned (Ministry of Health) subset only \u2014 148 facilities in Kilifi. The registry's public export also contains faith-based and NGO facilities; those are excluded here. A facility the county operates but the export does not list is carried separately and flagged."
+   },
+   {
+    "id": "maina",
+    "n": 3,
+    "short": "Maina et al. 2019",
+    "full": "Maina J, Ouma PO, Macharia PM, Alegana VA, Mitto B, Fall IS, Noor AM, Snow RW, Okiro EA (2019). A spatial database of health facilities managed by the public health sector in sub-Saharan Africa. Scientific Data 6:134.",
+    "url": "https://doi.org/10.1038/s41597-019-0142-2",
+    "use": "Facility coordinates, joined to the registry by facility name. 99 of the 148 government facilities in Kilifi carry a position; 93 of those were surveyed by GPS and the rest digitised. The remaining 49 were registered after this February 2019 snapshot and have no coordinate."
+   },
+   {
+    "id": "moturi",
+    "n": 4,
+    "short": "Moturi et al. 2022",
+    "full": "Moturi AK, Suiyanka L, Mumo E, Snow RW, Okiro EA, Macharia PM (2022). Geographic accessibility to public and private health facilities in Kenya in 2021: an updated geocoded inventory and spatial analysis. Frontiers in Public Health 10:1002975.",
+    "url": "https://doi.org/10.3389/fpubh.2022.1002975",
+    "use": "Published travel-time accessibility by sub-county: the share of the population within one and two hours of a health facility. Modelled in AccessMod 5.6 by cost-distance at 300 m over road network, land cover and elevation surfaces, for walking, cycling and motorised transport. Population projected to 2021."
+   },
+   {
+    "id": "era5",
+    "n": 5,
+    "short": "ERA5",
+    "full": "Hersbach H, Bell B, Berrisford P, et al. (2020). The ERA5 global reanalysis. Quarterly Journal of the Royal Meteorological Society 146:1999\u20132049. Retrieved through the Open-Meteo Historical Weather API.",
+    "url": "https://doi.org/10.1002/qj.3803",
+    "use": "Climate at each facility and each populated cell, on a 72-point grid across the county, 2005\u20132024: mean annual precipitation, mean daily maximum temperature, days per year above 35 \u00b0C, Rx5day (mean annual maximum consecutive five-day rainfall) and mean annual maximum 10 m wind gust."
+   },
+   {
+    "id": "glofas",
+    "n": 6,
+    "short": "GloFAS",
+    "full": "Copernicus Emergency Management Service. Global Flood Awareness System (GloFAS) river discharge reanalysis. Retrieved through the Open-Meteo Flood API.",
+    "url": "https://global-flood.emergency.copernicus.eu/",
+    "use": "Riverine flood exposure: mean annual maximum daily river discharge, 2005\u20132024, m\u00b3/s, on the GloFAS model grid. Shown at the model's own cells rather than interpolated, because discharge follows rivers and interpolation between cells invents water where there is none."
+   },
+   {
+    "id": "rwi",
+    "n": 7,
+    "short": "Relative Wealth Index",
+    "full": "Chi G, Fang H, Chatterjee S, Blumenstock JE (2022). Microestimates of wealth for all low- and middle-income countries. PNAS 119(3):e2113658119. Meta Data for Good Relative Wealth Index, retrieved via the Humanitarian Data Exchange.",
+    "url": "https://doi.org/10.1073/pnas.2113658119",
+    "use": "Relative wealth on a ~2.4 km grid, used to split the county's population into five equal groups. The index is relative, not a poverty rate: 0 is the national mean and negative values are poorer. 1,035 of its cells fall inside Kilifi."
+   },
+   {
+    "id": "knbs",
+    "n": 8,
+    "short": "KNBS Census 2019",
+    "full": "Kenya National Bureau of Statistics (2019). Kenya Population and Housing Census, Volume I: Population by County and Sub-County. Sub-national totals retrieved via the Humanitarian Data Exchange (cod-ps-ken).",
+    "url": "https://www.knbs.or.ke/",
+    "use": "Population by sub-county, including female, male and under-five counts. County total 1,453,762."
+   },
+   {
+    "id": "unosat",
+    "n": 9,
+    "short": "UNOSAT / Kenya Red Cross",
+    "full": "United Nations Satellite Centre (UNOSAT) and Kenya Red Cross Society, International Centre for Humanitarian Affairs. Satellite-detected water extent for Kenya, merged product FloodExtent01, clipped to Garissa, Kilifi and Tana River counties (STAAR programme, 2023). The Kilifi records are from the 4 May 2018 flood, UNOSAT activation FL20180508KEN.",
+    "url": "https://www.unitar.org/maps",
+    "use": "Observed flood extent: 13,440 hectares of surface water detected across Kilifi's seven sub-counties on 4 May 2018, in 6,639 polygons, concentrated in the Sabaki\u2013Galana corridor and the Ngomeni delta. Drives the observed-flooding question, the flood map overlay, and a one-band rise in a facility's flood exposure where at least 25 hectares of water were detected within 3 km. The extent is drawn as thousands of small slivers, so nearly every facility has some water within 2 km and bare distance separates nothing; area does. It records what did flood on one date \u2014 it is not a flood-hazard model and it does not show what could flood elsewhere."
+   },
+   {
+    "id": "osm",
+    "n": 10,
+    "short": "OpenStreetMap",
+    "full": "OpenStreetMap contributors. Kilifi County relation 3495545 and the seven admin_level=6 sub-county relations, retrieved through the Overpass API. Licensed under the Open Database License (ODbL).",
+    "url": "https://www.openstreetmap.org/relation/3495545",
+    "use": "The county outline and the seven sub-county boundaries drawn on every map. Member ways stitched into closed rings and simplified with Douglas-Peucker to 150 vertices each."
+   }
+  ],
+  "methods": [
+   [
+    "What is real here and what is not",
+    [
+     "Everything describing the county is real. The facility register, MFL codes, KEPH levels, sub-counties and wards come from the Ministry's own registry {kmhfr}. Facility coordinates are surveyed positions {maina}. Rainfall, temperature, heat days, extreme rainfall and wind gusts are ERA5 reanalysis {era5}; river discharge is GloFAS {glofas}; wealth is the Relative Wealth Index {rwi}; population is the 2019 census {knbs}; boundaries are OpenStreetMap {osm}; travel-time access is published work {moturi}.",
+     "Every assessment answer is synthetic. Readiness and vulnerability scores, staffing figures, water and power readings, narrative gaps and recommended actions were generated to exercise the tool ahead of fieldwork. They are not collected data and must not be read as findings about any named facility. Replace the derived-scores file with a real REDCap export {echrra} and everything else on this page works unchanged."
+    ]
+   ],
+   [
+    "Which facilities are included",
+    [
+     "The register is the government-owned (Ministry of Health) subset of the Kenya Master Health Facility Registry for Kilifi: 148 facilities {kmhfr}. The registry's public export also lists faith-based and NGO facilities, which Kenyan practice counts as public sector; those are excluded here so that everything on this page refers to facilities the county runs.",
+     "42 facilities carry an assessment in this build, selected by the county. 41 of them are on the register; <b>Barani Dispensary</b> is not on the September 2026 public export at all, so it has no MFL code and its position was supplied directly by the county. Its KEPH level is inferred from the facility type in its name. It is included in the assessment, on the maps and in the catchment allocation, and flagged wherever it appears. Facilities are matched to the registry on MFL code rather than name, because the name a county uses and the name in the registry often differ \u2014 Rabai Sub County Hospital is registered as Rabai Rural Health Demonstration Centre, and Marafa Sub County Hospital as Marafa Health Centre."
+    ]
+   ],
+   [
+    "Where the facilities are on the map",
+    [
+     "Coordinates come from the sub-Saharan Africa public health facility database {maina}, joined to the registry by facility name with manual review of every uncertain match. 99 of the 148 have a position, 93 of them GPS-surveyed. The 49 without one were registered after that database's February 2019 snapshot and are almost all Level 2 dispensaries, concentrated in Ganze, Kilifi North, Rabai and Magarini.",
+     "Four assessed facilities fall in that gap \u2014 Jila Model Health Centre, Mrima Wa Ndege Dispensary, Shakahola Dispensary and Chilodi CrossFit Health Centre. They are characterised at their sub-county centroid so they can still be scored, are flagged wherever they appear, and are left off the map rather than given a pin that implies a precision we do not have.",
+     "Maps use an equirectangular projection with a cos(latitude) correction, so a kilometre east is the same length on screen as a kilometre north. Each map carries a 20 km scale bar. County and sub-county outlines are simplified to 150 vertices each {osm} \u2014 suitable for mapping, not for area calculations."
+    ]
+   ],
+   [
+    "How hazard exposure is measured",
+    [
+     "Five of the six ECHRRA-K hazards are measured at each facility's true position rather than reported by the facility, then banded onto the tool's 0\u20135 exposure scale. <b>Extreme temperature</b> takes the higher of two bands, days above 35 \u00b0C and mean daily maximum, because the humid coastal strip rarely passes 35 \u00b0C dry-bulb but still carries real heat stress {era5}. <b>Drought</b> is banded on mean annual rainfall, inverted {era5}. <b>Heavy rainfall and flooding</b> is banded on Rx5day, raised one band where a GloFAS cell within 20 km carries a mean annual maximum discharge above 50 m\u00b3/s, and raised one band again where UNOSAT mapped at least 25 hectares of flood water within 3 km on 4 May 2018 \u2014 water a satellite actually saw is stronger evidence than either model {era5}{glofas}{unosat}. <b>Strong winds</b> is banded on mean annual maximum 10 m gust against an absolute scale, not the county's own spread: Kilifi runs 59\u201370 km/h throughout, Beaufort 7\u20138, so a county-relative band would invent differences that are not there {era5}. <b>Sea-level rise</b> is banded on distance to the coastline and reaches 20 km inland {osm}.",
+     "<b>Landslides are not derived from data.</b> There is no terrain layer in this build, so landslide exposure is assigned to the Rabai\u2013Kaloleni hill ridge and to nowhere else. It should be replaced with a slope and soil surface before the figure is used."
+    ]
+   ],
+   [
+    "Who lives where, and which facility they use",
+    [
+     "The population view changes the unit of analysis from the facility to the populated place. Each of the 1,035 Relative Wealth Index cells inside the county {rwi} is assigned to a sub-county by point-in-polygon against the OpenStreetMap boundaries {osm}, and that sub-county's 2019 census population {knbs} is spread evenly across its cells. This is a distributed total, not a modelled population surface: treat the counts as indicative of scale.",
+     "Cells are then split into five equal population groups by wealth index and attached to the nearest facility by straight-line distance, and separately to the nearest KEPH Level 4 facility, because a dispensary cannot take a caesarean or a severe-malaria admission. Five questions are then asked of those cells, each on one measured threshold: heat above 20 days a year over 35 \u00b0C; heavy rainfall above 105 mm Rx5day {era5}; river flooding within 20 km of a modelled channel above 50 m\u00b3/s at its annual peak {glofas}; observed flooding with 25 hectares or more of satellite-detected water within 3 km on 4 May 2018 {unosat}; and distance to care beyond 10 km {kmhfr}{maina}.",
+     "Straight-line distance ignores roads, rivers and terrain. The honest measure of access is the published travel-time modelling {moturi}, reported alongside at sub-county level; it is not available per facility, so Euclidean distance stands in for the catchments."
+    ]
+   ],
+   [
+    "Why flooding is carried as three questions",
+    [
+     "The three flood measures point different ways in Kilifi, so they are kept apart rather than blended into one score. <b>Heavy rainfall</b> is heaviest on the coastal strip, which is also the wealthiest, and correlates <i>positively</i> with wealth (r = +0.40) {era5}. <b>River discharge</b> is heaviest inland along the Goshi and Sabaki, in the poorest sub-counties (r = \u22120.20) {glofas}. The <b>observed 2018 extent</b> sits between the two (r = +0.09), because that event drowned both the Sabaki\u2013Galana corridor and the Ngomeni salt flats {unosat}. A single blended flood score would cancel all three out and hide each of them.",
+     "An earlier build of this tool omitted rainfall from the population view precisely because it tracks wealth upwards. That was a reason to label a finding, not to drop a measure, and it is stated here instead: on rainfall alone the priority ground is the tourist coast, which is why rainfall is never used on its own to rank need.",
+     "Only the observed extent is measured inundation. Rx5day is a rainfall index, river discharge is the flow of a channel rather than the water that leaves it, and the 2018 extent is one date in one event, limited by cloud, tree cover and overpass time. None of the three is a flood-hazard model; that would need terrain and a hydraulic model."
+    ]
+   ],
+   [
+    "How the scores are built",
+    [
+     "Overall risk is <b>\u221a(exposure \u00d7 severity) \u00f7 5 \u00d7 (weighted weakness \u00f7 5) \u00d7 100</b>, on a 0\u2013100 scale. Exposure and severity are the means across the six hazards; weakness is the criticality-weighted mean across the eight summary systems in ECHRRA-K section K {echrra}. Per-hazard risk uses the same geometric form so a band label means the same thing everywhere.",
+     "The ECHRRA-K rubrics run in two directions, so red, amber and green are assigned by meaning and never by the raw number. Tables 3 and 7\u201312 (utilities, workforce, supplies, continuity, alternatives, leadership, early warning) run 1 worst to 5 best; tables 1, 6 and 13 (exposure, severity, vulnerability) run 1 best to 5 worst.",
+     "On overall risk, <b>red is 35 and above, amber 25 to 34, green below 25</b>. Red is a site carrying real hazard whose critical systems score around 4 of 5 for weakness. Most facilities land in amber, because the composite averages ten weighted systems and averages cluster; the traffic light flags the tails, and the per-system chips are where the detail is."
+    ]
+   ]
+  ],
+  "n_offregister": 1
  },
  "facilities": [
   {
@@ -90,7 +230,9 @@
     "rx5day_mm": 75.4,
     "river_discharge_m3s": 152.0,
     "coast_km": 38.9,
-    "gust_kmh": 62.4
+    "gust_kmh": 62.4,
+    "observed_flood_ha3km": 0.8,
+    "observed_flood_km": 0.11
    },
    "approx": false,
    "offregister": false,
@@ -485,7 +627,9 @@
     "rx5day_mm": 81.5,
     "river_discharge_m3s": 152.0,
     "coast_km": 26.6,
-    "gust_kmh": 62.5
+    "gust_kmh": 62.5,
+    "observed_flood_ha3km": 0.3,
+    "observed_flood_km": 1.2
    },
    "approx": true,
    "offregister": false,
@@ -880,7 +1024,9 @@
     "rx5day_mm": 89.5,
     "river_discharge_m3s": 152.0,
     "coast_km": 28.5,
-    "gust_kmh": 63.3
+    "gust_kmh": 63.3,
+    "observed_flood_ha3km": 1.6,
+    "observed_flood_km": 1.21
    },
    "approx": false,
    "offregister": false,
@@ -1275,7 +1421,9 @@
     "rx5day_mm": 81.5,
     "river_discharge_m3s": 152.0,
     "coast_km": 26.6,
-    "gust_kmh": 62.5
+    "gust_kmh": 62.5,
+    "observed_flood_ha3km": 0.3,
+    "observed_flood_km": 1.2
    },
    "approx": true,
    "offregister": false,
@@ -1670,7 +1818,9 @@
     "rx5day_mm": 86.4,
     "river_discharge_m3s": 125.0,
     "coast_km": 44.8,
-    "gust_kmh": 61.5
+    "gust_kmh": 61.5,
+    "observed_flood_ha3km": 0.3,
+    "observed_flood_km": 1.92
    },
    "approx": false,
    "offregister": false,
@@ -2065,7 +2215,9 @@
     "rx5day_mm": 90.8,
     "river_discharge_m3s": 152.0,
     "coast_km": 17.7,
-    "gust_kmh": 62.8
+    "gust_kmh": 62.8,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 5.86
    },
    "approx": false,
    "offregister": false,
@@ -2460,7 +2612,9 @@
     "rx5day_mm": 79.1,
     "river_discharge_m3s": 152.0,
     "coast_km": 28.4,
-    "gust_kmh": 62.0
+    "gust_kmh": 62.0,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 5.16
    },
    "approx": false,
    "offregister": false,
@@ -2855,7 +3009,9 @@
     "rx5day_mm": 103.9,
     "river_discharge_m3s": 12.4,
     "coast_km": 15.8,
-    "gust_kmh": 63.3
+    "gust_kmh": 63.3,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 5.52
    },
    "approx": false,
    "offregister": false,
@@ -3250,7 +3406,9 @@
     "rx5day_mm": 91.6,
     "river_discharge_m3s": 187.1,
     "coast_km": 32.4,
-    "gust_kmh": 60.9
+    "gust_kmh": 60.9,
+    "observed_flood_ha3km": 3.9,
+    "observed_flood_km": 0.79
    },
    "approx": false,
    "offregister": false,
@@ -3645,7 +3803,9 @@
     "rx5day_mm": 84.9,
     "river_discharge_m3s": 28.9,
     "coast_km": 31.3,
-    "gust_kmh": 61.9
+    "gust_kmh": 61.9,
+    "observed_flood_ha3km": 3.5,
+    "observed_flood_km": 0.74
    },
    "approx": false,
    "offregister": false,
@@ -4040,7 +4200,9 @@
     "rx5day_mm": 81.1,
     "river_discharge_m3s": 187.1,
     "coast_km": 43.4,
-    "gust_kmh": 60.9
+    "gust_kmh": 60.9,
+    "observed_flood_ha3km": 0.5,
+    "observed_flood_km": 1.54
    },
    "approx": false,
    "offregister": false,
@@ -4435,7 +4597,9 @@
     "rx5day_mm": 80.7,
     "river_discharge_m3s": 28.9,
     "coast_km": 43.9,
-    "gust_kmh": 61.3
+    "gust_kmh": 61.3,
+    "observed_flood_ha3km": 0.6,
+    "observed_flood_km": 1.28
    },
    "approx": false,
    "offregister": false,
@@ -4830,7 +4994,9 @@
     "rx5day_mm": 98.0,
     "river_discharge_m3s": 28.9,
     "coast_km": 21.1,
-    "gust_kmh": 62.2
+    "gust_kmh": 62.2,
+    "observed_flood_ha3km": 1.4,
+    "observed_flood_km": 1.78
    },
    "approx": false,
    "offregister": false,
@@ -5225,14 +5391,16 @@
     "rx5day_mm": 100.3,
     "river_discharge_m3s": 0.8,
     "coast_km": 0.8,
-    "gust_kmh": 64.9
+    "gust_kmh": 64.9,
+    "observed_flood_ha3km": 236.3,
+    "observed_flood_km": 0.96
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 16,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -5240,7 +5408,7 @@
     "slr": 5
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 1,
     "drought": 3,
     "heat": 3,
@@ -5248,7 +5416,7 @@
     "slr": 5
    },
    "severity": {
-    "flood": 2,
+    "flood": 3,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -5333,7 +5501,7 @@
      "slr": 2
     },
     "workforce": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -5386,7 +5554,7 @@
     "waste": 3.72,
     "energy": 3.48,
     "infrastructure": 3.24,
-    "workforce": 3.6,
+    "workforce": 3.72,
     "supplies": 2.48,
     "leadership": 3.6,
     "earlywarning": 4.0,
@@ -5427,7 +5595,7 @@
      "slr": 4
     },
     "workforce": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -5487,18 +5655,18 @@
     "continuity": 5,
     "alternatives": 3
    },
-   "risk": 32.5,
+   "risk": 34.9,
    "risk_h": {
-    "flood": 36.6,
+    "flood": 54.0,
     "landslide": 0.0,
     "drought": 27.7,
     "heat": 27.5,
     "wind": 43.2,
     "slr": 80.0
    },
-   "E": 2.5,
-   "S": 2.33,
-   "V": 3.36,
+   "E": 2.67,
+   "S": 2.5,
+   "V": 3.38,
    "ops": {
     "catchment_opd": 37350,
     "catchment_vacc": 1232,
@@ -5576,9 +5744,9 @@
     {
      "domain": "workforce",
      "label": "Health workforce",
-     "vuln": 3.6,
+     "vuln": 3.72,
      "weight": 5,
-     "score": 18.0,
+     "score": 18.6,
      "gap": "No staff trained on climate-sensitive disease management or surge protocols",
      "action": "Cascade training on heat illness, cholera, surge and risk communication",
      "hazard": "Sea-level rise"
@@ -5620,7 +5788,9 @@
     "rx5day_mm": 106.8,
     "river_discharge_m3s": 2.9,
     "coast_km": 7.9,
-    "gust_kmh": 69.4
+    "gust_kmh": 69.4,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 6.81
    },
    "approx": false,
    "offregister": false,
@@ -6015,14 +6185,16 @@
     "rx5day_mm": 93.2,
     "river_discharge_m3s": 2.9,
     "coast_km": 4.3,
-    "gust_kmh": 65.4
+    "gust_kmh": 65.4,
+    "observed_flood_ha3km": 25.1,
+    "observed_flood_km": 0.2
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 48,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -6030,7 +6202,7 @@
     "slr": 3
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -6038,7 +6210,7 @@
     "slr": 3
    },
    "severity": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -6115,7 +6287,7 @@
      "slr": 3
     },
     "infrastructure": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -6131,7 +6303,7 @@
      "slr": 2
     },
     "supplies": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -6155,7 +6327,7 @@
      "slr": 1
     },
     "continuity": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -6175,12 +6347,12 @@
     "water": 4.12,
     "waste": 4.36,
     "energy": 3.12,
-    "infrastructure": 4.12,
+    "infrastructure": 4.24,
     "workforce": 4.48,
-    "supplies": 4.0,
+    "supplies": 4.12,
     "leadership": 4.0,
     "earlywarning": 5.0,
-    "continuity": 3.0,
+    "continuity": 3.12,
     "alternatives": 4.6
    },
    "vuln_h": {
@@ -6209,7 +6381,7 @@
      "slr": 3
     },
     "infrastructure": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -6225,7 +6397,7 @@
      "slr": 4
     },
     "supplies": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -6249,7 +6421,7 @@
      "slr": 5
     },
     "continuity": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -6277,18 +6449,18 @@
     "continuity": 4,
     "alternatives": 2
    },
-   "risk": 34.2,
+   "risk": 37.2,
    "risk_h": {
-    "flood": 52.3,
+    "flood": 73.8,
     "landslide": 0.0,
     "drought": 34.1,
     "heat": 32.8,
     "wind": 42.7,
     "slr": 48.8
    },
-   "E": 2.17,
-   "S": 2.0,
-   "V": 4.11,
+   "E": 2.33,
+   "S": 2.17,
+   "V": 4.14,
    "ops": {
     "catchment_opd": 12299,
     "catchment_vacc": 396,
@@ -6360,7 +6532,7 @@
     "water": 1,
     "waste": 1,
     "energy": 2,
-    "supply": 2
+    "supply": 1
    },
    "priorities": [
     {
@@ -6410,7 +6582,9 @@
     "rx5day_mm": 92.9,
     "river_discharge_m3s": 2.9,
     "coast_km": 4.2,
-    "gust_kmh": 65.2
+    "gust_kmh": 65.2,
+    "observed_flood_ha3km": 23.9,
+    "observed_flood_km": 0.53
    },
    "approx": false,
    "offregister": false,
@@ -6805,7 +6979,9 @@
     "rx5day_mm": 99.3,
     "river_discharge_m3s": 3.1,
     "coast_km": 8.2,
-    "gust_kmh": 64.5
+    "gust_kmh": 64.5,
+    "observed_flood_ha3km": 5.7,
+    "observed_flood_km": 1.24
    },
    "approx": false,
    "offregister": false,
@@ -7200,7 +7376,9 @@
     "rx5day_mm": 103.4,
     "river_discharge_m3s": 0.8,
     "coast_km": 3.8,
-    "gust_kmh": 65.4
+    "gust_kmh": 65.4,
+    "observed_flood_ha3km": 5.5,
+    "observed_flood_km": 0.23
    },
    "approx": false,
    "offregister": false,
@@ -7595,14 +7773,16 @@
     "rx5day_mm": 101.4,
     "river_discharge_m3s": 0.0,
     "coast_km": 2.2,
-    "gust_kmh": 65.2
+    "gust_kmh": 65.2,
+    "observed_flood_ha3km": 49.7,
+    "observed_flood_km": 0.24
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 18,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -7610,7 +7790,7 @@
     "slr": 4
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 3,
@@ -7618,7 +7798,7 @@
     "slr": 4
    },
    "severity": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 3,
     "heat": 2,
@@ -7735,7 +7915,7 @@
      "slr": 2
     },
     "continuity": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -7760,7 +7940,7 @@
     "supplies": 3.12,
     "leadership": 3.48,
     "earlywarning": 3.6,
-    "continuity": 3.6,
+    "continuity": 3.72,
     "alternatives": 4.24
    },
    "vuln_h": {
@@ -7829,7 +8009,7 @@
      "slr": 4
     },
     "continuity": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -7857,17 +8037,17 @@
     "continuity": 5,
     "alternatives": 2
    },
-   "risk": 31.6,
+   "risk": 33.8,
    "risk_h": {
-    "flood": 46.0,
+    "flood": 61.3,
     "landslide": 0.0,
     "drought": 34.0,
     "heat": 28.0,
     "wind": 46.0,
     "slr": 50.8
    },
-   "E": 2.33,
-   "S": 2.33,
+   "E": 2.5,
+   "S": 2.5,
    "V": 3.38,
    "ops": {
     "catchment_opd": 6750,
@@ -7944,6 +8124,16 @@
    },
    "priorities": [
     {
+     "domain": "continuity",
+     "label": "Service delivery continuity",
+     "vuln": 3.72,
+     "weight": 5,
+     "score": 18.6,
+     "gap": "Maternity, vaccination and chronic-care visits lapse during events",
+     "action": "Service continuity plan with priority service list and catch-up clinics",
+     "hazard": "Heavy rainfall / flooding"
+    },
+    {
      "domain": "water",
      "label": "Water services",
      "vuln": 3.6,
@@ -7951,17 +8141,7 @@
      "score": 18.0,
      "gap": "Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer",
      "action": "Install/expand rain harvesting and elevated storage; borehole rehabilitation",
-     "hazard": "Sea-level rise"
-    },
-    {
-     "domain": "continuity",
-     "label": "Service delivery continuity",
-     "vuln": 3.6,
-     "weight": 5,
-     "score": 18.0,
-     "gap": "Maternity, vaccination and chronic-care visits lapse during events",
-     "action": "Service continuity plan with priority service list and catch-up clinics",
-     "hazard": "Sea-level rise"
+     "hazard": "Heavy rainfall / flooding"
     },
     {
      "domain": "workforce",
@@ -7971,7 +8151,7 @@
      "score": 16.0,
      "gap": "No staff trained on climate-sensitive disease management or surge protocols",
      "action": "Cascade training on heat illness, cholera, surge and risk communication",
-     "hazard": "Sea-level rise"
+     "hazard": "Heavy rainfall / flooding"
     }
    ]
   },
@@ -7990,7 +8170,9 @@
     "rx5day_mm": 99.6,
     "river_discharge_m3s": 2.9,
     "coast_km": 6.8,
-    "gust_kmh": 67.6
+    "gust_kmh": 67.6,
+    "observed_flood_ha3km": 24.0,
+    "observed_flood_km": 0.3
    },
    "approx": false,
    "offregister": false,
@@ -8385,7 +8567,9 @@
     "rx5day_mm": 100.1,
     "river_discharge_m3s": 28.9,
     "coast_km": 17.5,
-    "gust_kmh": 63.0
+    "gust_kmh": 63.0,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 3.15
    },
    "approx": false,
    "offregister": false,
@@ -8780,7 +8964,9 @@
     "rx5day_mm": 106.9,
     "river_discharge_m3s": 1.0,
     "coast_km": 2.3,
-    "gust_kmh": 65.0
+    "gust_kmh": 65.0,
+    "observed_flood_ha3km": 0.7,
+    "observed_flood_km": 2.92
    },
    "approx": false,
    "offregister": false,
@@ -9175,7 +9361,9 @@
     "rx5day_mm": 113.5,
     "river_discharge_m3s": 12.4,
     "coast_km": 2.7,
-    "gust_kmh": 64.4
+    "gust_kmh": 64.4,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 13.21
    },
    "approx": false,
    "offregister": true,
@@ -9570,7 +9758,9 @@
     "rx5day_mm": 113.2,
     "river_discharge_m3s": 12.4,
     "coast_km": 7.6,
-    "gust_kmh": 64.4
+    "gust_kmh": 64.4,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 9.11
    },
    "approx": false,
    "offregister": false,
@@ -9965,7 +10155,9 @@
     "rx5day_mm": 111.9,
     "river_discharge_m3s": 12.4,
     "coast_km": 6.2,
-    "gust_kmh": 64.4
+    "gust_kmh": 64.4,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 7.85
    },
    "approx": false,
    "offregister": false,
@@ -10360,14 +10552,16 @@
     "rx5day_mm": 101.9,
     "river_discharge_m3s": 4.0,
     "coast_km": 4.7,
-    "gust_kmh": 64.8
+    "gust_kmh": 64.8,
+    "observed_flood_ha3km": 693.0,
+    "observed_flood_km": 0.28
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 44,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 3,
     "heat": 2,
@@ -10375,7 +10569,7 @@
     "slr": 3
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 1,
     "drought": 3,
     "heat": 2,
@@ -10460,7 +10654,7 @@
      "slr": 4
     },
     "infrastructure": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 4,
      "heat": 3,
@@ -10476,7 +10670,7 @@
      "slr": 4
     },
     "supplies": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -10508,7 +10702,7 @@
      "slr": 4
     },
     "alternatives": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 2,
      "heat": 3,
@@ -10520,13 +10714,13 @@
     "water": 2.36,
     "waste": 2.12,
     "energy": 2.24,
-    "infrastructure": 2.48,
+    "infrastructure": 2.6,
     "workforce": 1.6,
-    "supplies": 3.0,
+    "supplies": 3.12,
     "leadership": 3.24,
     "earlywarning": 3.48,
     "continuity": 1.6,
-    "alternatives": 3.24
+    "alternatives": 3.36
    },
    "vuln_h": {
     "water": {
@@ -10554,7 +10748,7 @@
      "slr": 2
     },
     "infrastructure": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 2,
      "heat": 3,
@@ -10570,7 +10764,7 @@
      "slr": 2
     },
     "supplies": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -10602,7 +10796,7 @@
      "slr": 2
     },
     "alternatives": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 4,
      "heat": 3,
@@ -10622,18 +10816,18 @@
     "continuity": 4,
     "alternatives": 2
    },
-   "risk": 23.2,
+   "risk": 24.2,
    "risk_h": {
-    "flood": 35.6,
+    "flood": 43.9,
     "landslide": 0.0,
     "drought": 32.0,
     "heat": 19.2,
     "wind": 32.0,
     "slr": 33.2
    },
-   "E": 2.33,
+   "E": 2.5,
    "S": 2.33,
-   "V": 2.48,
+   "V": 2.51,
    "ops": {
     "catchment_opd": 16400,
     "catchment_vacc": 460,
@@ -10705,7 +10899,7 @@
     "water": 3,
     "waste": 3,
     "energy": 3,
-    "supply": 3
+    "supply": 2
    },
    "priorities": [
     {
@@ -10755,7 +10949,9 @@
     "rx5day_mm": 99.2,
     "river_discharge_m3s": 49.1,
     "coast_km": 23.1,
-    "gust_kmh": 62.9
+    "gust_kmh": 62.9,
+    "observed_flood_ha3km": 1.7,
+    "observed_flood_km": 0.42
    },
    "approx": false,
    "offregister": false,
@@ -11150,14 +11346,16 @@
     "rx5day_mm": 81.2,
     "river_discharge_m3s": 20.4,
     "coast_km": 47.6,
-    "gust_kmh": 61.1
+    "gust_kmh": 61.1,
+    "observed_flood_ha3km": 389.5,
+    "observed_flood_km": 0.17
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 22,
    "exposure": {
-    "flood": 2,
+    "flood": 3,
     "landslide": 0,
     "drought": 4,
     "heat": 4,
@@ -11165,7 +11363,7 @@
     "slr": 0
    },
    "exposure_comm": {
-    "flood": 2,
+    "flood": 3,
     "landslide": 1,
     "drought": 5,
     "heat": 5,
@@ -11173,7 +11371,7 @@
     "slr": 0
    },
    "severity": {
-    "flood": 2,
+    "flood": 3,
     "landslide": 0,
     "drought": 4,
     "heat": 4,
@@ -11226,7 +11424,7 @@
    },
    "stressed": {
     "water": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 1,
      "heat": 2,
@@ -11242,7 +11440,7 @@
      "slr": null
     },
     "energy": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 3,
      "heat": 2,
@@ -11307,9 +11505,9 @@
     }
    },
    "vuln": {
-    "water": 4.15,
+    "water": 4.3,
     "waste": 4.15,
-    "energy": 3.3,
+    "energy": 3.45,
     "infrastructure": 4.45,
     "workforce": 3.15,
     "supplies": 3.75,
@@ -11320,7 +11518,7 @@
    },
    "vuln_h": {
     "water": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 5,
      "heat": 4,
@@ -11336,7 +11534,7 @@
      "slr": null
     },
     "energy": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 3,
      "heat": 4,
@@ -11412,18 +11610,18 @@
     "continuity": 5,
     "alternatives": 2
    },
-   "risk": 33.9,
+   "risk": 36.9,
    "risk_h": {
-    "flood": 32.0,
+    "flood": 51.9,
     "landslide": 0.0,
     "drought": 65.5,
     "heat": 66.1,
     "wind": 48.4,
     "slr": 0.0
    },
-   "E": 2.17,
-   "S": 2.17,
-   "V": 3.91,
+   "E": 2.33,
+   "S": 2.33,
+   "V": 3.96,
    "ops": {
     "catchment_opd": 5400,
     "catchment_vacc": 164,
@@ -11511,22 +11709,22 @@
     {
      "domain": "water",
      "label": "Water services",
-     "vuln": 4.15,
+     "vuln": 4.3,
      "weight": 5,
-     "score": 20.8,
+     "score": 21.5,
      "gap": "Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer",
      "action": "Install/expand rain harvesting and elevated storage; borehole rehabilitation",
      "hazard": "Drought"
     },
     {
-     "domain": "waste",
-     "label": "Waste, sanitation & sewerage",
-     "vuln": 4.15,
-     "weight": 4,
-     "score": 16.6,
-     "gap": "Placental pit and incinerator flood or become unusable in long rains",
-     "action": "Raise and bund waste structures; contract standby waste transport",
-     "hazard": "Drought"
+     "domain": "energy",
+     "label": "Energy services",
+     "vuln": 3.45,
+     "weight": 5,
+     "score": 17.2,
+     "gap": "KPLC outages during storms; generator present but no fuel budget",
+     "action": "Solar PV with battery backup for maternity, lab and cold chain",
+     "hazard": "Extreme temperatures"
     }
    ]
   },
@@ -11545,7 +11743,9 @@
     "rx5day_mm": 84.5,
     "river_discharge_m3s": 49.1,
     "coast_km": 29.8,
-    "gust_kmh": 62.9
+    "gust_kmh": 62.9,
+    "observed_flood_ha3km": 2.7,
+    "observed_flood_km": 0.41
    },
    "approx": false,
    "offregister": false,
@@ -11940,14 +12140,16 @@
     "rx5day_mm": 90.6,
     "river_discharge_m3s": 49.1,
     "coast_km": 27.0,
-    "gust_kmh": 63.6
+    "gust_kmh": 63.6,
+    "observed_flood_ha3km": 76.9,
+    "observed_flood_km": 0.15
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 19,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 3,
     "heat": 3,
@@ -11955,7 +12157,7 @@
     "slr": 0
    },
    "exposure_comm": {
-    "flood": 4,
+    "flood": 5,
     "landslide": 1,
     "drought": 4,
     "heat": 4,
@@ -11963,7 +12165,7 @@
     "slr": 1
    },
    "severity": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 3,
     "heat": 3,
@@ -12016,7 +12218,7 @@
    },
    "stressed": {
     "water": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -12024,7 +12226,7 @@
      "slr": null
     },
     "waste": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -12040,7 +12242,7 @@
      "slr": null
     },
     "infrastructure": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -12056,7 +12258,7 @@
      "slr": null
     },
     "supplies": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -12097,12 +12299,12 @@
     }
    },
    "vuln": {
-    "water": 2.6,
-    "waste": 3.6,
+    "water": 2.75,
+    "waste": 3.75,
     "energy": 3.45,
-    "infrastructure": 4.15,
+    "infrastructure": 4.3,
     "workforce": 4.15,
-    "supplies": 3.6,
+    "supplies": 3.75,
     "leadership": 4.0,
     "earlywarning": 3.6,
     "continuity": 3.6,
@@ -12110,7 +12312,7 @@
    },
    "vuln_h": {
     "water": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -12118,7 +12320,7 @@
      "slr": null
     },
     "waste": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -12134,7 +12336,7 @@
      "slr": null
     },
     "infrastructure": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -12150,7 +12352,7 @@
      "slr": null
     },
     "supplies": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -12202,18 +12404,18 @@
     "continuity": 4,
     "alternatives": 3
    },
-   "risk": 30.3,
+   "risk": 33.4,
    "risk_h": {
-    "flood": 48.4,
+    "flood": 72.8,
     "landslide": 0.0,
     "drought": 44.3,
     "heat": 46.3,
     "wind": 55.4,
     "slr": 0.0
    },
-   "E": 2.0,
-   "S": 2.17,
-   "V": 3.63,
+   "E": 2.17,
+   "S": 2.33,
+   "V": 3.71,
    "ops": {
     "catchment_opd": 8100,
     "catchment_vacc": 283,
@@ -12282,10 +12484,10 @@
     }
    },
    "disruption": {
-    "water": 3,
-    "waste": 2,
+    "water": 2,
+    "waste": 1,
     "energy": 2,
-    "supply": 2
+    "supply": 1
    },
    "priorities": [
     {
@@ -12296,7 +12498,7 @@
      "score": 20.8,
      "gap": "No staff trained on climate-sensitive disease management or surge protocols",
      "action": "Cascade training on heat illness, cholera, surge and risk communication",
-     "hazard": "Strong winds"
+     "hazard": "Heavy rainfall / flooding"
     },
     {
      "domain": "energy",
@@ -12306,17 +12508,17 @@
      "score": 17.2,
      "gap": "KPLC outages during storms; generator present but no fuel budget",
      "action": "Solar PV with battery backup for maternity, lab and cold chain",
-     "hazard": "Strong winds"
+     "hazard": "Heavy rainfall / flooding"
     },
     {
      "domain": "infrastructure",
      "label": "Facility infrastructure",
-     "vuln": 4.15,
+     "vuln": 4.3,
      "weight": 4,
-     "score": 16.6,
+     "score": 17.2,
      "gap": "Roof cover and drainage fail under strong winds; ward floods at ground level",
      "action": "Roof strengthening, gutter/drainage works, raise thresholds",
-     "hazard": "Strong winds"
+     "hazard": "Heavy rainfall / flooding"
     }
    ]
   },
@@ -12335,14 +12537,16 @@
     "rx5day_mm": 104.4,
     "river_discharge_m3s": 4.0,
     "coast_km": 6.1,
-    "gust_kmh": 67.0
+    "gust_kmh": 67.0,
+    "observed_flood_ha3km": 704.6,
+    "observed_flood_km": 0.27
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 21,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 2,
@@ -12350,7 +12554,7 @@
     "slr": 3
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 3,
@@ -12597,16 +12801,16 @@
     "continuity": 5,
     "alternatives": 2
    },
-   "risk": 40.8,
+   "risk": 42.3,
    "risk_h": {
-    "flood": 58.5,
+    "flood": 67.5,
     "landslide": 0.0,
     "drought": 45.2,
     "heat": 35.9,
     "wind": 57.3,
     "slr": 58.5
    },
-   "E": 2.17,
+   "E": 2.33,
    "S": 2.33,
    "V": 4.54,
    "ops": {
@@ -12730,7 +12934,9 @@
     "rx5day_mm": 103.2,
     "river_discharge_m3s": 49.1,
     "coast_km": 20.4,
-    "gust_kmh": 63.4
+    "gust_kmh": 63.4,
+    "observed_flood_ha3km": 2.5,
+    "observed_flood_km": 1.7
    },
    "approx": true,
    "offregister": false,
@@ -13125,7 +13331,9 @@
     "rx5day_mm": 104.6,
     "river_discharge_m3s": 2.9,
     "coast_km": 1.9,
-    "gust_kmh": 67.6
+    "gust_kmh": 67.6,
+    "observed_flood_ha3km": 8.5,
+    "observed_flood_km": 0.65
    },
    "approx": false,
    "offregister": false,
@@ -13520,7 +13728,9 @@
     "rx5day_mm": 104.8,
     "river_discharge_m3s": 2.9,
     "coast_km": 3.3,
-    "gust_kmh": 67.8
+    "gust_kmh": 67.8,
+    "observed_flood_ha3km": 8.7,
+    "observed_flood_km": 0.57
    },
    "approx": false,
    "offregister": false,
@@ -13915,7 +14125,9 @@
     "rx5day_mm": 84.5,
     "river_discharge_m3s": 49.1,
     "coast_km": 30.9,
-    "gust_kmh": 62.9
+    "gust_kmh": 62.9,
+    "observed_flood_ha3km": 3.8,
+    "observed_flood_km": 0.61
    },
    "approx": false,
    "offregister": false,
@@ -14310,14 +14522,16 @@
     "rx5day_mm": 101.5,
     "river_discharge_m3s": 2.9,
     "coast_km": 16.7,
-    "gust_kmh": 65.6
+    "gust_kmh": 65.6,
+    "observed_flood_ha3km": 354.9,
+    "observed_flood_km": 0.45
    },
    "approx": false,
    "offregister": false,
    "ownership": "MoH",
    "years": 35,
    "exposure": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 2,
     "heat": 3,
@@ -14325,7 +14539,7 @@
     "slr": 1
    },
    "exposure_comm": {
-    "flood": 3,
+    "flood": 4,
     "landslide": 0,
     "drought": 3,
     "heat": 4,
@@ -14386,7 +14600,7 @@
    },
    "stressed": {
     "water": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -14410,7 +14624,7 @@
      "slr": 4
     },
     "infrastructure": {
-     "flood": 3,
+     "flood": 2,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -14426,7 +14640,7 @@
      "slr": 3
     },
     "supplies": {
-     "flood": 2,
+     "flood": 1,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -14467,12 +14681,12 @@
     }
    },
    "vuln": {
-    "water": 3.0,
+    "water": 3.12,
     "waste": 3.6,
     "energy": 2.36,
-    "infrastructure": 2.24,
+    "infrastructure": 2.36,
     "workforce": 3.48,
-    "supplies": 3.6,
+    "supplies": 3.72,
     "leadership": 3.36,
     "earlywarning": 4.0,
     "continuity": 3.36,
@@ -14480,7 +14694,7 @@
    },
    "vuln_h": {
     "water": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 3,
      "heat": 3,
@@ -14504,7 +14718,7 @@
      "slr": 2
     },
     "infrastructure": {
-     "flood": 3,
+     "flood": 4,
      "landslide": null,
      "drought": 2,
      "heat": 2,
@@ -14520,7 +14734,7 @@
      "slr": 3
     },
     "supplies": {
-     "flood": 4,
+     "flood": 5,
      "landslide": null,
      "drought": 4,
      "heat": 4,
@@ -14572,18 +14786,18 @@
     "continuity": 4,
     "alternatives": 2
    },
-   "risk": 27.6,
+   "risk": 29.1,
    "risk_h": {
-    "flood": 51.6,
+    "flood": 65.7,
     "landslide": 0.0,
     "drought": 32.8,
     "heat": 41.0,
     "wind": 43.0,
     "slr": 11.9
    },
-   "E": 2.0,
+   "E": 2.17,
    "S": 2.33,
-   "V": 3.19,
+   "V": 3.23,
    "ops": {
     "catchment_opd": 5400,
     "catchment_vacc": 160,
@@ -14652,10 +14866,10 @@
     }
    },
    "disruption": {
-    "water": 3,
+    "water": 2,
     "waste": 1,
     "energy": 3,
-    "supply": 2
+    "supply": 1
    },
    "priorities": [
     {
@@ -14671,9 +14885,9 @@
     {
      "domain": "water",
      "label": "Water services",
-     "vuln": 3.0,
+     "vuln": 3.12,
      "weight": 5,
-     "score": 15.0,
+     "score": 15.6,
      "gap": "Boreholes yield saline/low flow in prolonged dry spells; storage below 2-day buffer",
      "action": "Install/expand rain harvesting and elevated storage; borehole rehabilitation",
      "hazard": "Heavy rainfall / flooding"
@@ -14705,7 +14919,9 @@
     "rx5day_mm": 107.1,
     "river_discharge_m3s": 12.4,
     "coast_km": 18.3,
-    "gust_kmh": 61.2
+    "gust_kmh": 61.2,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 5.44
    },
    "approx": true,
    "offregister": false,
@@ -15100,7 +15316,9 @@
     "rx5day_mm": 107.0,
     "river_discharge_m3s": 12.4,
     "coast_km": 22.8,
-    "gust_kmh": 59.6
+    "gust_kmh": 59.6,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 9.01
    },
    "approx": false,
    "offregister": false,
@@ -15495,7 +15713,9 @@
     "rx5day_mm": 110.7,
     "river_discharge_m3s": 12.4,
     "coast_km": 14.4,
-    "gust_kmh": 62.1
+    "gust_kmh": 62.1,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 8.52
    },
    "approx": false,
    "offregister": false,
@@ -15890,7 +16110,9 @@
     "rx5day_mm": 105.6,
     "river_discharge_m3s": 12.4,
     "coast_km": 20.8,
-    "gust_kmh": 60.2
+    "gust_kmh": 60.2,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 6.46
    },
    "approx": false,
    "offregister": false,
@@ -16285,7 +16507,9 @@
     "rx5day_mm": 109.6,
     "river_discharge_m3s": 12.4,
     "coast_km": 17.1,
-    "gust_kmh": 62.2
+    "gust_kmh": 62.2,
+    "observed_flood_ha3km": 0.0,
+    "observed_flood_km": 4.61
    },
    "approx": false,
    "offregister": false,

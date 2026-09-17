@@ -147,4 +147,4 @@ mfl_code,facility_name,keph_level,facility_type,sub_county,ward,owner_type,beds,
 11555,Malindi District Hospital,Level 4,Primary care hospitals,Malindi,Shella,Ministry of Health,183,-3.2165,40.1182,GPS,yes,yes
 11474,Kilifi County Hospital,Level 4,Primary care hospitals,Kilifi North,Sokoni,Ministry of Health,172,-3.63205,39.85722,Google Earth,yes,yes
 11432,Jibana Sub District Hospital,Level 4,Primary care hospitals,Kaloleni,Kaloleni,Ministry of Health,20,-3.8311,39.6865,GPS,yes,yes
-,Barani Dispensary,Level 2 (inferred from facility type),Dispensary,Kilifi South,,Ministry of Health (assumed),,-3.9249356,39.7693358,supplied by the county,yes,no
+,Barani Dispensary,Level 2,,Kilifi South,,Ministry of Health,,-3.9249356,39.7693358,county list,no,no
